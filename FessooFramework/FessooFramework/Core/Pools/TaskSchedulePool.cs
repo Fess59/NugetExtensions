@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FessooFramework.System.Pools
+namespace FessooFramework.Core.Pools
 {
-    class TaskPool
+    class TaskSchedulePool
     {
     }
 }

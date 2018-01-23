@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FessooFramework.System
+namespace FessooFramework.Core
 {
-    class _Bootstrapper
+    class _DCTContext
     {
     }
 }

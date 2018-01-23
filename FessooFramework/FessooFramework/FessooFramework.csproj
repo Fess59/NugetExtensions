@@ -57,7 +57,7 @@
     <Compile Include="Objects\Message\MessageObject.cs" />
     <Compile Include="Objects\Message\RequestMessage.cs" />
     <Compile Include="Objects\Message\ResponseMessage.cs" />
-    <Compile Include="Objects\ModuleObject  .cs" />
+    <Compile Include="Objects\ModuleObject.cs" />
     <Compile Include="Objects\SystemObject.cs" />
     <Compile Include="Objects\Task\TaskController.cs" />
     <Compile Include="Objects\Task\TaskDelayController.cs" />
@@ -65,18 +65,19 @@
     <Compile Include="Objects\ViewModel\NotifyObject.cs" />
     <Compile Include="Objects\ViewModel\VM.cs" />
     <Compile Include="Objects\ViewModel\VVM.cs" />
-    <Compile Include="System\Pools\ActionPool.cs" />
-    <Compile Include="System\Pools\TaskPool.cs" />
-    <Compile Include="System\Pools\TaskSchedulePool.cs" />
-    <Compile Include="System\Pools\VMPool.cs" />
-    <Compile Include="System\_Bootstrapper.cs" />
-    <Compile Include="System\_DCTContext.cs" />
-    <Compile Include="System\_DCT.cs" />
-    <Compile Include="System\_System.cs" />
-    <Compile Include="System\_SystemCoreConfiguration.cs" />
+    <Compile Include="Core\Pools\ActionPool.cs" />
+    <Compile Include="Core\Pools\TaskPool.cs" />
+    <Compile Include="Core\Pools\TaskSchedulePool.cs" />
+    <Compile Include="Core\Pools\VMPool.cs" />
+    <Compile Include="Core\_Bootstrapper.cs" />
+    <Compile Include="Core\_DCTContext.cs" />
+    <Compile Include="Core\_DCT.cs" />
+    <Compile Include="Core\_System.cs" />
+    <Compile Include="Core\_SystemCoreConfiguration.cs" />
     <Compile Include="Tools\Helpers\CryptographyHelper.cs" />
     <Compile Include="Tools\Helpers\EnumHelper.cs" />
     <Compile Include="Tools\Helpers\ImageHelper.cs" />
+    <Compile Include="Tools\Helpers\ObjectHelper.cs" />
     <Compile Include="Tools\Helpers\PasswordGeneratorHelper.cs" />
     <Compile Include="Tools\Helpers\SerializationHelper.cs" />
     <Compile Include="Tools\Helpers\TimeZoneHelper.cs" />
@@ -90,14 +91,11 @@
     <Compile Include="_Obsolete\BLL\Modules\SystemStateModules.cs" />
     <Compile Include="_Obsolete\BLL\SystemConfiguration.cs" />
     <Compile Include="_Obsolete\BLL\SystemCore.cs" />
-    <Compile Include="_Obsolete\Objects\BaseObject.cs" />
     <Compile Include="_Obsolete\Objects\EntityBaseObject.cs" />
     <Compile Include="_Obsolete\Objects\EntityChangeHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Obsolete\Tools\ConsoleHelper.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="_Obsolete\DAL\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

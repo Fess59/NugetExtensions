@@ -12,12 +12,16 @@ namespace FessooFramework.BLL
     ///
     /// <remarks>   AM Kozhevnikov, 22.01.2018. </remarks>
 
-    public class Module : BaseObject
+    public class Module : SystemObject
     {
         #region Constructor
         public Module()
         {
             
+        }
+
+        public override void Default()
+        {
         }
         #endregion
         #region Property

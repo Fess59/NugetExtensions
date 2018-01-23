@@ -10,7 +10,8 @@ namespace Example
     {
         static void Main(string[] args)
         {
-            Bootstrapper.Current.Run();
+            new TestInheritance_3().Set();
+            //Bootstrapper.Current.Run();
             Console.Read();
         }
     }
