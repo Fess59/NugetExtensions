@@ -47,7 +47,7 @@
     <Compile Include="Modules\SingltonApplicationModule.cs" />
     <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Modules\TrackModule.cs" />
-    <Compile Include="Objects\Action\ActionController.cs" />
+    <Compile Include="Tools\Controllers\ActionController.cs" />
     <Compile Include="Objects\BaseObject.cs" />
     <Compile Include="Objects\Data\CacheObject.cs" />
     <Compile Include="Objects\Data\DataObject.cs" />
@@ -58,10 +58,11 @@
     <Compile Include="Objects\Message\RequestMessage.cs" />
     <Compile Include="Objects\Message\ResponseMessage.cs" />
     <Compile Include="Objects\ModuleObject.cs" />
+    <Compile Include="Tools\Controllers\ObjectController.cs" />
     <Compile Include="Objects\SystemObject.cs" />
-    <Compile Include="Objects\Task\TaskController.cs" />
-    <Compile Include="Objects\Task\TaskDelayController.cs" />
-    <Compile Include="Objects\Task\TaskSchedule.cs" />
+    <Compile Include="Tools\Controllers\TaskController.cs" />
+    <Compile Include="Tools\Controllers\TaskDelayController.cs" />
+    <Compile Include="Tools\Controllers\TaskScheduleController.cs" />
     <Compile Include="Objects\ViewModel\NotifyObject.cs" />
     <Compile Include="Objects\ViewModel\VM.cs" />
     <Compile Include="Objects\ViewModel\VVM.cs" />

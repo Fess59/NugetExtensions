@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FessooFramework.Objects.Task
+namespace FessooFramework.Tools.Controllers
 {
-    class TaskController
+    class TaskScheduleController
     {
     }
 }

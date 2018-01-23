@@ -7,9 +7,19 @@ using System.Threading.Tasks;
 
 namespace FessooFramework.Objects
 {
+    /// <summary>   A system object. 
+    ///             Основной объект системы</summary>
+    ///
+    /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
+
     public abstract class SystemObject : BaseObject, IDisposable
     {
         #region Constructor
+
+        /// <summary>   Default constructor. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
+
         public SystemObject()
         {
             Initialization();
@@ -35,17 +45,38 @@ namespace FessooFramework.Objects
         }
         #endregion
         #region IDisposable realization
+
+        /// <summary>   Finaliser.
+        ///             При очистке объекта отправляет его в ObjectHelper.Dispose</summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
+
         ~SystemObject()
         {
             ObjectHelper.Dispose(this);
         }
+
         /// <summary>
-        /// Обёртка IDisposable - вызывает все base.Dispose в наследуемых элементах
+        /// Обертка для IDisposable.Dispose в SystemObject
+        /// Создана для возможности очистки объекта во всех наследуемых сущностях
+        /// 
+        /// Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или сбросом
+        /// неуправляемых ресурсов.
         /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
+
         protected virtual void Dispose()
         {
-            ObjectHelper.Dispose(Change);
         }
+
+        /// <summary>
+        /// Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или сбросом
+        /// неуправляемых ресурсов.
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
+
         void IDisposable.Dispose()
         {
             Dispose();
