@@ -23,11 +23,23 @@ namespace FessooFramework.Tools
         ///
         /// <param name="text"> The text. </param>
 
-        public static void Send(string text)
+        public static void SendMessage(string text)
         {
 #if DEBUG
             Console.WriteLine($"[{DateTime.Now.ToString("o")}] {text}");
 #endif
+        }
+
+        /// <summary>   Sends an exception.
+        ///             Отправка информации об ошибке в консоль </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 22.01.2018. </remarks>
+        ///
+        /// <param name="ex">   The ex. </param>
+
+        internal static void SendException(Exception ex)
+        {
+            SendMessage($"EXCEPTION! {ex.ToString()}");
         }
 
         /// <summary>   Sends a warning. Отправляет предупреждение в консоль </summary>
@@ -38,7 +50,7 @@ namespace FessooFramework.Tools
 
         public static void SendWarning(string text)
         {
-            Send($"WARNING! {text}");
+            SendMessage($"WARNING! {text}");
         }
     }
 }

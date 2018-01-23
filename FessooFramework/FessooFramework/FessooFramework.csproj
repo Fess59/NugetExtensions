@@ -41,12 +41,62 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL\Bootstrapper.cs" />
+    <Compile Include="Modules\AnaliticsModule.cs" />
+    <Compile Include="Modules\DataModule.cs" />
+    <Compile Include="Modules\LoggerModule.cs" />
+    <Compile Include="Modules\SingltonApplicationModule.cs" />
+    <Compile Include="Modules\TestModule.cs" />
+    <Compile Include="Modules\TrackModule.cs" />
+    <Compile Include="Objects\Action\ActionController.cs" />
+    <Compile Include="Objects\BaseObject.cs" />
+    <Compile Include="Objects\Data\CacheObject.cs" />
+    <Compile Include="Objects\Data\DataObject.cs" />
+    <Compile Include="Objects\Data\EntityObject.cs" />
+    <Compile Include="Objects\Delegate\DelegateAsyncCommand.cs" />
+    <Compile Include="Objects\Delegate\DelegateCommand.cs" />
+    <Compile Include="Objects\Message\MessageObject.cs" />
+    <Compile Include="Objects\Message\RequestMessage.cs" />
+    <Compile Include="Objects\Message\ResponseMessage.cs" />
+    <Compile Include="Objects\ModuleObject  .cs" />
+    <Compile Include="Objects\SystemObject.cs" />
+    <Compile Include="Objects\Task\TaskController.cs" />
+    <Compile Include="Objects\Task\TaskDelayController.cs" />
+    <Compile Include="Objects\Task\TaskSchedule.cs" />
+    <Compile Include="Objects\ViewModel\NotifyObject.cs" />
+    <Compile Include="Objects\ViewModel\VM.cs" />
+    <Compile Include="Objects\ViewModel\VVM.cs" />
+    <Compile Include="System\Pools\ActionPool.cs" />
+    <Compile Include="System\Pools\TaskPool.cs" />
+    <Compile Include="System\Pools\TaskSchedulePool.cs" />
+    <Compile Include="System\Pools\VMPool.cs" />
+    <Compile Include="System\_Bootstrapper.cs" />
+    <Compile Include="System\_DCTContext.cs" />
+    <Compile Include="System\_DCT.cs" />
+    <Compile Include="System\_System.cs" />
+    <Compile Include="System\_SystemCoreConfiguration.cs" />
+    <Compile Include="Tools\Helpers\CryptographyHelper.cs" />
+    <Compile Include="Tools\Helpers\EnumHelper.cs" />
+    <Compile Include="Tools\Helpers\ImageHelper.cs" />
+    <Compile Include="Tools\Helpers\PasswordGeneratorHelper.cs" />
+    <Compile Include="Tools\Helpers\SerializationHelper.cs" />
+    <Compile Include="Tools\Helpers\TimeZoneHelper.cs" />
+    <Compile Include="Tools\Helpers\WebHelper.cs" />
+    <Compile Include="Tools\IOC\_IOCContainer.cs" />
+    <Compile Include="Tools\IOC\_IOCElement.cs" />
+    <Compile Include="_Obsolete\BLL\BootstrapperBase.cs" />
+    <Compile Include="_Obsolete\BLL\Modules\LoggerModule.cs" />
+    <Compile Include="_Obsolete\BLL\Modules\Module.cs" />
+    <Compile Include="_Obsolete\BLL\Modules\SystemStateModules.cs" />
+    <Compile Include="_Obsolete\BLL\SystemConfiguration.cs" />
+    <Compile Include="_Obsolete\BLL\SystemCore.cs" />
+    <Compile Include="_Obsolete\Objects\BaseObject.cs" />
+    <Compile Include="_Obsolete\Objects\EntityBaseObject.cs" />
+    <Compile Include="_Obsolete\Objects\EntityChangeHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\ConsoleHelper.cs" />
+    <Compile Include="_Obsolete\Tools\ConsoleHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DAL\" />
+    <Folder Include="_Obsolete\DAL\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
