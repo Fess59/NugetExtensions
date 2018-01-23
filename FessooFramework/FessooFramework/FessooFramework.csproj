@@ -80,6 +80,7 @@
     <Compile Include="Tools\Helpers\PasswordGeneratorHelper.cs" />
     <Compile Include="Tools\Helpers\SerializationHelper.cs" />
     <Compile Include="Tools\Helpers\TimeZoneHelper.cs" />
+    <Compile Include="Tools\Helpers\WebBrowserHelper.cs" />
     <Compile Include="Tools\Helpers\WebHelper.cs" />
     <Compile Include="Tools\IOC\_IOCContainer.cs" />
     <Compile Include="Tools\IOC\_IOCElement.cs" />
