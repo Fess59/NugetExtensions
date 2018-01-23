@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace FessooFramework.Objects
 {
-    class SystemObject
+    public abstract class SystemObject : BaseObject
     {
+        /// <summary>   Defaults this object.
+        ///             Приводит данный объект к конфигурации по умолчанию </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 22.01.2018. </remarks>
+        public abstract void Default();
+        //public virtual void Initialization()
+        //{
+        //    Def
+        //}
     }
 }
