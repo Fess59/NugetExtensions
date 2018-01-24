@@ -47,6 +47,7 @@
     <Compile Include="Modules\SingltonApplicationModule.cs" />
     <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Modules\TrackModule.cs" />
+    <Compile Include="Objects\Data\EntityHistory.cs" />
     <Compile Include="Tools\Controllers\ActionController.cs" />
     <Compile Include="Objects\BaseObject.cs" />
     <Compile Include="Objects\Data\CacheObject.cs" />
@@ -92,8 +93,6 @@
     <Compile Include="_Obsolete\BLL\Modules\SystemStateModules.cs" />
     <Compile Include="_Obsolete\BLL\SystemConfiguration.cs" />
     <Compile Include="_Obsolete\BLL\SystemCore.cs" />
-    <Compile Include="_Obsolete\Objects\EntityBaseObject.cs" />
-    <Compile Include="_Obsolete\Objects\EntityChangeHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Obsolete\Tools\ConsoleHelper.cs" />
   </ItemGroup>
