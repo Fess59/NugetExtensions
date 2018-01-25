@@ -315,7 +315,7 @@ namespace FessooFramework.Tools.Controllers
         ///
         /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
 
-        protected override void Dispose()
+        public override void Dispose()
         {
             ReleaseUnmanagedResources();
         }
