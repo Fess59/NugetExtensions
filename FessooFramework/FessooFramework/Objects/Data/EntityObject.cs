@@ -21,7 +21,7 @@ namespace FessooFramework.Objects.Data
         /// <summary>   Gets or sets the save changes. </summary>
         ///
         /// <value> The save changes. </value>
-        public static Action<EntityChangeHistory> _SendToHistory { get; set; }
+        public static Action<EntityHistory> _SendToHistory { get; set; }
         /// <summary>   Gets or sets the identifier of the last change. </summary>
         ///
         /// <value> The identifier of the last change. </value>
@@ -48,7 +48,7 @@ namespace FessooFramework.Objects.Data
         {
             try
             {
-                _SendToHistory?.Invoke(EntityChangeHistory.New(Id, GetType().Name, userId, comment));
+                _SendToHistory?.Invoke(EntityHistory.New(Id, GetType().Name, userId, comment));
             }
             catch (Exception ex)
             {

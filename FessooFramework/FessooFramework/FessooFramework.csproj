@@ -47,6 +47,7 @@
     <Compile Include="Modules\SingltonApplicationModule.cs" />
     <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Modules\TrackModule.cs" />
+    <Compile Include="Objects\Data\CacheState.cs" />
     <Compile Include="Objects\Data\EntityHistory.cs" />
     <Compile Include="Tools\Controllers\ActionController.cs" />
     <Compile Include="Objects\BaseObject.cs" />
