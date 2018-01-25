@@ -46,7 +46,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\TestInheritance.cs" />
-    <Compile Include="_0_Base\ClientModels\ClientCacheModel.cs" />
+    <Compile Include="Tests\ClientCacheModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -58,7 +58,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataExample\" />
+    <Folder Include="_0_Base\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -66,7 +66,7 @@ namespace FessooFramework.Objects
         ///
         /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
 
-        protected virtual void Dispose()
+        public virtual void Dispose()
         {
         }
 
