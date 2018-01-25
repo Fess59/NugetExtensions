@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FessooFramework.Tools
+namespace FessooFramework.Tools.Helpers
 {
     /// <summary>   A console helper.
     ///             Для взаимодействия с консолью
-    ///             Помогает централизовано управлять выводом в консоль, его оформлением и самой публикацией в при переключении debug и релиз
+    ///             Помогает централизовано управлять выводом в консоль, его оформлением и публикацией при переключении debug и release
     ///             </summary>
     ///
     /// <remarks>   AM Kozhevnikov, 19.01.2018. </remarks>
@@ -39,7 +35,7 @@ namespace FessooFramework.Tools
 
         internal static void SendException(Exception ex)
         {
-            SendMessage($"EXCEPTION! {ex.ToString()}");
+            SendMessage($"EXCEPTION {ex.ToString()}");
         }
 
         /// <summary>   Sends a warning. Отправляет предупреждение в консоль </summary>
@@ -50,7 +46,7 @@ namespace FessooFramework.Tools
 
         public static void SendWarning(string text)
         {
-            SendMessage($"WARNING! {text}");
+            SendMessage($"WARNING {text}");
         }
     }
 }
