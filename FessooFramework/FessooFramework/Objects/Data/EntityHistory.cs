@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FessooFramework.Objects
+namespace FessooFramework.Objects.Data
 {
-    /// <summary>   A entity change history model. </summary>
+    /// <summary>   An entity change history model. </summary>
     ///
-    /// <remarks>   AM Kozhevnikov, 11.01.2018. </remarks>
+    /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>
 
-    public class EntityChangeHistory : EntityBaseObject
+    public class EntityHistory : DataObject
     {
         /// <summary>   Gets or sets the identifier of the modified object. </summary>
         ///
@@ -28,7 +28,7 @@ namespace FessooFramework.Objects
         ///
         /// <value> The identifier of the user who owns the change. </value>
 
-        public Guid? UserId { get; set; }
+        public Guid? OwnerId { get; set; }
 
         /// <summary>   Gets or sets the comment. </summary>
         ///
@@ -49,15 +49,15 @@ namespace FessooFramework.Objects
         ///
         /// <returns>   A ChangeHistory. </returns>
 
-        public static EntityChangeHistory New(Guid objectId, string objectType, Guid? userId, string comment)
+        public static EntityHistory New(Guid objectId, string objectType, Guid? ownerId, string comment)
         {
             if (objectId == Guid.Empty)
-                throw new NullReferenceException("ChangeHistory.Create ObjectId cannot Guid.Empty");
-            return new EntityChangeHistory()
+                throw new NullReferenceException("EntityHistory.New ObjectId cannot Guid.Empty");
+            return new EntityHistory()
             {
                 ObjectId = objectId,
                 ObjectType = objectType,
-                UserId = userId,
+                OwnerId = ownerId,
                 Comment = comment
             };
         }
