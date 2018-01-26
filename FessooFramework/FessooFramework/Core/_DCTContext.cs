@@ -23,11 +23,18 @@ namespace FessooFramework.Core
 
         public Guid TrackId { get; set; }
 
+        /// <summary>   Gets or sets the identifier of the parent track. 
+        ///             Идентификатор родителя</summary>
+        ///
+        /// <value> The identifier of the parent track. </value>
+
+        public Guid ParentTrackId { get; internal set; }
+
         #endregion
         #region Constructor
         public _DCTContext()
         {
-            //TODO 
+            //TODO TrackModule
             TrackId = Guid.NewGuid();
         }
         #endregion

@@ -1,54 +1,235 @@
-﻿using System;
+﻿using FessooFramework.Tools.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using FessooFramework.Tools.DCT;
 
 namespace FessooFramework.Core
 {
-
+    /// <summary>   A dct.
+    ///             Инструмент отказоустойчивости системы, интегрирован модулями:
+    ///             - Логирования - сбор ошибок и урощенная аналитика ошибок  
+    ///             - Аналитика - количество и время выполнения каждого метода и блока  
+    ///             - Трекер - дерево выполнения всех методов  
+    ///             - MainThread - Интеграция с модулем основного потока  
+    ///             - DCTContext - расширяемый блок данных  
+    ///             - Pools - различные пулы объектов, визуальные и другие  
+    ///             - Warnings - модуль предупреждений, аналог юнит тестирования на лету </summary>
+    ///
+    /// <remarks>   Fess59, 26.01.2018. </remarks>
+    ///
+    /// <typeparam name="TContext"> Type of the context. </typeparam>
     public static class _DCT<TContext> where TContext : _DCTContext, new()
     {
         #region DCT base
-        //1. Void
-        //2. Result
-        //3. Async
-        //4. Async + ResultAction - обработка результа в отдельном методе
-
-
+        /// <summary>    Executes result.
+        ///              Основной инструмент, в нём сосредоточена вся основная логика работы </summary>
+        ///
+        /// <remarks>    Fess59, 26.01.2018. </remarks>
+        ///
+        /// <exception cref="NullReferenceException">    Thrown when a value was unexpectedly null. </exception>
+        ///
+        /// <typeparam name="TResult">   Type of the result. </typeparam>
+        /// <param name="method">                    The method. Выполняемый блок кода  </param>
+        /// <param name="_data">                     (Optional) The data. Контекст данных </param>
+        /// <param name="continueExceptionMethod">   (Optional) The continue exception method. Выполнится при ошибке в method </param>
+        /// <param name="continueMethod">            (Optional) The continue method. Выполнится после method и continueExceptionMethod  </param>
+        /// <param name="complete">                  (Optional) The complete. Для отправки результата в другой блок кода, используется в ExecuteAsync<TReusult>  </param>
+        ///
+        /// <returns>    A TResult. </returns>
         private static TResult execute<TResult>(
             Func<TContext, TResult> method,
-            TContext _data = null,
             Action<TContext, Exception> continueExceptionMethod = null,
-            Action<TContext> continueMethod = null)
+            Action<TContext> continueMethod = null,
+             Action<TContext, TResult> complete = null)
         {
             TResult result = default(TResult);
+            bool isOwner = false;
             try
             {
                 if (method == null) throw new NullReferenceException("Parameter 'method' cannot be null");
-                var data = _data == null ? new TContext() : _data;
-                result = method(data);
-                if (_data == null) data.Dispose();
+                //Статус владельца контекста
+                isOwner = CheckContext();
+                result = method(Context);
+
             }
             catch (Exception e)
             {
                 if (continueExceptionMethod != null)
-                    execute((data) => continueExceptionMethod(data, e), _data);
+                    execute(dataEx => continueExceptionMethod(dataEx, e));
             }
             finally
             {
                 if (continueMethod != null)
-                    execute((data) => continueMethod(data), _data);
+                    execute(dataCon => continueMethod(dataCon));
+                if (complete != null)
+                    execute(dataCom => complete(dataCom, result));
             }
+            DisposeContext(Context, isOwner);
             return result;
         }
+        /// <summary>
+        ///     Executes void. Основной инструмент, в нём сосредоточена вся основная логика работы.
+        /// </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <param name="method">                   The method. Выполняемый блок кода. </param>
+        /// <param name="_data">                    (Optional) The data. Контекст данных. </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
         private static void execute(Action<TContext> method,
-           TContext _data = null,
            Action<TContext, Exception> continueExceptionMethod = null,
            Action<TContext> continueMethod = null)
         {
-            execute<object>((data) => { method(data); return null; }, _data,continueExceptionMethod, continueMethod);
+            execute<object>(data => { method(data); return null; }, continueExceptionMethod, continueMethod);
+        }
+        #endregion
+        #region Context base
+        static string contextName = "DCTContext";
+
+        public static TContext Context { get { return GetContext(null); } }
+
+
+        /// <summary>    Gets a context.
+        ///              Получаю контекст из области данных потока </summary>
+        ///
+        /// <remarks>    Fess59, 26.01.2018. </remarks>
+        ///
+        /// <param name="value"> (Optional) The value. </param>
+        ///
+        /// <returns>    The context. </returns>
+
+        private static TContext GetContext(TContext value = null)
+        {
+            var context = ContextHelper.CheckOrCreateContext<TContext>(contextName);
+            if (value != null)
+            {
+                var parentTrackId = context.TrackId == value.TrackId ? context.ParentTrackId : value.ParentTrackId;
+                context.ParentTrackId = parentTrackId;
+            }
+            return context;
+        }
+        /// <summary>   Determines if we can check context. </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        private static bool CheckContext()
+        {
+            var result = false;
+            var context = ContextHelper.GetContext<TContext>(contextName);
+            if (context == null)
+                result = true;
+            return result;
+        }
+        private static void DisposeContext(TContext data, bool isOwner)
+        {
+            try
+            {
+                if (isOwner)
+                {
+                    data.Dispose();
+                    ContextHelper.SetContext<TContext>(null, contextName);
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleHelper.SendException(ex);
+            }
+
+        }
+        #endregion
+        #region Public DCT method
+        /// <summary>   Executes void. </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <param name="action">                   The action. </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
+        public static void Execute(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        {
+            execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+        }
+        /// <summary>   Executes result. </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <typeparam name="TResult">  Type of the result. </typeparam>
+        /// <param name="action">                   The action. </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
+        ///
+        /// <returns>   A TResult. </returns>
+        public static TResult Execute<TResult>(Func<TContext, TResult> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        {
+            return execute<TResult>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+        }
+        /// <summary>   Executes the asynchronous operation. With result </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <typeparam name="TResult">  Type of the result. </typeparam>
+        /// <param name="action">                   The action. </param>
+        /// <param name="complete">                 The complete. Для отправки результата в другой блок
+        ///                                         кода, используется в ExecuteAsync<TReusult> </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
+        public static void ExecuteAsync<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        {
+            Task.Factory.StartNew(() => execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: complete));
+        }
+        /// <summary>   Executes the asynchronous operation. Void </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <param name="action">                   The action. </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
+        public static void ExecuteAsync(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        {
+            ExecuteAsync<object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+        }
+        /// <summary>   Executes the main thread operation. With result async </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <param name="action">                   The action. </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
+        public static void ExecuteMainThread<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        {
+            DispatcherHelper.Execute(() => execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: (data, result) => ExecuteAsync( dataAsync => complete.Invoke(dataAsync, result))));
+        }
+        /// <summary>   Executes the main thread operation. Void </summary>
+        ///
+        /// <remarks>   Fess59, 26.01.2018. </remarks>
+        ///
+        /// <param name="action">                   The action. </param>
+        /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
+        ///                                         при ошибке в method. </param>
+        /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
+        ///                                         method и continueExceptionMethod. </param>
+        public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        {
+            DispatcherHelper.Execute(() => execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
         }
         #endregion
         #region Logger module
@@ -134,86 +315,6 @@ namespace FessooFramework.Core
         //public static int TaskCount { get { return TaskPool.Current.CurrentTaskCount; } }
         //public static TaskPool TaskPool { get { return TaskPool.Current; } }
         //public static TaskSchedulePool SchdulePool { get { return TaskSchedulePool.Current; } }
-        #endregion
-        #region Methods
-        ///// <summary>
-        ///// Выполенение метода, для возврата значение используем стандартную обёртку с внешней переменной
-        ///// </summary>
-        ///// <param name="action"></param>
-        //public static void Execute(Action<T> action, System.Enum group, object[] parameters = null, string comment = "", bool logInfo = true, Action<T, Exception> continueExceptionMethod = null, Action<T> continueMethod = null)
-        //{
-        //    var methodName = GetMethodName(MethodNameLevel);
-        //    execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName);
-        //}
-        //public static TResult Execute<TResult>(Func<T, TResult> action, System.Enum group, object[] parameters = null, string comment = "", bool logInfo = true, Action<T, Exception> continueExceptionMethod = null, Action<T> continueMethod = null)
-        //{
-        //    var methodName = GetMethodName(MethodNameLevel);
-        //    return execute<TResult>(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName);
-        //}
-        ///// <summary>
-        ///// Асинхронное выполенение метода, без заморочек просто Task
-        ///// </summary>
-        ///// <param name="action"></param>
-        //public static void ExecuteAsync(Action<T> action, System.Enum group, object[] parameters = null, string comment = "", bool logInfo = true, Action<T, Exception> continueExceptionMethod = null, Action<T> continueMethod = null)
-        //{
-        //    var methodName = GetMethodName(MethodNameLevel);
-        //    var task = new Task(() => execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //    TaskStart(task);
-        //    //TaskPool.Execute((a) => execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //}
-        ///// <summary>
-        ///// Асинхронное выполенение метода, без заморочек просто Task
-        ///// </summary>
-        ///// <param name="action"></param>
-        //public static void ExecuteCurrentDispatcher(Action<T> action, System.Enum group, object[] parameters = null, string comment = "", bool logInfo = true, Action<T, Exception> continueExceptionMethod = null, Action<T> continueMethod = null)
-        //{
-        //    var methodName = GetMethodName(MethodNameLevel);
-        //    DispatcherHelper.Execute(() => execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //}
-        ///// <summary>
-        ///// Асинхронное выполенение метода, без заморочек просто Task
-        ///// </summary>
-        ///// <param name="action"></param>
-        //public static Task<TResult> ExecuteAsync<TResult>(Func<T, TResult> action, System.Enum group, object[] parameters = null, string comment = "", bool logInfo = true, Action<T, Exception> continueExceptionMethod = null, Action<T> continueMethod = null)
-        //{
-        //    var methodName = GetMethodName(MethodNameLevel);
-        //    var task = new Task<TResult>(() => execute<TResult>(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //    return TaskStart(task);
-        //}
-        ///// <summary>
-        ///// Асинхронное выполенение метода, без заморочек просто Task
-        ///// </summary>
-        ///// <param name="action"></param>
-        //public static void ExecuteAsyncPool(Action<T> action, System.Enum group, object[] parameters = null, string comment = "", bool logInfo = true, Action<T, Exception> continueExceptionMethod = null, Action<T> continueMethod = null)
-        //{
-        //    var methodName = GetMethodName(MethodNameLevel);
-        //    var task = new Task(() => execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //    TaskStart(task);
-        //    //ThreadPoolHelper.Execute(() => execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //    //TaskPool.Execute((a) => execute(action, group, parameters, comment, logInfo: logInfo, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, methodName: methodName));
-        //}
-      
-        #endregion
-        #region Task dispatcher
-        ///// <summary>
-        ///// Заготовка
-        ///// </summary>
-        ///// <param name="task"></param>
-        //public static Task TaskStart(Task task)
-        //{
-        //    task.Start();
-        //    return task;
-        //}
-        ///// <summary>
-        ///// Заготовка
-        ///// </summary>
-        ///// <param name="task"></param>
-        //public static Task<TResult> TaskStart<TResult>(Task<TResult> task)
-        //{
-
-        //    task.Start();
-        //    return task;
-        //}
         #endregion
     }
 }
