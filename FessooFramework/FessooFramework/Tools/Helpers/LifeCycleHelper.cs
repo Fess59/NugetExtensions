@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FessooFramework.Core
+namespace FessooFramework.Tools.Helpers
 {
-    class _System
+    public static class LifeCycleHelper
     {
+        public 
     }
+    
 }
