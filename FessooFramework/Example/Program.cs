@@ -1,4 +1,6 @@
-﻿using FessooFramework.Tools.DCT;
+﻿using Example.Tests;
+using FessooFramework.Core;
+using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,22 @@ namespace Example
     public class Program
     {
         static void Main(string[] args)
+        {
+            CoreTest();
+            DCTNameTest();
+            Console.Read();
+        }
+        #region DCT test
+        private static void DCTNameTest()
+        {
+            DCTDefault.Execute(c =>{});
+            DCTDefault.Execute<string>(c => { return ""; });
+            DCTDefault.ExecuteAsync(c => {  });
+            DCTDefault.ExecuteAsync<string>(c => { return "";  }, (c, result)=> { });
+            DCTDefault.ExecuteMainThread(c => {  });
+        }
+
+        private static void DCTTest()
         {
             DCTDefault.Execute(data =>
             {
@@ -39,13 +57,50 @@ namespace Example
                 ConsoleHelper.SendMessage($"Context 6 ID {data.Id}");
                 InternalMethod();
             });
-            Console.Read();
         }
-
         private static void InternalMethod()
         {
             var context = DCTDefault.Context;
             ConsoleHelper.SendMessage($"Internal ID {context.Id}");
         }
+        #endregion
+        #region ALM test
+        static void ALMtest()
+        {
+            var almo = new ALMModel();
+            DCTDefault.Execute(c =>
+            {
+                almo._SetState(ALMModelState.First);
+            });
+            DCTDefault.Execute(c =>
+            {
+                almo._SetState(ALMModelState.Create);
+                almo._SetState(ALMModelState.First);
+                almo._SetState(ALMModelState.Second);
+                almo._SetState(ALMModelState.Third);
+            });
+
+        }
+        static void ObjectAndComponent()
+        {
+            var soe = new SystemObjectExample();
+            var sce = new SystemComponentExample();
+            DCTDefault.Execute(c =>
+            {
+                sce._SetState(FessooFramework.Objects.SystemState.Initialized);
+                sce._SetState(FessooFramework.Objects.SystemState.Configured);
+                sce._SetState(FessooFramework.Objects.SystemState.Loaded);
+                sce._SetState(FessooFramework.Objects.SystemState.Launched);
+            });
+
+        }
+
+        #endregion
+        #region CoreTest
+        public static void CoreTest()
+        {
+            new Example.Tests.CoreExample.Bootstrapper().Run();
+        }
+        #endregion
     }
 }

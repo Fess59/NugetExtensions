@@ -34,7 +34,7 @@ namespace FessooFramework.Tools.Helpers
             Dispacher = dispatcher;
             Dispacher.UnhandledException += Dispacher_UnhandledException;
         }
-        internal static void Execute(Action action, bool isAsync = true)
+        internal static void Execute(Action action, bool isAsync = true, string name = "")
         {
             DCTDefault.Execute(data =>
             {
@@ -44,7 +44,7 @@ namespace FessooFramework.Tools.Helpers
                     CurrentSynchronizationContext.Post((a) => execute(a), action);
                 else
                     CurrentSynchronizationContext.Send((a) => execute(a), action);
-            });
+            }, name: "DispatcherHelper");
         }
 
         #endregion

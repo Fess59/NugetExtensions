@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace FessooFramework.Tools.Helpers
 {
@@ -25,6 +26,30 @@ namespace FessooFramework.Tools.Helpers
             Console.WriteLine($"[{DateTime.Now.ToString("o")}] {text}");
 #endif
         }
+        /// <summary>   Sends an exception.
+        ///             Отправка информации об ошибке в консоль </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 22.01.2018. </remarks>
+        ///
+        /// <param name="ex">   The ex. </param>
+
+        public static void SendException(MethodBase owner, string text, Exception ex)
+        {
+            SendException($"{owner.DeclaringType}.{owner.Name} - {text}: {Environment.NewLine + ex}");
+        }
+        /// <summary>   Sends an exception.
+        ///             Отправка информации об ошибке в консоль </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 22.01.2018. </remarks>
+        ///
+        /// <param name="ex">   The ex. </param>
+
+        public static void SendWarning(MethodBase owner, string text)
+        {
+            SendWarning($"{owner.DeclaringType}.{owner.Name} - {text}");
+        }
+
+        
 
         /// <summary>   Sends an exception.
         ///             Отправка информации об ошибке в консоль </summary>
@@ -33,9 +58,21 @@ namespace FessooFramework.Tools.Helpers
         ///
         /// <param name="ex">   The ex. </param>
 
-        internal static void SendException(Exception ex)
+        public static void SendException(Exception ex)
         {
-            SendMessage($"EXCEPTION {ex.ToString()}");
+            SendException(ex.ToString());
+        }
+
+        /// <summary>   Sends an exception.
+        ///             Отправка информации об ошибке в консоль </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 22.01.2018. </remarks>
+        ///
+        /// <param name="ex">   The ex. </param>
+
+        public static void SendException(string ex)
+        {
+            SendMessage($"[EXCEPTION] {ex}");
         }
 
         /// <summary>   Sends a warning. Отправляет предупреждение в консоль </summary>
@@ -46,7 +83,23 @@ namespace FessooFramework.Tools.Helpers
 
         public static void SendWarning(string text)
         {
-            SendMessage($"WARNING {text}");
+            SendMessage($"[WARNING] {text}");
+        }
+
+        public static void Send(string type, string text)
+        {
+            switch (type)
+            {
+                case "Warning":
+                    SendWarning(text);
+                    break;
+                case "Exception":
+                    SendException(text);
+                    break;
+                default:
+                    SendMessage(text);
+                    break;
+            }
         }
     }
 }

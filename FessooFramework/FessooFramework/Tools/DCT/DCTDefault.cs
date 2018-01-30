@@ -18,9 +18,9 @@ namespace FessooFramework.Tools.DCT
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void Execute(Action<DCTContextDefault> action, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null)
+        public static void Execute(Action<DCTContextDefault> action, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null, string name = "")
         {
-            _DCT<DCTContextDefault>.Execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT<DCTContextDefault>.Execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
         }
         /// <summary>   Executes result. </summary>
         ///

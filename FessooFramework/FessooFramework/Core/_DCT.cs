@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FessooFramework.Tools.DCT;
+using FessooFramework.Components.LoggerComponent;
+using FessooFramework.Components.LoggerComponent.Models;
 
 namespace FessooFramework.Core
 {
@@ -42,6 +44,7 @@ namespace FessooFramework.Core
         ///
         /// <returns>    A TResult. </returns>
         private static TResult execute<TResult>(
+            string name,
             Func<TContext, TResult> method,
             Action<TContext, Exception> continueExceptionMethod = null,
             Action<TContext> continueMethod = null,
@@ -57,17 +60,20 @@ namespace FessooFramework.Core
                 result = method(Context);
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 if (continueExceptionMethod != null)
-                    execute(dataEx => continueExceptionMethod(dataEx, e));
+                    execute(name, dataEx => continueExceptionMethod(dataEx, ex));
+                SendExceptions(ex, name);
             }
             finally
             {
                 if (continueMethod != null)
-                    execute(dataCon => continueMethod(dataCon));
+                    execute(name, dataCon => continueMethod(dataCon));
                 if (complete != null)
-                    execute(dataCom => complete(dataCom, result));
+                    execute(name, dataCom => complete(dataCom, result));
+                //TODO Tracker and Analitics
+                //SendInformations($@"Complete", name);
             }
             DisposeContext(Context, isOwner);
             return result;
@@ -84,19 +90,17 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        private static void execute(Action<TContext> method,
+        private static void execute(string name, Action<TContext> method,
            Action<TContext, Exception> continueExceptionMethod = null,
            Action<TContext> continueMethod = null)
         {
-            execute<object>(data => { method(data); return null; }, continueExceptionMethod, continueMethod);
+            execute<object>(name, data => { method(data); return null; }, continueExceptionMethod, continueMethod);
         }
         #endregion
         #region Context base
         static string contextName = "DCTContext";
 
         public static TContext Context { get { return GetContext(null); } }
-
-
         /// <summary>    Gets a context.
         ///              Получаю контекст из области данных потока </summary>
         ///
@@ -105,7 +109,6 @@ namespace FessooFramework.Core
         /// <param name="value"> (Optional) The value. </param>
         ///
         /// <returns>    The context. </returns>
-
         private static TContext GetContext(TContext value = null)
         {
             var context = ContextHelper.CheckOrCreateContext<TContext>(contextName);
@@ -143,7 +146,6 @@ namespace FessooFramework.Core
             {
                 ConsoleHelper.SendException(ex);
             }
-
         }
         #endregion
         #region Public DCT method
@@ -156,9 +158,11 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void Execute(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static void Execute(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
         {
-            execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            if (name == "")
+                name = GetCategoryName();
+            execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes result. </summary>
         ///
@@ -174,7 +178,7 @@ namespace FessooFramework.Core
         /// <returns>   A TResult. </returns>
         public static TResult Execute<TResult>(Func<TContext, TResult> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
         {
-            return execute<TResult>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            return execute<TResult>(GetCategoryName(), action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. With result </summary>
         ///
@@ -188,9 +192,11 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteAsync<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static void ExecuteAsync<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
         {
-            Task.Factory.StartNew(() => execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: complete));
+            if (name == "")
+             name = GetCategoryName();
+            Task.Factory.StartNew(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: complete));
         }
         /// <summary>   Executes the asynchronous operation. Void </summary>
         ///
@@ -203,7 +209,8 @@ namespace FessooFramework.Core
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteAsync(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
         {
-            ExecuteAsync<object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            var name = GetCategoryName();
+            ExecuteAsync<object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
         }
         /// <summary>   Executes the main thread operation. With result async </summary>
         ///
@@ -216,7 +223,8 @@ namespace FessooFramework.Core
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteMainThread<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
         {
-            DispatcherHelper.Execute(() => execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: (data, result) => ExecuteAsync( dataAsync => complete.Invoke(dataAsync, result))));
+            var name = GetCategoryName();
+            DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: (data, result) => ExecuteAsync(dataAsync => complete.Invoke(dataAsync, result))));
         }
         /// <summary>   Executes the main thread operation. Void </summary>
         ///
@@ -229,87 +237,64 @@ namespace FessooFramework.Core
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
         {
-            DispatcherHelper.Execute(() => execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
+            var name = GetCategoryName();
+            DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
         }
         #endregion
         #region Logger module
-        //public static bool IsLogEnable { get; set; }
-        //public static int MethodNameLevel = 2;
-        //public static string GetMethodNameWrapper(int frame = 1)
-        //{
-        //    return GetMethodName(frame);
-        //}
-        //internal static void LogDisable()
-        //{
-        //    if (IsLogEnable)
-        //    {
-        //        IsLogEnable = false;
-        //    }
-        //}
-        //internal static void LogEnable()
-        //{
-        //    if (!IsLogEnable)
-        //    {
-        //        IsLogEnable = true;
-        //    }
-        //}
-        //   /// <summary>
+        public static void SendInformations(string text, string category)
+        {
+            Send(LoggerMessageType.Information, text, category);
+        }
+        public static void SendWarning(string text, string category)
+        {
+            Send(LoggerMessageType.Warning, text, category);
+        }
+        public static void SendExceptions(string text, string category)
+        {
+            Send(LoggerMessageType.Exception, text, category);
+        }
+        public static void SendExceptions(Exception ex, string category)
+        {
+            Send(LoggerMessageType.Exception, ex.ToString(), category);
+        }
+        private static void Send(LoggerMessageType messageType, string text, string category)
+        {
+            Send(LoggerMessage.New(messageType, text, category));
+        }
+        private static void Send(LoggerMessage message)
+        {
+            Logger.SendMessage(message);
+        }
+        #endregion
+        #region Tools
+        public static int MethodNameLevel = 2;
+        private static string GetMethodNameWrapper(int frame = 1)
+        {
+            return GetCategoryName(frame);
+        }
+        /// <summary>
         /// Получаем имя текущего метода
         /// </summary>
         /// <returns></returns>
-        //        internal static string GetMethodName(int frame = 1)
-        //        {
-        //            try ///Разрешённый try
-        //            {
-        //                StackTrace st = new StackTrace();
-        //                StackFrame sf = st.GetFrame(frame);
-        //                var method = sf.GetMethod();
-        //                if (method.Name.Contains("<"))
-        //                    return method.DeclaringType.FullName + "." + method.Name.Remove(0, 1).Remove(method.Name.IndexOf(">") - 1);
-        //                return method.DeclaringType.FullName + "." + method.Name;
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                Console.WriteLine(e);
-        //            }
-        //            return "";
-        //        }
-        //public static void SendInfo(System.Enum group, string comment, Guid? track = null)
-        //{
-        //    var message = new LogMessage(group);
-        //    message.Comment = comment;
-        //    message.Elapsed = 0;
-        //    message.MessageType = LogMessageType.Message;
-        //    //message.TrackNumber = track.Value;
-        //    Send(message);
-        //}
-        //public static void SendWarning(System.Enum group, string comment, Guid? track = null)
-        //{
-        //    var message = new LogMessage(group);
-        //    message.Comment = comment;
-        //    message.Elapsed = 0;
-        //    message.MessageType = LogMessageType.Message;
-        //    //message.TrackNumber = track.Value;
-        //    Send(message);
-        //}
-        //public static void SendExceptions(System.Enum group, string comment, Guid? track = null)
-        //{
-        //    var message = new LogMessage(group);
-        //    message.Comment = comment;
-        //    message.Elapsed = 0;
-        //    message.MessageType = LogMessageType.Message;
-        //    //message.TrackNumber = track.Value;
-        //    Send(message);
-        //}
-        //public static void SendExceptions(System.Enum group, Exception ex, Guid? track = null)
-        //{
-        //    SendExceptions(group, ex.ToString(), track);
-        //}
-        //private static void Send(LogMessage message)
-        //{
-        //    if (IsLogEnable)
-        //        Logger.Logger.Instance.Add(message);
-        //}
+        private static string GetCategoryName(int frame = 3)
+        {
+            var result = "";
+            try 
+            {
+                if (!Logger.HasLoggerEnable.Value)
+                    return result;
+                StackTrace st = new StackTrace(1, false);
+                StackFrame sf = st.GetFrame(frame);
+                var method = sf.GetMethod();
+                result = method.DeclaringType.Name;
+            }
+            catch (Exception e)
+            {
+                ConsoleHelper.SendException(e);
+            }
+            return result;
+        }
         #endregion
         #region Pools
         //public static int TaskCount { get { return TaskPool.Current.CurrentTaskCount; } }

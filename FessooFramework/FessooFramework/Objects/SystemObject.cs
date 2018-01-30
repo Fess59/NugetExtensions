@@ -1,4 +1,5 @@
-﻿using FessooFramework.Tools.Helpers;
+﻿using FessooFramework.Objects.ALM;
+using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace FessooFramework.Objects
     ///
     /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
 
-    public abstract class SystemObject : BaseObject, IDisposable
+    public abstract class SystemObject : ALMObject<SystemState>, IDisposable
     {
         #region Constructor
 
@@ -22,7 +23,7 @@ namespace FessooFramework.Objects
 
         public SystemObject()
         {
-            Initialization();
+            _SetState(SystemState.Created);
         }
         #endregion
         #region Methods
@@ -43,6 +44,7 @@ namespace FessooFramework.Objects
         {
             Default();
         }
+
         #endregion
         #region IDisposable realization
 
@@ -80,6 +82,48 @@ namespace FessooFramework.Objects
         void IDisposable.Dispose()
         {
             Dispose();
+        }
+        #endregion
+        #region ALM realization
+        public override void _StateChanged(SystemState newState, SystemState oldState)
+        {
+            switch (newState)
+            {
+                case SystemState.Created:
+                    _SetState(SystemState.Initialized);
+                    break;
+                case SystemState.Initialized:
+                    Initialization();
+                    _SetState(SystemState.Configured);
+                    break;
+                case SystemState.Configured:
+                    _SetState(SystemState.Loaded);
+                    break;
+                case SystemState.Loaded:
+                    _SetState(SystemState.Launched);
+                    break;
+                case SystemState.Launched:
+                    break;
+                case SystemState.Pause:
+                    break;
+                case SystemState.Complete:
+                    break;
+                default:
+                    break;
+            }
+        }
+        public override IEnumerable<ALMConf<SystemState>> _StateConfiguration()
+        {
+            return new ALMConf<SystemState>[] 
+            {
+                ALMConf<SystemState>.New(SystemState.None, new[] { SystemState.Created }),
+                ALMConf<SystemState>.New(SystemState.Created, new[] { SystemState.Initialized }),
+                ALMConf<SystemState>.New(SystemState.Initialized, new[] { SystemState.Configured }),
+                ALMConf<SystemState>.New(SystemState.Configured, new[] { SystemState.Loaded }),
+                ALMConf<SystemState>.New(SystemState.Loaded, new[] { SystemState.Launched, SystemState.Warnings }),
+                ALMConf<SystemState>.New(SystemState.Warnings, new[] { SystemState.Launched }),
+                ALMConf<SystemState>.New(SystemState.Launched, new[] { SystemState.Complete })
+            };
         }
         #endregion
     }

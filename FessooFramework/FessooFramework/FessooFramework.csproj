@@ -42,14 +42,28 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\AnaliticsModule.cs" />
-    <Compile Include="Modules\DataModule.cs" />
-    <Compile Include="Modules\LoggerModule.cs" />
-    <Compile Include="Modules\SingltonApplicationModule.cs" />
-    <Compile Include="Modules\TestModule.cs" />
-    <Compile Include="Modules\TrackModule.cs" />
+    <Compile Include="Components\LoggerComponent\Logger.cs" />
+    <Compile Include="Components\LoggerComponent\Models\LoggerMessage.cs" />
+    <Compile Include="Components\LoggerComponent\Models\LoggerMessgaeType.cs" />
+    <Compile Include="Components\LoggerComponent\Parts\LoggerElement.cs" />
+    <Compile Include="Components\LoggerComponent\Parts\LoggerElementType.cs" />
+    <Compile Include="Components\LoggerComponent\Realizations\ActionLogger.cs" />
+    <Compile Include="Components\LoggerComponent\Realizations\ConsoleLogger.cs" />
+    <Compile Include="Components\LoggerComponent\Realizations\FileLogger.cs" />
+    <Compile Include="Components\LoggerComponent\Realizations\ServiceLogger.cs" />
+    <Compile Include="Components\LoggerComponent\Tests\LoggerCases.cs" />
+    <Compile Include="Core\SystemCoreConfiguration.cs" />
+    <Compile Include="Components\AnaliticsModule.cs" />
+    <Compile Include="Components\DataModule.cs" />
+    <Compile Include="Components\SingltonApplicationModule.cs" />
+    <Compile Include="Components\TestModule.cs" />
+    <Compile Include="Components\TrackModule.cs" />
     <Compile Include="Objects\Data\CacheState.cs" />
     <Compile Include="Objects\Data\EntityHistory.cs" />
+    <Compile Include="Objects\ALM\ALMObject.cs" />
+    <Compile Include="Objects\ALM\ALMStateConfiguration.cs" />
+    <Compile Include="Objects\Component\SystemComponentMulti.cs" />
+    <Compile Include="Objects\SystemObjectState.cs" />
     <Compile Include="Tools\Controllers\ActionController.cs" />
     <Compile Include="Objects\BaseObject.cs" />
     <Compile Include="Objects\Data\CacheObject.cs" />
@@ -60,8 +74,7 @@
     <Compile Include="Objects\Message\MessageObject.cs" />
     <Compile Include="Objects\Message\RequestMessage.cs" />
     <Compile Include="Objects\Message\ResponseMessage.cs" />
-    <Compile Include="Objects\ModuleObject.cs" />
-    <Compile Include="Tools\Controllers\LifeCycleController.cs" />
+    <Compile Include="Objects\Component\SystemComponent.cs" />
     <Compile Include="Tools\Controllers\ObjectController.cs" />
     <Compile Include="Objects\SystemObject.cs" />
     <Compile Include="Tools\Controllers\TaskController.cs" />
@@ -77,8 +90,7 @@
     <Compile Include="Core\_Bootstrapper.cs" />
     <Compile Include="Core\_DCTContext.cs" />
     <Compile Include="Core\_DCT.cs" />
-    <Compile Include="Core\_SystemCore.cs" />
-    <Compile Include="Core\_SystemCoreConfiguration.cs" />
+    <Compile Include="Core\SystemCore.cs" />
     <Compile Include="Tools\DCT\DCTContextDefault.cs" />
     <Compile Include="Tools\DCT\DCTDefault.cs" />
     <Compile Include="Tools\Helpers\ConsoleHelper.cs" />
@@ -86,7 +98,6 @@
     <Compile Include="Tools\Helpers\CryptographyHelper.cs" />
     <Compile Include="Tools\Helpers\DispatcherHelper.cs" />
     <Compile Include="Tools\Helpers\EnumHelper.cs" />
-    <Compile Include="Tools\Helpers\LifeCycleHelper.cs" />
     <Compile Include="Tools\Helpers\LoggerFileHelper.cs" />
     <Compile Include="Tools\Helpers\ImageHelper.cs" />
     <Compile Include="Tools\Helpers\ObjectHelper.cs" />
@@ -96,10 +107,8 @@
     <Compile Include="Tools\Helpers\WebBrowserHelper.cs" />
     <Compile Include="Tools\Helpers\WebHelper.cs" />
     <Compile Include="Tools\IOC\_IOCContainer.cs" />
+    <Compile Include="Tools\IOC\_IOCElementEnum.cs" />
     <Compile Include="Tools\IOC\_IOCElement.cs" />
-    <Compile Include="_Obsolete\BLL\BootstrapperBase.cs" />
-    <Compile Include="_Obsolete\BLL\SystemConfiguration.cs" />
-    <Compile Include="_Obsolete\BLL\SystemCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

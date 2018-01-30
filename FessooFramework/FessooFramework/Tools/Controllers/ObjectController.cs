@@ -110,7 +110,7 @@ namespace FessooFramework.Tools.Controllers
         /// <param name="_CheckValue">  (Optional) The check value. </param>
         /// <param name="isAsync">      (Optional) True if this object is asynchronous, false if not. </param>
 
-        public ObjectController(T defaultValue, Func<T, bool> _CheckValue = null, bool isAsync = true)
+        public ObjectController(T defaultValue, Func<T, bool> _CheckValue = null, bool isAsync = false)
         {
             _DefaultValue = defaultValue;
             _Value = defaultValue;

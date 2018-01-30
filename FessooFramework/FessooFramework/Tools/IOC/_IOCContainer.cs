@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace FessooFramework.Tools.IOC
     ///
     /// <typeparam name="T">    Generic type parameter. Where T is  <see cref="IOCElement"/> </typeparam>
 
-    public class IOContainer<T> : SystemObject where T : IOCElement
+    public class IOContainer<T> : SystemObject where T : _IOCElement
     {
         #region Property
 
@@ -51,7 +52,7 @@ namespace FessooFramework.Tools.IOC
             }
             catch (Exception ex)
             {
-                Logger.SendMessage(ex.ToString());
+                ConsoleHelper.SendException(ex);
             }
         }
         #endregion
@@ -72,6 +73,20 @@ namespace FessooFramework.Tools.IOC
                 return result;
             result = Collection.FirstOrDefault(q => q.UID == uid);
             return result;
+        }
+
+        /// <summary>   Gets all items in this collection.
+        ///             Получаем все объекты для обработки </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        ///
+        /// <returns>
+        /// An enumerator that allows foreach to be used to process all items in this collection.
+        /// </returns>
+
+        public IEnumerable<T> GetAll()
+        {
+            return Collection.ToArray();
         }
 
         /// <summary>   Adds IOC element in container. </summary>
@@ -98,8 +113,9 @@ namespace FessooFramework.Tools.IOC
             foreach (var item in collection)
             {
                 if (Collection.Any(q => q.UID == item.UID))
-                    throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
-                Collection.Add(item);
+                    throw new Exception("IOC element with the specified UID has already been added");
+                    //throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
+                    Collection.Add(item);
             }
         }
         #endregion
