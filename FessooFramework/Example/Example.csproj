@@ -44,13 +44,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\ALMModel.cs" />
-    <Compile Include="Tests\CoreExample\Components\SingltonApplicationHelper.cs" />
-    <Compile Include="Tests\CoreExample\_Bootstrapper.cs" />
-    <Compile Include="Tests\MEF.cs" />
-    <Compile Include="Tests\SystemObject.cs" />
-    <Compile Include="Tests\TestInheritance.cs" />
-    <Compile Include="Tests\ClientCacheModel.cs" />
+    <Compile Include="_0_Base\Models\ALMModel.cs" />
+    <Compile Include="_0_Base\CustomComponents\SingltonApplicationHelper.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="_0_Base\CustomComponents\SystemObject.cs" />
+    <Compile Include="_0_Base\Logic\TestInheritance.cs" />
+    <Compile Include="_0_Base\Models\ClientCacheModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -61,8 +60,6 @@
       <Name>FessooFramework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="_0_Base\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

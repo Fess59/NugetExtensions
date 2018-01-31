@@ -16,7 +16,6 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
-            var r = SynchronizationContext.Current;
             DCTNameTest();
             Console.Read();
         }
