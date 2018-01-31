@@ -47,8 +47,8 @@ namespace FessooFramework.Components.LoggerComponent.Realizations
             try
             {
                 //Путь 
-                var path = Logger.FilePath.Value;
-                var folder = Logger.FileFolder.Value;
+                var path = LoggerHelper.FilePath.Value;
+                var folder = LoggerHelper.FileFolder.Value;
                 if (string.IsNullOrWhiteSpace(path))
                     throw new Exception("Путь до файла не может быть пустым");
                 var absolutePath = $@"{path}\{folder}";

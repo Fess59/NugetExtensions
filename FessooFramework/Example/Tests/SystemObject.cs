@@ -14,29 +14,29 @@ namespace Example.Tests
     }
     public class SystemComponentExample : SystemComponent
     {
-        public override void _Compliting()
+        public override void _6_Unload()
         {
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Compliting Complete");
         }
 
-        public override void _Configuring()
+        public override void _2_Configuring()
         {
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Configuring Complete");
         }
 
-        public override void _Launching()
+        public override void _5_Launching()
         {
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Launching Complete");
         }
 
-        public override void _Loading()
+        public override void _3_Loaded()
         {
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Loading Complete");
         }
 
-        public override void _Warnings()
+        public override IEnumerable<TestingCase> _4_Testing()
         {
-            throw new NotImplementedException();
+            return Enumerable.Empty<TestingCase>();
         }
     }
 }

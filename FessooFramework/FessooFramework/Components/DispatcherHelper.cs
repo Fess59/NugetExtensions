@@ -1,4 +1,6 @@
-﻿using FessooFramework.Tools.DCT;
+﻿using FessooFramework.Objects;
+using FessooFramework.Objects.ALM;
+using FessooFramework.Tools.DCT;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,27 +10,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace FessooFramework.Tools.Helpers
+namespace FessooFramework.Components
 {
-    public static class DispatcherHelper
+    public class DispatcherHelper : SystemComponent
     {
         #region Property
         /// <summary>
         ///     Диспетчер основного потока
         /// </summary>
-        internal static Dispatcher Dispacher { get; set; }
+        static Dispatcher Dispacher { get; set; }
 
         /// <summary>
         ///     Диспетчер основного потока
         /// </summary>
-        internal static SynchronizationContext CurrentSynchronizationContext { get; set; }
+        static SynchronizationContext CurrentSynchronizationContext { get; set; }
         #endregion
-        #region Public methods
+        #region Methods
         /// <summary>
         ///     Устанавливает текущий диспетчер как основной диспетчер для выполнения операций
         /// </summary>
         /// <param name="dispatcher"></param>
-        internal static void SetDispatherAsDefault(this Dispatcher dispatcher)
+        internal static void SetDispatherAsDefault(Dispatcher dispatcher)
         {
             CurrentSynchronizationContext = SynchronizationContext.Current;
             Dispacher = dispatcher;
@@ -40,20 +42,23 @@ namespace FessooFramework.Tools.Helpers
             {
                 if (action == null)
                     throw new NullReferenceException("CurrentDispatcher.Execute - Action не может быть пустым");
+                //Если контекст синхронизации не доступен в данном приложении
+                if (CurrentSynchronizationContext == null)
+                {
+                    DCTDefault.ExecuteAsync(c => action());
+                    return;
+                }
                 if (isAsync)
                     CurrentSynchronizationContext.Post((a) => execute(a), action);
                 else
                     CurrentSynchronizationContext.Send((a) => execute(a), action);
             }, name: "DispatcherHelper");
         }
-
-        #endregion
-        #region Private
         internal static void Dispacher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             DCTDefault.Execute(data => { e.Handled = true; });
         }
-        internal static void execute(object args)
+        static void execute(object args)
         {
             DCTDefault.Execute(data =>
             {
@@ -69,5 +74,25 @@ namespace FessooFramework.Tools.Helpers
             });
         }
         #endregion
+        #region Component realization
+
+        #endregion
+        public override void _2_Configuring()
+        {
+            SetDispatherAsDefault(Dispatcher.CurrentDispatcher);
+        }
+        public override void _3_Loaded()
+        {
+        }
+        public override IEnumerable<TestingCase> _4_Testing()
+        {
+            return Enumerable.Empty<TestingCase>();
+        }
+        public override void _5_Launching()
+        {
+        }
+        public override void _6_Unload()
+        {
+        }
     }
 }

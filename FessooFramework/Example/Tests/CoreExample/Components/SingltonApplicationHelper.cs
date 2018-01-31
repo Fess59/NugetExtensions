@@ -9,25 +9,25 @@ namespace Example.Tests.CoreExample.Components
 {
     public class SingltonApplicationHelper : SystemComponent
     {
-        public override void _Compliting()
+        public override void _6_Unload()
         {
         }
 
-        public override void _Configuring()
+        public override void _2_Configuring()
         {
         }
 
-        public override void _Launching()
+        public override void _5_Launching()
         {
         }
 
-        public override void _Loading()
+        public override void _3_Loaded()
         {
         }
 
-        public override void _Warnings()
+        public override IEnumerable<TestingCase> _4_Testing()
         {
-     
+            return Enumerable.Empty<TestingCase>();
         }
     }
 }

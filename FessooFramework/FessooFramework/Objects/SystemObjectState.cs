@@ -12,14 +12,12 @@ namespace FessooFramework.Objects
 
     public enum SystemState
     {
-        None = 0,
-        Created = 1,
-        Initialized = 2,
-        Configured = 3,
-        Loaded = 4,
+        Created = 0,
+        Initialized = 1,
+        Configured = 2,
+        Loaded = 3,
+        Testing = 4,
         Launched = 5,
-        Pause = 6,
-        Complete = 7,
-        Warnings = 8
+        Unload = 6,
     }
 }

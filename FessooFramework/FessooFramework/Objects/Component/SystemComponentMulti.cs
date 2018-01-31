@@ -53,7 +53,7 @@ namespace FessooFramework.Objects
         /// <summary>   Configurings this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public override void _Configuring()
+        public override void _2_Configuring()
         {
             var list = new List<TElement>();
             _1_ElementAdd(ref list);
@@ -64,61 +64,19 @@ namespace FessooFramework.Objects
                 Container.Add(element);
             }
         }
-        /// <summary>   Loadings this object. Загрузка данных для объекта и обработка данных. </summary>
+      /// <summary>   Launchings this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public override void _Loading()
-        {
-            _3_Loaded();
-        }
-        /// <summary>
-        ///     Warnings this object. Проверка компонента на определённые условия - в будующем в этом
-        ///     месте требуется подключение модуля динамической отладки с выводом предпреждений.
-        /// </summary>
-        ///
-        /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public override void _Warnings()
-        {
-            var cases = _4_CaseTesting();
-            if (cases != null && cases.Any())
-            {
-                foreach (var c in cases)
-                {
-                    if (c.ComponentCase == null)
-                    {
-                        ConsoleHelper.SendWarning(MethodBase.GetCurrentMethod(), $"Case не возможно выполнить. Func не может быть NULL. Описание -  '{c.Description}' - тело вызова не может быть NULL");
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (!c.ComponentCase.Invoke())
-                            {
-                                ConsoleHelper.SendWarning(MethodBase.GetCurrentMethod(), $"Case не пройден! Описание - '{c.Description}'");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            ConsoleHelper.SendWarning(MethodBase.GetCurrentMethod(), $"Case ошибка при выполнении! Описание - '{c.Description}'");
-                        }
-
-                    }
-                }
-            }
-        }
-        /// <summary>   Launchings this object. </summary>
-        ///
-        /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public override void _Launching()
+        public override void _5_Launching()
         {
             _5_Run();
         }
         /// <summary>   Complitings this object. Работа с модулем была завершена. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public override void _Compliting()
+        public override void _6_Unload()
         {
-            _99_Finalize();
+            _99_Unload();
         }
         #endregion
         #region Abstractions
@@ -137,13 +95,13 @@ namespace FessooFramework.Objects
         /// <summary>  Loaded this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public abstract void _3_Loaded();
+        public abstract override void _3_Loaded();
         /// <summary>   Case testing. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
         ///
         /// <param name="cases">    [in,out] The cases. </param>
-        public abstract IEnumerable<SystemComponentCase> _4_CaseTesting();
+        public abstract override IEnumerable<TestingCase> _4_Testing();
         /// <summary>   Runs this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
@@ -152,26 +110,7 @@ namespace FessooFramework.Objects
         ///             Вызывается перед Dispose - сохраняем необходимые параметры и фиксируем аналитические данные</summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public abstract void _99_Finalize();
+        public abstract void _99_Unload();
         #endregion
-    }
-
-    public struct SystemComponentCase
-    {
-        public Func<bool> ComponentCase { get; set; }
-        public string Description { get; set; }
-        SystemComponentCase(string description, Func<bool> componentCase)
-        {
-            Description = description;
-            ComponentCase = componentCase;
-        }
-        public static SystemComponentCase New(string description, Func<bool> componentCase)
-        {
-            return new SystemComponentCase()
-            {
-                Description = description,
-                ComponentCase = componentCase
-            };
-        }
     }
 }

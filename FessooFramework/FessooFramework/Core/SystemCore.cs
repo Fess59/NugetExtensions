@@ -1,4 +1,5 @@
-﻿using FessooFramework.Components.LoggerComponent;
+﻿using FessooFramework.Components;
+using FessooFramework.Components.LoggerComponent;
 using FessooFramework.Objects;
 using FessooFramework.Tools.Helpers;
 using FessooFramework.Tools.IOC;
@@ -58,8 +59,6 @@ namespace FessooFramework.Core
         {   
             switch (newState)
             {
-                case SystemState.None:
-                    throw new Exception($"{GetType().Name}: State 'None' not supported");
                 case SystemState.Created:
                     ConsoleHelper.SendMessage($"0. SystemCore: Core instance created");
                     break;
@@ -71,9 +70,11 @@ namespace FessooFramework.Core
                     Bootstrapper.SetConfiguration(ref coreConfiguration);
                     CoreConfiguration = coreConfiguration;
 
-                    //1. Получаю добавляю или переопределяю модули
+                    //1. Добавляю базовые компоненты системы
                     var components = new List<SystemComponent>();
-                    components.Add(new Logger());
+                    components.Add(new LoggerHelper());
+                    components.Add(new DispatcherHelper());
+                    //Получаю кастомные компоненты
                     Bootstrapper.SetComponents(ref components);
                     ComponentsContainer.AddRange(components);
                     ConsoleHelper.SendMessage($"2. SystemCore '{Name}': Initialization - setup all components default settings");
@@ -98,14 +99,14 @@ namespace FessooFramework.Core
                         component._SetState(State);
 #if DEBUG
                     if (CoreConfiguration.ComponentTestEnable)
-                        _SetState(SystemState.Warnings);
+                        _SetState(SystemState.Testing);
                     else
                         _SetState(SystemState.Launched);
 #else
                     _SetState(SystemState.Launched);
 #endif
                     break;
-                case SystemState.Warnings:
+                case SystemState.Testing:
                     //4.1 Тестовый метод для проверки работы модуля - может использовать как динамическое тестирование под дебагом
                     foreach (var component in ComponentsContainer.GetAll())
                         component._SetState(State);
@@ -121,9 +122,7 @@ namespace FessooFramework.Core
                     foreach (var component in ComponentsContainer.GetAll())
                        ConsoleHelper.SendMessage(component.ToInfo());
                     break;
-                case SystemState.Pause:
-                    break;
-                case SystemState.Complete:
+                case SystemState.Unload:
                     break;
                 default:
                     break;

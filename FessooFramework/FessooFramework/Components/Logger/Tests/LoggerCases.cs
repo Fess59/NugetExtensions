@@ -18,9 +18,9 @@ namespace FessooFramework.Components.LoggerComponent.Tests
         internal static bool Case1()
         {
             var result = true;
-            if (!Logger.HasLoggerEnable.Value)
+            if (!LoggerHelper.HasLoggerEnable.Value)
             {
-                result = Logger.SendMessage(LoggerMessage.New(LoggerMessageType.Testing, "Logger.Case1 - Test", Category));
+                result = LoggerHelper.SendMessage(LoggerMessage.New(LoggerMessageType.Testing, "Logger.Case1 - Test", Category));
             }
             return result;
         }
@@ -30,7 +30,7 @@ namespace FessooFramework.Components.LoggerComponent.Tests
         internal static bool Case2()
         {
             var result = true;
-            foreach (var item in Logger.GetAll())
+            foreach (var item in LoggerHelper.GetAll())
             {
                 if (!item.SendInformation("Logger.Case2 - Test", Category))
                 {

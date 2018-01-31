@@ -20,7 +20,7 @@ namespace FessooFramework.Components.LoggerComponent
     ///
     /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
 
-    public class Logger : SystemComponentMulti<LoggerElement, LoggerElementType>
+    public class LoggerHelper : SystemComponentMulti<LoggerElement, LoggerElementType>
     {
         #region Property
         /// <summary>   The has logger enable.
@@ -103,7 +103,7 @@ namespace FessooFramework.Components.LoggerComponent
             return result;
         }
         #endregion
-        #region SystemComponent realization
+        #region Component realization
         public override void _1_ElementAdd(ref List<LoggerElement> elements)
         {
             elements.Add(new ConsoleLogger());
@@ -143,18 +143,18 @@ namespace FessooFramework.Components.LoggerComponent
             HasConsole.Value = true;
 #endif
         }
-        public override IEnumerable<SystemComponentCase> _4_CaseTesting()
+        public override IEnumerable<TestingCase> _4_Testing()
         {
-            return new SystemComponentCase[]
+            return new TestingCase[]
             {
-                SystemComponentCase.New(LoggerCases.Case1Description, LoggerCases.Case1),
-                SystemComponentCase.New(LoggerCases.Case2Description, LoggerCases.Case2)
+                TestingCase.New(LoggerCases.Case1Description, LoggerCases.Case1),
+                TestingCase.New(LoggerCases.Case2Description, LoggerCases.Case2)
             };
         }
         public override void _5_Run()
         {
         }
-        public override void _99_Finalize()
+        public override void _99_Unload()
         {
         }
         #endregion

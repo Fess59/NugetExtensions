@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using FessooFramework.Tools.DCT;
 using FessooFramework.Components.LoggerComponent;
 using FessooFramework.Components.LoggerComponent.Models;
+using FessooFramework.Components;
 
 namespace FessooFramework.Core
 {
@@ -264,7 +265,7 @@ namespace FessooFramework.Core
         }
         private static void Send(LoggerMessage message)
         {
-            Logger.SendMessage(message);
+            LoggerHelper.SendMessage(message);
         }
         #endregion
         #region Tools
@@ -282,7 +283,7 @@ namespace FessooFramework.Core
             var result = "";
             try 
             {
-                if (!Logger.HasLoggerEnable.Value)
+                if (!LoggerHelper.HasLoggerEnable.Value)
                     return result;
                 StackTrace st = new StackTrace(1, false);
                 StackFrame sf = st.GetFrame(frame);

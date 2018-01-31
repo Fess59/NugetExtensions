@@ -22,7 +22,8 @@ namespace FessooFramework.Objects
     ///             - Created - успешно выполнил конструктор
     ///             - Initialized - успешно прошёл инициализацию, в инициализацию входит базовые настройки всего модуля, значение по умолчанию и настройки по умолчанию
     ///             - Configured - базовая настройка блока - вызов Default метода
-    ///             - Loaded - загрузка данных для блока, к примеру с сервера
+    ///             - Loaded - загрузка данных для блока, к примеру с сервера  
+    ///             - Testing - кейсы компонента системы, выполняются под DEBUG
     ///             - Launched - запуск процессов не обходимы для работу блока  
     ///             - Complete - модуль завершил работу, принудительно или планово
     ///             
@@ -32,7 +33,7 @@ namespace FessooFramework.Objects
     ///             - Компоненты модулей в одном месте </summary>
     ///
     /// <remarks>   Fess59, 26.01.2018. </remarks>
-    public abstract class SystemComponent: _IOCElement
+    public abstract class SystemComponent : _IOCElement
     {
         #region Property
         /// <summary>   Gets the name.
@@ -62,37 +63,6 @@ namespace FessooFramework.Objects
         }
         #endregion
         #region Methods
-        /// <summary>   Второй шаг настройки модуля - в инициализацию входит базовые настройки модуля, установка значений и настроек по умолчанию</summary>
-        ///
-        /// <remarks>   Fess59, 26.01.2018. </remarks>
-        private void Initialization()
-        {
-            Default();
-        }
-        /// <summary>   Configurations this object.
-        ///             Настройка текущего модуля - наложение кастомных настроек и подписки глобальных настроек </summary>
-        ///
-        /// <remarks>   Fess59, 26.01.2018. </remarks>
-        private void Configuration()
-        {
-            _Configuring();
-        }
-        /// <summary>   Loads this object.
-        ///             Загрузка данных для объекта и обработка данных, к примеру парметры глобальные из настрое или кэша или сервера </summary>
-        ///
-        /// <remarks>   Fess59, 26.01.2018. </remarks>
-        private void Load()
-        {
-            _Loading();
-        }
-        /// <summary>   Launches this object.
-        ///             Запуск процессов необходимых для работы модуля. Модуль в работе, все настройки завершены</summary>
-        ///
-        /// <remarks>   Fess59, 26.01.2018. </remarks>
-        private void Launch()
-        {
-            _Launching();
-        }
 
         /// <summary>   Converts this object to an information. </summary>
         ///
@@ -102,78 +72,75 @@ namespace FessooFramework.Objects
         {
             return $"Component {_Name} state {State}";
         }
-
-        /// <summary>   Completed this object.
-        ///             Работа с модулем была завершена </summary>
+        #endregion
+        #region Abstractiona
+        /// <summary>   Второй шаг настройки модуля(Create первый) - в инициализацию входит базовые настройки модуля, установка значений и настроек по умолчанию</summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
-        private void Completed()
+        public virtual void _1_Initialization()
         {
-            _Compliting();
-            _IsEnable = false;
-            Dispose();
+            Default();
         }
-
         /// <summary>   Configurings this object.
         ///             Настройка текущего модуля - наложение кастомных настроек и подписки глобальных настроек </summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
 
-        public abstract void _Configuring();
+        public abstract void _2_Configuring();
 
         /// <summary>   Loadings this object.
         ///              Загрузка данных для объекта и обработка данных </summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
 
-        public abstract void _Loading();
+        public abstract override void _3_Loaded();
+
+        /// <summary>   Testing this object.
+        ///             Проверка компонента на определённые условия - в будующем в этом месте требуется подключение модуля динамической отладки с выводом предпреждений </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+
+        public abstract override IEnumerable<TestingCase> _4_Testing();
 
         /// <summary>   Launchings this object. </summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
 
-        public abstract void _Launching();
+        public abstract void _5_Launching();
 
         /// <summary>   Complitings this object. 
         ///             Работа с модулем была завершена</summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
 
-        public abstract void _Compliting();
-
-        /// <summary>   Warnings this object.
-        ///             Проверка компонента на определённые условия - в будующем в этом месте требуется подключение модуля динамической отладки с выводом предпреждений </summary>
-        ///
-        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
-
-        public abstract void _Warnings();
+        public abstract override void _6_Unload();
         #endregion
         #region ALM realization
-        public override void _StateChanged(SystemState newState, SystemState oldState)
+        public sealed override void _StateChanged(SystemState newState, SystemState oldState)
         {
             switch (newState)
             {
                 case SystemState.Created:
                     break;
                 case SystemState.Initialized:
-                    Initialization();
+                    _1_Initialization();
                     break;
                 case SystemState.Configured:
-                    _Configuring();
+                    _2_Configuring();
                     break;
                 case SystemState.Loaded:
-                    _Loading();
+                    _3_Loaded();
                     break;
                 case SystemState.Launched:
-                    _Launching();
+                    _5_Launching();
                     break;
-                case SystemState.Warnings:
-                    _Warnings();
+                case SystemState.Testing:
+                    Testing();
                     break;
-                case SystemState.Pause:
-                    break;
-                case SystemState.Complete:
-                    _Compliting();
+                case SystemState.Unload:
+                    _6_Unload();
+                    _IsEnable = false;
+                    Dispose();
                     break;
                 default:
                     break;

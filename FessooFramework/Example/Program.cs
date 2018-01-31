@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Example
@@ -15,6 +16,7 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
+            var r = SynchronizationContext.Current;
             DCTNameTest();
             Console.Read();
         }
