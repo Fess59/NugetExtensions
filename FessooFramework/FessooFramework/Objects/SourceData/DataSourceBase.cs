@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FessooFramework.Objects.SourceData
 {
-    public abstract class DataSourceBase : _IOCElement
+    internal abstract class DataSourceBase : _IOCElement
     {
         public abstract DbContext GetContext();
         protected abstract bool IsCreated { get; }

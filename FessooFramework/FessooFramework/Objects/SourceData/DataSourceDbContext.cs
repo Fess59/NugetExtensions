@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FessooFramework.Objects.SourceData
 {
-    public class DataSourceDbContext<TContext> : DataSourceBase
+    internal class DataSourceDbContext<TContext> : DataSourceBase
          where TContext : DbContext, new()
     {
         #region Property
