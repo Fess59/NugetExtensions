@@ -48,20 +48,20 @@ namespace FessooFramework.Objects
         /// <summary>   Loaded this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 31.01.2018. </remarks>
-        public virtual void _3_Loaded()
+        protected virtual void _3_Loaded()
         {
         }
         /// <summary>   Testings this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 31.01.2018. </remarks>
-        public virtual IEnumerable<TestingCase> _4_Testing()
+        protected virtual IEnumerable<TestingCase> _4_Testing()
         {
             return Enumerable.Empty<TestingCase>();
         }
         /// <summary>   Unloaded this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 31.01.2018. </remarks>
-        public virtual void _6_Unload()
+        protected virtual void _6_Unload()
         {
 
         }
@@ -105,7 +105,7 @@ namespace FessooFramework.Objects
         }
         #endregion
         #region ALM realization
-        public override void _StateChanged(SystemState newState, SystemState oldState)
+        protected override void _StateChanged(SystemState newState, SystemState oldState)
         {
             switch (newState)
             {
@@ -140,7 +140,7 @@ namespace FessooFramework.Objects
                     break;
             }
         }
-        public override IEnumerable<ALMConf<SystemState>> _StateConfiguration()
+        protected override IEnumerable<ALMConf<SystemState>> _StateConfiguration()
         {
             return new ALMConf<SystemState>[]
             {

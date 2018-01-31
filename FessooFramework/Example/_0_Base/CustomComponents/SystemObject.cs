@@ -14,7 +14,7 @@ namespace Example.Tests
     }
     public class SystemComponentExample : SystemComponent
     {
-        public override void _6_Unload()
+        protected override void _6_Unload()
         {
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Compliting Complete");
         }
@@ -29,12 +29,12 @@ namespace Example.Tests
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Launching Complete");
         }
 
-        public override void _3_Loaded()
+        protected override void _3_Loaded()
         {
             ConsoleHelper.SendMessage($"{this.GetType().Name} => _Loading Complete");
         }
 
-        public override IEnumerable<TestingCase> _4_Testing()
+        protected override IEnumerable<TestingCase> _4_Testing()
         {
             return Enumerable.Empty<TestingCase>();
         }

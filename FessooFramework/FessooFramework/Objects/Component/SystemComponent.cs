@@ -93,14 +93,14 @@ namespace FessooFramework.Objects
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
 
-        public abstract override void _3_Loaded();
+        protected abstract override void _3_Loaded();
 
         /// <summary>   Testing this object.
         ///             Проверка компонента на определённые условия - в будующем в этом месте требуется подключение модуля динамической отладки с выводом предпреждений </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
 
-        public abstract override IEnumerable<TestingCase> _4_Testing();
+        protected abstract override IEnumerable<TestingCase> _4_Testing();
 
         /// <summary>   Launchings this object. </summary>
         ///
@@ -113,10 +113,10 @@ namespace FessooFramework.Objects
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
 
-        public abstract override void _6_Unload();
+        protected abstract override void _6_Unload();
         #endregion
         #region ALM realization
-        public sealed override void _StateChanged(SystemState newState, SystemState oldState)
+        protected sealed override void _StateChanged(SystemState newState, SystemState oldState)
         {
             switch (newState)
             {

@@ -52,7 +52,7 @@ namespace FessooFramework.Objects.ALM
         ///             Состояние объекта было изменено </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
-        public virtual void _StateChanged(TEnumState newState, TEnumState oldState)
+        protected virtual void _StateChanged(TEnumState newState, TEnumState oldState)
         {
 
         }
@@ -86,7 +86,7 @@ namespace FessooFramework.Objects.ALM
         ///
         /// <param name="list"> [in,out] The list. </param>
 
-        public virtual IEnumerable<ALMConf<TEnumState>> _StateConfiguration()
+        protected virtual IEnumerable<ALMConf<TEnumState>> _StateConfiguration()
         {
             return Enumerable.Empty<ALMConf<TEnumState>>();
         }

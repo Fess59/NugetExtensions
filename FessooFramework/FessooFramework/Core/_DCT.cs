@@ -287,8 +287,19 @@ namespace FessooFramework.Core
                     return result;
                 StackTrace st = new StackTrace(1, false);
                 StackFrame sf = st.GetFrame(frame);
-                var method = sf.GetMethod();
-                result = method.DeclaringType.Name;
+                if (sf != null)
+                {
+                    var method = sf.GetMethod();
+                    result = method.DeclaringType.Name;
+                }
+                else if (frame > 1)
+                {
+                    result = GetCategoryName(frame - 1);
+                }
+                else
+                {
+                    result = "UNKNOW";
+                }
             }
             catch (Exception e)
             {

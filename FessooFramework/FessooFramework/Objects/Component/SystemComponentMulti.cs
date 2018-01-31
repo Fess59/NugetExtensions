@@ -74,7 +74,7 @@ namespace FessooFramework.Objects
         /// <summary>   Complitings this object. Работа с модулем была завершена. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public override void _6_Unload()
+        protected override void _6_Unload()
         {
             _99_Unload();
         }
@@ -95,13 +95,13 @@ namespace FessooFramework.Objects
         /// <summary>  Loaded this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
-        public abstract override void _3_Loaded();
+        protected abstract override void _3_Loaded();
         /// <summary>   Case testing. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
         ///
         /// <param name="cases">    [in,out] The cases. </param>
-        public abstract override IEnumerable<TestingCase> _4_Testing();
+        protected abstract override IEnumerable<TestingCase> _4_Testing();
         /// <summary>   Runs this object. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>

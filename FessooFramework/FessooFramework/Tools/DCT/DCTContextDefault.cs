@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Core;
+using FessooFramework.Objects.SourceData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace FessooFramework.Tools.DCT
     /// <remarks>   Fess59, 26.01.2018. </remarks>
     public class DCTContextDefault : _DCTContext
     {
+        public DataContextStore DataContextStore { get; set; }
         public DCTContextDefault()
         {
         }

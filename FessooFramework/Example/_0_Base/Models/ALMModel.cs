@@ -10,11 +10,11 @@ namespace Example.Tests
 {
     public class ALMModel : ALMObject<ALMModelState>
     {
-        public override void _StateChanged(ALMModelState newState, ALMModelState oldState)
+        protected override void _StateChanged(ALMModelState newState, ALMModelState oldState)
         {
             ConsoleHelper.SendMessage($"Объект {typeof(ALMModelState).ToString()} осуществил пререход из {newState} в {oldState}");
         }
-        public override IEnumerable<ALMConf<ALMModelState>> _StateConfiguration()
+        protected override IEnumerable<ALMConf<ALMModelState>> _StateConfiguration()
         {
             return new ALMConf<ALMModelState>[] 
             {

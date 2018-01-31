@@ -9,7 +9,7 @@ namespace Example.Tests.CoreExample.Components
 {
     public class SingltonApplicationHelper : SystemComponent
     {
-        public override void _6_Unload()
+        protected override void _6_Unload()
         {
         }
 
@@ -21,11 +21,11 @@ namespace Example.Tests.CoreExample.Components
         {
         }
 
-        public override void _3_Loaded()
+        protected override void _3_Loaded()
         {
         }
 
-        public override IEnumerable<TestingCase> _4_Testing()
+        protected override IEnumerable<TestingCase> _4_Testing()
         {
             return Enumerable.Empty<TestingCase>();
         }

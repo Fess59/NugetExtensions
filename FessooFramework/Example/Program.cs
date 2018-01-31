@@ -1,4 +1,5 @@
-﻿using Example.Tests;
+﻿using Example._0_Base.Data;
+using Example.Tests;
 using FessooFramework.Core;
 using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
@@ -17,6 +18,13 @@ namespace Example
         {
             CoreTest();
             DCTNameTest();
+
+            DCTExample.Execute(c => {
+                var r1 = c.FirstModels.ToArray();
+                var r2 = c.SecondModels.ToArray();
+                var r3 = c.ThirdModels.ToArray();
+            });
+            
             Console.Read();
         }
         #region DCT test

@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Objects.SourceData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,13 +30,20 @@ namespace FessooFramework.Core
         /// <value> The identifier of the parent track. </value>
 
         public Guid ParentTrackId { get; internal set; }
-
+        protected DataContextStore _Store = new DataContextStore();
         #endregion
         #region Constructor
         public _DCTContext()
         {
             //TODO TrackModule
             TrackId = Guid.NewGuid();
+        }
+        #endregion
+        #region Methods
+        public override void Dispose()
+        {
+            base.Dispose();
+            _Store.Dispose();
         }
         #endregion
     }

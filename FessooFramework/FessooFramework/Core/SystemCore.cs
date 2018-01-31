@@ -55,7 +55,7 @@ namespace FessooFramework.Core
         }
         #endregion
         #region ALM realization
-        public override void _StateChanged(SystemState newState, SystemState oldState)
+        protected override void _StateChanged(SystemState newState, SystemState oldState)
         {   
             switch (newState)
             {
@@ -121,6 +121,9 @@ namespace FessooFramework.Core
 
                     foreach (var component in ComponentsContainer.GetAll())
                        ConsoleHelper.SendMessage(component.ToInfo());
+
+                    //6. Ядро готово к работе
+                    ConsoleHelper.SendMessage($"Core launch completed! Elapsed  { TimeSpan.FromTicks( DateTime.Now.Ticks - CreateDate.Ticks)} мс");
                     break;
                 case SystemState.Unload:
                     break;

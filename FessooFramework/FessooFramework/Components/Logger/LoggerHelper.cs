@@ -136,14 +136,14 @@ namespace FessooFramework.Components.LoggerComponent
                     break;
             }
         }
-        public override void _3_Loaded()
+        protected override void _3_Loaded()
         {
             HasLoggerEnable.Value = SystemCore.Current.CoreConfiguration.LogEnable.Value;
 #if DEBUG
             HasConsole.Value = true;
 #endif
         }
-        public override IEnumerable<TestingCase> _4_Testing()
+        protected override IEnumerable<TestingCase> _4_Testing()
         {
             return new TestingCase[]
             {
