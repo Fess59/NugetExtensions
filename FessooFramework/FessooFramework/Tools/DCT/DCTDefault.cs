@@ -10,7 +10,7 @@ namespace FessooFramework.Tools.DCT
     public static class DCTDefault
     {
         #region Property
-        public static DCTContextDefault Context { get { return _DCT<DCTContextDefault>.Context; } }
+        public static _DCTContext Context { get { return _DCT.Context<_DCTContext>(); } }
         #endregion
         #region Execute methods
         /// <summary>   Executes void. </summary>
@@ -22,9 +22,9 @@ namespace FessooFramework.Tools.DCT
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void Execute(Action<DCTContextDefault> action, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null, string name = "")
+        public static void Execute(Action<_DCTContext> action, Action<_DCTContext, Exception> continueExceptionMethod = null, Action<_DCTContext> continueMethod = null, string name = "")
         {
-            _DCT<DCTContextDefault>.Execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
+            _DCT.Execute<_DCTContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
         }
         /// <summary>   Executes result. </summary>
         ///
@@ -38,9 +38,9 @@ namespace FessooFramework.Tools.DCT
         ///                                         method и continueExceptionMethod. </param>
         ///
         /// <returns>   A TResult. </returns>
-        public static TResult Execute<TResult>(Func<DCTContextDefault, TResult> action, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null)
+        public static TResult Execute<TResult>(Func<_DCTContext, TResult> action, Action<_DCTContext, Exception> continueExceptionMethod = null, Action<_DCTContext> continueMethod = null)
         {
-            return _DCT<DCTContextDefault>.Execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            return _DCT.Execute<_DCTContext, TResult>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. With result </summary>
         ///
@@ -54,9 +54,9 @@ namespace FessooFramework.Tools.DCT
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteAsync<TResult>(Func<DCTContextDefault, TResult> action, Action<DCTContextDefault, TResult> complete, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null)
+        public static void ExecuteAsync<TResult>(Func<_DCTContext, TResult> action, Action<_DCTContext, TResult> complete, Action<_DCTContext, Exception> continueExceptionMethod = null, Action<_DCTContext> continueMethod = null)
         {
-            _DCT<DCTContextDefault>.ExecuteAsync(action, complete, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT.ExecuteAsync<_DCTContext, TResult>(action, complete, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. Void </summary>
         ///
@@ -67,9 +67,9 @@ namespace FessooFramework.Tools.DCT
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteAsync(Action<DCTContextDefault> action, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null)
+        public static void ExecuteAsync(Action<_DCTContext> action, Action<_DCTContext, Exception> continueExceptionMethod = null, Action<_DCTContext> continueMethod = null)
         {
-            _DCT<DCTContextDefault>.ExecuteAsync(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT.ExecuteAsync<_DCTContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the main thread operation. </summary>
         ///
@@ -80,31 +80,31 @@ namespace FessooFramework.Tools.DCT
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteMainThread(Action<DCTContextDefault> action, Action<DCTContextDefault, Exception> continueExceptionMethod = null, Action<DCTContextDefault> continueMethod = null)
+        public static void ExecuteMainThread(Action<_DCTContext> action, Action<_DCTContext, Exception> continueExceptionMethod = null, Action<_DCTContext> continueMethod = null)
         {
-            _DCT<DCTContextDefault>.ExecuteMainThread(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT.ExecuteMainThread<_DCTContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         #endregion
         #region Send message methods
         public static void SendExceptions(string text, string category)
         {
-            _DCT<DCTContextDefault>.SendExceptions(text, category);
+            _DCT.SendExceptions(text, category);
         }
         public static void SendExceptions(Exception ex, string category)
         {
-            _DCT<DCTContextDefault>.SendExceptions(ex, category);
+            _DCT.SendExceptions(ex, category);
         }
         public static void SendInformations(string text, string category)
         {
-            _DCT<DCTContextDefault>.SendInformations(text, category);
+            _DCT.SendInformations(text, category);
         }
         public static void SendWarning(string text, string category)
         {
-            _DCT<DCTContextDefault>.SendWarning(text, category);
+            _DCT.SendWarning(text, category);
         }
         public static void Send(string text)
         {
-            _DCT<DCTContextDefault>.Send(text);
+            _DCT.Send(text);
         }
         #endregion
     }

@@ -17,18 +17,8 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
-            DCTNameTest();
-
-            DCTExample.Execute(c => {
-                var r1 = c.FirstModels.ToArray();
-                var r2 = c.SecondModels.ToArray();
-                var r3 = c.ThirdModels.ToArray();
-            });
-
-            DCTExample.Execute(c => {
-                
-            });
-
+            DCTTest();
+            EntityTest();
             Console.Read();
         }
         #region DCT test
@@ -43,10 +33,10 @@ namespace Example
 
         private static void DCTTest()
         {
-            DCTDefault.Execute(data =>
+            DCTExample.Execute(data =>
             {
                 ConsoleHelper.SendMessage($"Context 1 ID {data.Id}");
-                DCTDefault.Execute(data2 =>
+                DCTExample.Execute(data2 =>
                 {
                     ConsoleHelper.SendMessage($"Context 2 ID {data2.Id}");
                 });
@@ -60,12 +50,12 @@ namespace Example
                 });
                 InternalMethod();
             });
-            DCTDefault.Execute(data =>
+            DCTExample.Execute(data =>
             {
                 ConsoleHelper.SendMessage($"Context 5 ID {data.Id}");
                 InternalMethod();
             });
-            DCTDefault.ExecuteAsync(data =>
+            DCTExample.ExecuteAsync(data =>
             {
                 ConsoleHelper.SendMessage($"Context 6 ID {data.Id}");
                 InternalMethod();
@@ -113,6 +103,22 @@ namespace Example
         public static void CoreTest()
         {
             new Example.Tests.CoreExample.Bootstrapper().Run();
+        }
+        #endregion
+        #region Entity test
+        public static void EntityTest()
+        {
+            DCTDefault.Send("START");
+            DCTExample.Execute(c => {
+                c.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "1" });
+                EntityTest2();
+                c.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "3" });
+                c.SaveChanges();
+            });
+        }
+        public static void EntityTest2()
+        {
+            DCTExample.Context.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "2" });
         }
         #endregion
     }

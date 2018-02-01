@@ -20,7 +20,7 @@ namespace FessooFramework.Tools.DCT
         ///                                         method и continueExceptionMethod. </param>
         public static void Execute(Action<DCTContextExample> action, Action<DCTContextExample, Exception> continueExceptionMethod = null, Action<DCTContextExample> continueMethod = null, string name = "")
         {
-            _DCT<DCTContextExample>.Execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
+            _DCT.Execute<DCTContextExample>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
         }
         /// <summary>   Executes result. </summary>
         ///
@@ -36,7 +36,7 @@ namespace FessooFramework.Tools.DCT
         /// <returns>   A TResult. </returns>
         public static TResult Execute<TResult>(Func<DCTContextExample, TResult> action, Action<DCTContextExample, Exception> continueExceptionMethod = null, Action<DCTContextExample> continueMethod = null)
         {
-            return _DCT<DCTContextExample>.Execute(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            return _DCT.Execute<DCTContextExample, TResult>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. With result </summary>
         ///
@@ -52,7 +52,7 @@ namespace FessooFramework.Tools.DCT
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteAsync<TResult>(Func<DCTContextExample, TResult> action, Action<DCTContextExample, TResult> complete, Action<DCTContextExample, Exception> continueExceptionMethod = null, Action<DCTContextExample> continueMethod = null)
         {
-            _DCT<DCTContextExample>.ExecuteAsync(action, complete, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT.ExecuteAsync<DCTContextExample, TResult>(action, complete, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. Void </summary>
         ///
@@ -65,7 +65,7 @@ namespace FessooFramework.Tools.DCT
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteAsync(Action<DCTContextExample> action, Action<DCTContextExample, Exception> continueExceptionMethod = null, Action<DCTContextExample> continueMethod = null)
         {
-            _DCT<DCTContextExample>.ExecuteAsync(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT.ExecuteAsync<DCTContextExample>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the main thread operation. </summary>
         ///
@@ -78,9 +78,9 @@ namespace FessooFramework.Tools.DCT
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteMainThread(Action<DCTContextExample> action, Action<DCTContextExample, Exception> continueExceptionMethod = null, Action<DCTContextExample> continueMethod = null)
         {
-            _DCT<DCTContextExample>.ExecuteMainThread(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _DCT.ExecuteMainThread(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
 
-        public static DCTContextExample Context { get { return _DCT<DCTContextExample>.Context; } }
+        public static DCTContextExample Context { get { return _DCT.Context<DCTContextExample>(); } }
     }
 }

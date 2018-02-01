@@ -21,9 +21,9 @@ namespace FessooFramework.Tools.Helpers
         /// <remarks>   Fess59, 26.01.2018. </remarks>
         ///
         /// <returns>   The context. </returns>
-        public static T GetContext<T>(string name) where T : class
+        public static object GetContext(string name)
         {
-            return Thread.GetData(Thread.GetNamedDataSlot(name)) as T;
+            return Thread.GetData(Thread.GetNamedDataSlot(name));
         }
 
         /// <summary>   Sets a context.
@@ -37,7 +37,7 @@ namespace FessooFramework.Tools.Helpers
         ///
         /// <returns>   A T. </returns>
 
-        public static T SetContext<T>(T value, string name) where T : class
+        public static object SetContext(object value, string name) 
         {
             Thread.SetData(Thread.GetNamedDataSlot(name), value);
             return value;
@@ -53,11 +53,11 @@ namespace FessooFramework.Tools.Helpers
         ///
         /// <returns>   A T. </returns>
 
-        public static T CheckOrCreateContext<T>(string contextName) where T : class, new()
-        {            
-            var context = ContextHelper.GetContext<T>(contextName);
-            var data = context == null ? ContextHelper.SetContext(new T(), contextName) : context;
-            return data;
-        }
+        //public static T CheckOrCreateContext<T>(string contextName) where T : class, new()
+        //{
+        //    var context = ContextHelper.GetContext(contextName);
+        //    var data = context == null ? ContextHelper.SetContext(new T(), contextName) : context;
+        //    return data;
+        //}
     }
 }

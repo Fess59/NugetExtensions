@@ -26,7 +26,7 @@ namespace FessooFramework.Core
     /// <remarks>   Fess59, 26.01.2018. </remarks>
     ///
     /// <typeparam name="TContext"> Type of the context. </typeparam>
-    public static class _DCT<TContext> where TContext : _DCTContext, new()
+    public static class _DCT
     {
         #region DCT base
         /// <summary>    Executes result.
@@ -44,12 +44,13 @@ namespace FessooFramework.Core
         /// <param name="complete">                  (Optional) The complete. Для отправки результата в другой блок кода, используется в ExecuteAsync<TReusult>  </param>
         ///
         /// <returns>    A TResult. </returns>
-        private static TResult execute<TResult>(
+        private static TResult execute<TContext, TResult>(
             string name,
             Func<TContext, TResult> method,
             Action<TContext, Exception> continueExceptionMethod = null,
             Action<TContext> continueMethod = null,
              Action<TContext, TResult> complete = null)
+             where TContext : _DCTContext, new()
         {
             TResult result = default(TResult);
             bool isOwner = false;
@@ -57,26 +58,26 @@ namespace FessooFramework.Core
             {
                 if (method == null) throw new NullReferenceException("Parameter 'method' cannot be null");
                 //Статус владельца контекста
-                isOwner = CheckContext();
-                result = method(Context);
+                isOwner = CheckContext<TContext>();
+                result = method(Context<TContext>());
 
             }
             catch (Exception ex)
             {
                 if (continueExceptionMethod != null)
-                    execute(name, dataEx => continueExceptionMethod(dataEx, ex));
+                    execute<TContext>(name, dataEx => continueExceptionMethod(dataEx, ex));
                 SendExceptions(ex, name);
             }
             finally
             {
                 if (continueMethod != null)
-                    execute(name, dataCon => continueMethod(dataCon));
+                    execute<TContext>(name, dataCon => continueMethod(dataCon));
                 if (complete != null)
-                    execute(name, dataCom => complete(dataCom, result));
+                    execute<TContext>(name, dataCom => complete(dataCom, result));
                 //TODO Tracker and Analitics
                 //SendInformations($@"Complete", name);
             }
-            DisposeContext(Context, isOwner);
+            DisposeContext(Context<TContext>(), isOwner);
             return result;
         }
         /// <summary>
@@ -91,17 +92,21 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        private static void execute(string name, Action<TContext> method,
+        private static void execute<TContext>(string name, Action<TContext> method,
            Action<TContext, Exception> continueExceptionMethod = null,
            Action<TContext> continueMethod = null)
+             where TContext : _DCTContext, new()
         {
-            execute<object>(name, data => { method(data); return null; }, continueExceptionMethod, continueMethod);
+            execute<TContext, object>(name, data => { method(data); return null; }, continueExceptionMethod, continueMethod);
         }
         #endregion
         #region Context base
         static string contextName = "DCTContext";
-
-        public static TContext Context { get { return GetContext(null); } }
+        public static TContext Context<TContext>()
+             where TContext : _DCTContext, new()
+        {
+            return GetContext<TContext>();
+        }
         /// <summary>    Gets a context.
         ///              Получаю контекст из области данных потока </summary>
         ///
@@ -110,37 +115,46 @@ namespace FessooFramework.Core
         /// <param name="value"> (Optional) The value. </param>
         ///
         /// <returns>    The context. </returns>
-        private static TContext GetContext(TContext value = null)
+        private static TContext GetContext<TContext>(TContext value = null)
+              where TContext : _DCTContext, new()
         {
-            var context = ContextHelper.CheckOrCreateContext<TContext>(contextName);
-            if (value != null)
-            {
-                var parentTrackId = context.TrackId == value.TrackId ? context.ParentTrackId : value.ParentTrackId;
-                context.ParentTrackId = parentTrackId;
-            }
-            return context;
+                var obj = ContextHelper.GetContext(contextName);
+                if (obj == null)
+                {
+                    obj = new TContext();
+                    ContextHelper.SetContext(obj, contextName);
+                }
+                var context = obj as TContext;
+                if (value != null)
+                {
+                    var parentTrackId = context.TrackId == value.TrackId ? context.ParentTrackId : value.ParentTrackId;
+                    context.ParentTrackId = parentTrackId;
+                }
+                return context;
         }
         /// <summary>   Determines if we can check context. </summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
         ///
         /// <returns>   True if it succeeds, false if it fails. </returns>
-        private static bool CheckContext()
+        private static bool CheckContext<TContext>()
+              where TContext : _DCTContext, new()
         {
             var result = false;
-            var context = ContextHelper.GetContext<TContext>(contextName);
+            var context = ContextHelper.GetContext(contextName);
             if (context == null)
                 result = true;
             return result;
         }
-        private static void DisposeContext(TContext data, bool isOwner)
+        private static void DisposeContext<TContext>(TContext data, bool isOwner)
+              where TContext : _DCTContext, new()
         {
             try
             {
                 if (isOwner)
                 {
                     data.Dispose();
-                    ContextHelper.SetContext<TContext>(null, contextName);
+                    ContextHelper.SetContext(null, contextName);
                 }
             }
             catch (Exception ex)
@@ -159,7 +173,8 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void Execute(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
+        public static void Execute<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
+             where TContext : _DCTContext, new()
         {
             if (name == "")
                 name = GetCategoryName();
@@ -177,9 +192,10 @@ namespace FessooFramework.Core
         ///                                         method и continueExceptionMethod. </param>
         ///
         /// <returns>   A TResult. </returns>
-        public static TResult Execute<TResult>(Func<TContext, TResult> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static TResult Execute<TContext,TResult>(Func<TContext, TResult> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+             where TContext : _DCTContext, new()
         {
-            return execute<TResult>(GetCategoryName(), action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            return execute<TContext,TResult>(GetCategoryName(), action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. With result </summary>
         ///
@@ -193,10 +209,11 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteAsync<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
+        public static void ExecuteAsync<TContext,TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
+             where TContext : _DCTContext, new()
         {
             if (name == "")
-             name = GetCategoryName();
+                name = GetCategoryName();
             Task.Factory.StartNew(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: complete));
         }
         /// <summary>   Executes the asynchronous operation. Void </summary>
@@ -208,10 +225,11 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteAsync(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static void ExecuteAsync<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+             where TContext : _DCTContext, new()
         {
             var name = GetCategoryName();
-            ExecuteAsync<object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
+            ExecuteAsync<TContext,object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
         }
         /// <summary>   Executes the main thread operation. With result async </summary>
         ///
@@ -222,10 +240,11 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteMainThread<TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static void ExecuteMainThread<TContext,TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+             where TContext : _DCTContext, new()
         {
             var name = GetCategoryName();
-            DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: (data, result) => ExecuteAsync(dataAsync => complete.Invoke(dataAsync, result))));
+            DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: (data, result) => ExecuteAsync<TContext>(dataAsync => complete.Invoke(dataAsync, result))));
         }
         /// <summary>   Executes the main thread operation. Void </summary>
         ///
@@ -236,7 +255,8 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static void ExecuteMainThread<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+             where TContext : _DCTContext, new()
         {
             var name = GetCategoryName();
             DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
@@ -285,7 +305,7 @@ namespace FessooFramework.Core
         private static string GetCategoryName(int frame = 3)
         {
             var result = "";
-            try 
+            try
             {
                 if (!LoggerHelper.HasLoggerEnable.Value)
                     return result;
