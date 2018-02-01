@@ -1,5 +1,5 @@
-﻿using System;
-using FessooFramework.Objects.Data;
+﻿using FessooFramework.Objects.Data;
+using System;
 
 namespace Example._0_Base.ClientModels
 {

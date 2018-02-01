@@ -259,6 +259,10 @@ namespace FessooFramework.Core
         {
             Send(LoggerMessageType.Exception, ex.ToString(), category);
         }
+        public static void Send(string text)
+        {
+            Send(LoggerMessage.New(LoggerMessageType.Information, text, "Message"));
+        }
         private static void Send(LoggerMessageType messageType, string text, string category)
         {
             Send(LoggerMessage.New(messageType, text, category));

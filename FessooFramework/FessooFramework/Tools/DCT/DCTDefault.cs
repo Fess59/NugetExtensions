@@ -9,6 +9,10 @@ namespace FessooFramework.Tools.DCT
 {
     public static class DCTDefault
     {
+        #region Property
+        public static DCTContextDefault Context { get { return _DCT<DCTContextDefault>.Context; } }
+        #endregion
+        #region Execute methods
         /// <summary>   Executes void. </summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
@@ -80,7 +84,28 @@ namespace FessooFramework.Tools.DCT
         {
             _DCT<DCTContextDefault>.ExecuteMainThread(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
-
-        public static DCTContextDefault Context { get { return _DCT<DCTContextDefault>.Context; } }
+        #endregion
+        #region Send message methods
+        public static void SendExceptions(string text, string category)
+        {
+            _DCT<DCTContextDefault>.SendExceptions(text, category);
+        }
+        public static void SendExceptions(Exception ex, string category)
+        {
+            _DCT<DCTContextDefault>.SendExceptions(ex, category);
+        }
+        public static void SendInformations(string text, string category)
+        {
+            _DCT<DCTContextDefault>.SendInformations(text, category);
+        }
+        public static void SendWarning(string text, string category)
+        {
+            _DCT<DCTContextDefault>.SendWarning(text, category);
+        }
+        public static void Send(string text)
+        {
+            _DCT<DCTContextDefault>.Send(text);
+        }
+        #endregion
     }
 }

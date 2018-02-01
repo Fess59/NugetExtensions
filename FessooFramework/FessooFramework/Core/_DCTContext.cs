@@ -30,6 +30,9 @@ namespace FessooFramework.Core
         /// <value> The identifier of the parent track. </value>
 
         public Guid ParentTrackId { get; internal set; }
+
+        /// <summary>   The store. 
+        ///             Данные контекста</summary>
         protected DataContextStore _Store = new DataContextStore();
         #endregion
         #region Constructor
@@ -40,6 +43,28 @@ namespace FessooFramework.Core
         }
         #endregion
         #region Methods
+
+        /// <summary>   Saves the changes.
+        ///             Сохраняем все изменения, во всех базах</summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 01.02.2018. </remarks>
+
+        public void SaveChanges()
+        {
+            _Store.SaveChanges();
+        }
+        /// <summary>
+        ///     Обертка для IDisposable.Dispose в SystemObject Создана для возможности очистки объекта во
+        ///     всех наследуемых сущностях
+        ///     
+        ///     Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или
+        ///     сбросом неуправляемых ресурсов.
+        ///     
+        ///     Очищает контекст данных и высвобождает все DbContext
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 01.02.2018. </remarks>
+
         public override void Dispose()
         {
             base.Dispose();

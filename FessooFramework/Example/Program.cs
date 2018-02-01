@@ -24,7 +24,11 @@ namespace Example
                 var r2 = c.SecondModels.ToArray();
                 var r3 = c.ThirdModels.ToArray();
             });
-            
+
+            DCTExample.Execute(c => {
+                
+            });
+
             Console.Read();
         }
         #region DCT test
