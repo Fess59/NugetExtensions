@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FessooFramework.Components.LoggerComponent;
+using System;
 using System.Reflection;
 
 namespace FessooFramework.Tools.Helpers
@@ -35,7 +36,7 @@ namespace FessooFramework.Tools.Helpers
 
         public static void SendException(MethodBase owner, string text, Exception ex)
         {
-            SendException($"{owner.DeclaringType}.{owner.Name} - {text}: {Environment.NewLine + ex}");
+            SendException($"{owner.DeclaringType}.{owner.Name} - {text}: {Environment.NewLine + LoggerHelper.ExToString(ex)}");
         }
         /// <summary>   Sends an exception.
         ///             Отправка информации об ошибке в консоль </summary>
@@ -60,7 +61,7 @@ namespace FessooFramework.Tools.Helpers
 
         public static void SendException(Exception ex)
         {
-            SendException(ex.ToString());
+            SendException(LoggerHelper.ExToString(ex));
         }
 
         /// <summary>   Sends an exception.

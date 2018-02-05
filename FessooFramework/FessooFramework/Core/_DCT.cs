@@ -277,7 +277,7 @@ namespace FessooFramework.Core
         }
         public static void SendExceptions(Exception ex, string category)
         {
-            Send(LoggerMessageType.Exception, ex.ToString(), category);
+            Send(LoggerMessageType.Exception, LoggerHelper.ExToString(ex), category);
         }
         public static void Send(string text)
         {

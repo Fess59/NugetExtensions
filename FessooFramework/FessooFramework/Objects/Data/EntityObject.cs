@@ -27,6 +27,14 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> The identifier of the last change. </value>
         public Guid? LastChangeId { get; set; }
+
+        /// <summary>   Gets or sets the state.
+        ///             Default state = 0 </summary>
+        ///
+        /// <value> The state. </value>
+
+        public int State { get; set; }
+
         #endregion
         #region Constructor
         /// <summary>   Default constructor. </summary>
@@ -35,6 +43,7 @@ namespace FessooFramework.Objects.Data
 
         public EntityObject() : base()
         {
+            State = 0;
             _ToHistory("Create");
         }
         #endregion

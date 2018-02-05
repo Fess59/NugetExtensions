@@ -18,18 +18,15 @@ namespace FessooFramework.Objects.ALM
     public abstract class ALMObject<TEnumState> : BaseObject 
         where TEnumState :  struct, IConvertible
     {
-
         /// <summary>   The state.
         ///             Поле которое сохраняется в базу </summary>
         public int state { get; private set; }
-
         /// <summary>   Gets or sets the state.
         ///             Текущее состояние объекта </summary>
         ///
         /// <value> The state. </value>
 
         public TEnumState State { get; private set; }
-
         /// <summary>   Sets a state.
         ///             Изменяем состояние объекта </summary>
         ///
@@ -38,7 +35,6 @@ namespace FessooFramework.Objects.ALM
         /// <exception cref="Exception">    Thrown when an exception error condition occurs. </exception>
         ///
         /// <param name="newState"> State of the new. </param>
-
         public void _SetState(TEnumState newState)
         {
             if (!StateCheck(State, newState) && State.ToString() != newState.ToString())

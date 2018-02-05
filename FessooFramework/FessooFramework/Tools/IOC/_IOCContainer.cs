@@ -4,6 +4,7 @@ using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,9 +12,9 @@ namespace FessooFramework.Tools.IOC
 {
     /// <summary>   An i/o container. </summary>
     ///
-    /// <remarks>   AM Kozhevnikov, 11.01.2018. </remarks>
+    /// <remarks>   AM Kozhevnikov, 05.02.2018. </remarks>
     ///
-    /// <typeparam name="T">    Generic type parameter. Where T is  <see cref="IOCElement"/> </typeparam>
+    /// <typeparam name="T">    Generic type parameter. </typeparam>
 
     public class IOContainer<T> : SystemObject where T : _IOCElement
     {
@@ -27,6 +28,7 @@ namespace FessooFramework.Tools.IOC
         /// <value> The name of the container. </value>
 
         public string ContainerName { get; set; }
+        private bool HasElementCreate { get; set; }
         #endregion
         #region Constructor
 
@@ -34,9 +36,9 @@ namespace FessooFramework.Tools.IOC
         ///
         /// <remarks>   AM Kozhevnikov, 11.01.2018. </remarks>
 
-        public IOContainer()
+        public IOContainer(bool hasElementCreate = false)
         {
-
+            HasElementCreate = hasElementCreate;
         }
 
         /// <summary>   Constructor of IOC container with the help of elements list. </summary>
@@ -59,24 +61,34 @@ namespace FessooFramework.Tools.IOC
         #endregion
         #region Methods
 
-        /// <summary>   Gets <see cref="T" /> by UID. </summary>
+        /// <summary>   Gets <see cref="T" /> by UID. Аргумент autoCreate отвечает за создание элемента если он не был найден</summary>
         ///
         /// <remarks>   AM Kozhevnikov, 11.01.2018. </remarks>
         ///
         /// <param name="uid">  The UID of IOC element. </param>
+        /// <param name="autoCreate"> If True - UID not found enable, else False - UID not found disable and excute Create method). </param>
         ///
         /// <returns>   The by name. </returns>
 
         public T GetByName(string uid)
         {
             T result = default(T);
-            DCTDefault.Execute(c => 
+            DCTDefault.Execute(c =>
             {
-                if (Collection == null || !Collection.Any())
-                    throw new Exception($"IOC container empty. IOC element with the specified UID not found => {this.GetType().Name}.Add({uid})");
-                result = Collection.FirstOrDefault(q => q.UID == uid);
-                if (result == null)
-                    throw new Exception($"IOC element with the specified UID not found => {this.GetType().Name}.Add({uid})");
+                if (HasElementCreate)
+                {
+                    result = Collection.FirstOrDefault(q => q.UID == uid);
+                    if (result == null)
+                        result = Create(uid);
+                }
+                else
+                {
+                    if (Collection == null || !Collection.Any())
+                        throw new Exception($"IOC container empty. IOC element with the specified UID not found => {this.GetType().Name}.Add({uid})");
+                    result = Collection.FirstOrDefault(q => q.UID == uid);
+                    if (result == null)
+                        throw new Exception($"IOC element with the specified UID not found => {this.GetType().Name}.Add({uid})");
+                }
             });
             return result;
         }
@@ -101,15 +113,18 @@ namespace FessooFramework.Tools.IOC
         ///
         /// <param name="element">  The element to add. </param>
 
-        public void Add(T element)
+        public T Add(T element)
         {
+            var result = default(T);
             DCTDefault.Execute(c =>
             {
                 if (Collection.Any(q => q.UID == element.UID))
                     throw new Exception($"IOC element with the specified UID has already been added => {this.GetType().Name}.Add({element.UID})");
                 //throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
                 Collection.Add(element);
+                result = element;
             });
+            return result;
         }
 
         /// <summary>   Adds IOC element collection in container. </summary>
@@ -124,6 +139,35 @@ namespace FessooFramework.Tools.IOC
         {
             foreach (var element in collection)
                 Add(element);
+        }
+
+        /// <summary>   Creates a new T.
+        ///             Создание нового элемента для контейнера если он отсутсвует в контейнере </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 05.02.2018. </remarks>
+        ///
+        /// <param name="uid">  The UID of IOC element. </param>
+        ///
+        /// <returns>   A T. </returns>
+
+        public virtual T Create(string uid)
+        {
+            throw new NotImplementedException("IOC container not implemented methods Create, please override Create or disable argument 'HasElementCreate' from container base constructor");
+        }
+
+        /// <summary>   Enumerates where in this collection. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 05.02.2018. </remarks>
+        ///
+        /// <param name="predicate">    The predicate. </param>
+        ///
+        /// <returns>
+        ///     An enumerator that allows foreach to be used to process where in this collection.
+        /// </returns>
+
+        public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)
+        {
+            return Collection.AsQueryable().Where(predicate).ToArray();
         }
     }
     #endregion

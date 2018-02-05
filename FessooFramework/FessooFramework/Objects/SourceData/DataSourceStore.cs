@@ -1,4 +1,6 @@
-﻿using FessooFramework.Tools.IOC;
+﻿using FessooFramework.Objects.Data;
+using FessooFramework.Tools.DCT;
+using FessooFramework.Tools.IOC;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,7 +15,7 @@ namespace FessooFramework.Objects.SourceData
     ///
     /// <remarks>   AM Kozhevnikov, 31.01.2018. </remarks>
 
-    public class DataContextStore: SystemObject
+    public class DataContextStore : SystemObject
     {
         #region Property source
         private IOContainer<DataSourceBase> Container = new IOContainer<DataSourceBase>();
@@ -22,10 +24,9 @@ namespace FessooFramework.Objects.SourceData
         //public DbSet<FirstModel> First => GetContext<DefaultDB>().GetSet<FirstModel>();
         #endregion
         #region Constructor
-        public DataContextStore()
-        {
-            //Container.Add(new DataSource_2<DefaultDB>());
-        }
+        //public DataContextStore()
+        //{
+        //}
         #endregion
         #region Methods
         public void Add<T>()
@@ -51,6 +52,23 @@ namespace FessooFramework.Objects.SourceData
             var context = element.GetContext();
             var dbContext = context as T;
             return dbContext;
+        }
+        public DbSet<T> DbSet<T>() where T : EntityObject
+        {
+            var result = default(DbSet<T>);
+            DCTDefault.Execute(c =>
+            {
+
+                var dbContexts = Container.Where(q => q.CheckType<T>());
+                if (dbContexts.Count() > 0)
+                {
+                    if (dbContexts.Count() > 1)
+                        throw new Exception($"DataContextStore найдено более одного контекста данных для модели {typeof(T).Name}");
+                    var db = dbContexts.FirstOrDefault();
+                    result = db.DbSet<T>();
+                }
+            });
+            return result;
         }
         #endregion
     }

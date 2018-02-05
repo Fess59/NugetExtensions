@@ -1,7 +1,9 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Objects.Data;
 using FessooFramework.Objects.SourceData;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,6 +71,10 @@ namespace FessooFramework.Core
         {
             base.Dispose();
             _Store.Dispose();
+        }
+        public DbSet<T> DbSet<T>() where T : EntityObject
+        {
+            return _Store.DbSet<T>();
         }
         #endregion
     }

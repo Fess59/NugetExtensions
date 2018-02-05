@@ -16,7 +16,7 @@ namespace System
     {
         internal static void ToDataContainer(this Type type)
         {
-            DataContainer.Current.Add(DataComponent.New(type));
+            DataContainer.Current.Add(DataComponentBase.New(type));
         }
         public static DbSet<TEntity> GetSet<TEntity>(this DbContext context)
           where TEntity : class

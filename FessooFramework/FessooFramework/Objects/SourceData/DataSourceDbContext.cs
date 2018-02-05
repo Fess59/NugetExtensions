@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects.DataClasses;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,14 +26,19 @@ namespace FessooFramework.Objects.SourceData
             }
         }
         private TContext source { get; set; }
-
         #endregion
         #region Constructor
         public DataSourceDbContext()
         {
+           
         }
         #endregion
         #region Methods
+
+       
+       
+
+
         #endregion
         #region Abstraction
         public override DbContext GetContext()

@@ -1,5 +1,6 @@
 ﻿using FessooFramework.Components.LoggerComponent.Models;
 using FessooFramework.Components.LoggerComponent.Parts;
+using FessooFramework.Tools.Controllers;
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace FessooFramework.Components.LoggerComponent.Realizations
 
     public class ConsoleLogger : LoggerElement
     {
-        /// <summary>   Default constructor. </summary>
+              /// <summary>   Default constructor. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 30.01.2018. </remarks>
 

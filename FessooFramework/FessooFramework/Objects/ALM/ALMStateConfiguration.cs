@@ -12,7 +12,7 @@ namespace FessooFramework.Objects.ALM
     ///
     /// <typeparam name="TEnumState">   Type of the enum state. </typeparam>
 
-    public class ALMConf<TEnumState> 
+    public class ALMConf<TEnumState>
         where TEnumState : struct, IConvertible
     {
         /// <summary>   Constructor. </summary>

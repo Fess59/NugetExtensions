@@ -2,6 +2,7 @@
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Example._0_Base.Data.DataComponent.ModelX
     public class ModelX : EntityObject
     {
         public string Description { get; set; }
-        public int State { get; set; }
+        [NotMapped]
         public ModelXState StateEnum
         {
             get => EnumHelper.GetValue<ModelXState>(State);
@@ -23,17 +24,21 @@ namespace Example._0_Base.Data.DataComponent.ModelX
         ///
         /// <remarks>   Fess59, 02.02.2018. </remarks>
 
-        public void Save()
+        public void _Save()
         {
             DataContainer.Save(this);
         }
+        public DbSet<ModelX> _DbSet()
+        {
+            return DbSet();
+        }
+        public T _Convert<T>() where T : class => DataContainer.Convert<T>(this);
 
         public static DbSet<ModelX> DbSet()
         {
-            return DataContainer.DbSet(new ModelX());
+            return DataContainer.DbSet<ModelX>();
         }
-
-        public T Convert<T>() => DataContainer.Convert<T>(this);
+      
     }
 
    //TODO Create classicator from state
@@ -42,6 +47,7 @@ namespace Example._0_Base.Data.DataComponent.ModelX
         Create = 0,
         Edited = 1,
         Edited2 = 2,
-        Edited3 = 3
+        Edited3 = 3,
+        Error = 4
     }
 }

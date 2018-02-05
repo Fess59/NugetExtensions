@@ -1,4 +1,5 @@
-﻿using Example._0_Base.Models;
+﻿using Example._0_Base.Data.DataComponent.ModelX;
+using Example._0_Base.Models;
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,8 @@ namespace Example._0_Base.Data.Contexts
     public class DefaultDB : DbContext
     {
         public DbSet<FirstModel> FirstModels{ get; set; }
-      
+        public DbSet<ModelX> ModelX { get; set; }
+
         public DefaultDB()
         {
             base.Configuration.ProxyCreationEnabled = false;

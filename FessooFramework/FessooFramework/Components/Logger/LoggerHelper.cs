@@ -42,6 +42,9 @@ namespace FessooFramework.Components.LoggerComponent
         public static ObjectController<string> FileFolder = new ObjectController<string>("Logs");
         /// <summary>   Full pathname of the file. </summary>
         public static ObjectController<string> FilePath = new ObjectController<string>(SystemCoreConfiguration.RootDirectory);
+
+        /// <summary>   Message describing the has exception full. </summary>
+        public static ObjectController<bool> HasExceptionFullMessage = new ObjectController<bool>(true);
         #endregion
         #region Constructor
         static LoggerHelper()
@@ -75,7 +78,7 @@ namespace FessooFramework.Components.LoggerComponent
         }
         public static bool SendException(Exception ex, string category = "None")
         {
-            return SendMessage(LoggerMessage.New(LoggerMessageType.Exception, ex.ToString(), category));
+            return SendMessage(LoggerMessage.New(LoggerMessageType.Exception, ExToString(ex), category));
         }
         public static bool SendWarning(string text, string category = "None")
         {
@@ -107,6 +110,19 @@ namespace FessooFramework.Components.LoggerComponent
                 ConsoleHelper.SendException(MethodBase.GetCurrentMethod(), "Ошибка при попытке логирования", ex);
             }
             return result;
+        }
+
+        /// <summary>   Exception to string. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 05.02.2018. </remarks>
+        ///
+        /// <param name="ex">   The ex. </param>
+        ///
+        /// <returns>   A string. </returns>
+
+        internal static string ExToString(Exception ex)
+        {
+            return HasExceptionFullMessage.Value ? ex.ToString() : ex.Message;
         }
         #endregion
         #region Component realization

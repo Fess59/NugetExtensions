@@ -4,6 +4,7 @@ using FessooFramework.Tools.Helpers;
 using FessooFramework.Tools.IOC;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,25 +12,23 @@ using System.Threading.Tasks;
 namespace Example._0_Base.Data.DataComponent
 {
     /// <summary>   A data component.
+    ///             Компонент определяет базовые методы для работы с со списками
     ///              </summary>
     ///
     /// <remarks>   Fess59, 02.02.2018. </remarks>
     ///
     /// <typeparam name="TModel">   Type of the model. </typeparam>
-    public class DataComponent : _IOCElement
+    public class DataComponentBase : _IOCElement
     {
         #region Property
-
         /// <summary>   Gets or sets the type of the current.
         ///             Тип текущего компоненнта данных </summary>
         ///
         /// <value> The type of the current. </value>
-
         public Type CurrentType { get; private set; }
 
         #endregion
         #region Constructor
-
         /// <summary>   New data component from type. </summary>
         ///
         /// <remarks>   Fess59, 02.02.2018. </remarks>
@@ -37,10 +36,9 @@ namespace Example._0_Base.Data.DataComponent
         /// <param name="type"> The type. </param>
         ///
         /// <returns>   A DataComponent. </returns>
-
-        internal static DataComponent New(Type type)
+        internal static DataComponentBase New(Type type)
         {
-            return new DataComponent()
+            return new DataComponentBase()
             {
                 CurrentType = type,
                 UID = type.ToString()
@@ -48,14 +46,18 @@ namespace Example._0_Base.Data.DataComponent
         }
         #endregion
         #region Methods
-        public void Save(EntityObject obj)
+        /// <summary>   Converts the given object. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 05.02.2018. </remarks>
+        ///
+        /// <typeparam name="TResult">  Type of the result. </typeparam>
+        /// <param name="obj">  The object. </param>
+        ///
+        /// <returns>   A TResult. </returns>
+        public TResult Convert<TResult>(EntityObject obj) where TResult : class
         {
-            DCTDefault.Context.GetContext
-            //1. Проверяю существование контекста - был использован DCT
-            //2.  Прогоняю объект по жиненному циклу
-            //3. Сохраняю объект в указанный источник данных
-            ConsoleHelper.Send("UpdateObject", $"Type={obj.GetType()}");
-
+            ConsoleHelper.Send("Convert", $"Type={obj.GetType()}");
+            return default(TResult);
         }
         #endregion
     }
