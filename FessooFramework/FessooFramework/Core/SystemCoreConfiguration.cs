@@ -26,7 +26,7 @@ namespace FessooFramework.Core
         ///
         /// <value> The pathname of the root directory. </value>
 
-        public string RootDirectory { get { return System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); } }
+        public static string RootDirectory { get { return System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); } }
 
         /// <summary>
         ///     Gets or sets a value indicating whether this object is test module enable.

@@ -1,3 +1,2 @@
-cd C:\Users\AMKozhevnikov\source\repos\NugetExtensions\FessooFramework\FessooFramework
 nuget pack FessooFramework.csproj
-nuget push FessooFramework.1.0.0.3.nupkg oy2f5zrfgyjzrcnhxswqkjnnizrzi2pengs7baixu4ift4 -Source https://api.nuget.org/v3/index.json
+nuget push FessooFramework.1.0.0.4.nupkg oy2karttewf6irbuaenqip5jgrw2fu3uphuvjveohukod4 -Source https://api.nuget.org/v3/index.json

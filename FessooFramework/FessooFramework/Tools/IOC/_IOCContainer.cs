@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -69,9 +70,14 @@ namespace FessooFramework.Tools.IOC
         public T GetByName(string uid)
         {
             T result = default(T);
-            if (Collection == null && !Collection.Any())
-                return result;
-            result = Collection.FirstOrDefault(q => q.UID == uid);
+            DCTDefault.Execute(c => 
+            {
+                if (Collection == null || !Collection.Any())
+                    throw new Exception($"IOC container empty. IOC element with the specified UID not found => {this.GetType().Name}.Add({uid})");
+                result = Collection.FirstOrDefault(q => q.UID == uid);
+                if (result == null)
+                    throw new Exception($"IOC element with the specified UID not found => {this.GetType().Name}.Add({uid})");
+            });
             return result;
         }
 
@@ -97,7 +103,13 @@ namespace FessooFramework.Tools.IOC
 
         public void Add(T element)
         {
-            AddRange(new T[] { element });
+            DCTDefault.Execute(c =>
+            {
+                if (Collection.Any(q => q.UID == element.UID))
+                    throw new Exception($"IOC element with the specified UID has already been added => {this.GetType().Name}.Add({element.UID})");
+                //throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
+                Collection.Add(element);
+            });
         }
 
         /// <summary>   Adds IOC element collection in container. </summary>
@@ -110,14 +122,9 @@ namespace FessooFramework.Tools.IOC
 
         public void AddRange(IEnumerable<T> collection)
         {
-            foreach (var item in collection)
-            {
-                if (Collection.Any(q => q.UID == item.UID))
-                    throw new Exception("IOC element with the specified UID has already been added");
-                    //throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
-                    Collection.Add(item);
-            }
+            foreach (var element in collection)
+                Add(element);
         }
-        #endregion
     }
+    #endregion
 }

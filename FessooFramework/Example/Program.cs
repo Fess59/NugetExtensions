@@ -1,4 +1,5 @@
 ﻿using Example._0_Base.Data;
+using Example._0_Base.Data.DataComponent.ModelX;
 using Example.Tests;
 using FessooFramework.Core;
 using FessooFramework.Tools.DCT;
@@ -16,19 +17,21 @@ namespace Example
     {
         static void Main(string[] args)
         {
-            CoreTest();
-            DCTTest();
-            EntityTest();
-            Console.Read();
+            DCTExample.Execute(c =>
+            {
+                CoreTest();
+                DataComponentTest();
+                Console.Read();
+            });
         }
         #region DCT test
         private static void DCTNameTest()
         {
-            DCTDefault.Execute(c =>{});
+            DCTDefault.Execute(c => { });
             DCTDefault.Execute<string>(c => { return ""; });
-            DCTDefault.ExecuteAsync(c => {  });
-            DCTDefault.ExecuteAsync<string>(c => { return "";  }, (c, result)=> { });
-            DCTDefault.ExecuteMainThread(c => {  });
+            DCTDefault.ExecuteAsync(c => { });
+            DCTDefault.ExecuteAsync<string>(c => { return ""; }, (c, result) => { });
+            DCTDefault.ExecuteMainThread(c => { });
         }
 
         private static void DCTTest()
@@ -108,18 +111,40 @@ namespace Example
         #region Entity test
         public static void EntityTest()
         {
-            DCTDefault.Send("START - EntityTest");
-            DCTExample.Execute(c => {
+            DCTDefault.Send("START");
+            DCTExample.Execute(c =>
+            {
                 c.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "1" });
                 EntityTest2();
                 c.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "3" });
                 c.SaveChanges();
             });
-            DCTDefault.Send("STOP - EntityTest");
         }
         public static void EntityTest2()
         {
             DCTExample.Context.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "2" });
+        }
+        #endregion
+        #region DataComponent test
+        public static void DataComponentTest()
+        {
+            //Container adds
+            //typeof(ModelX).ToDataContainer();
+            //typeof(ModelX).ToDataContainer();
+
+
+            //ALM
+            var model = new ModelX();
+            model.StateEnum = ModelXState.Edited;
+            model.Save();
+            model.StateEnum = ModelXState.Edited2;
+            model.Save();
+
+            //Query
+            var set = ModelX.DbSet();
+
+            //Creators
+            var visualModel = model.Convert<ModelXView>();
         }
         #endregion
     }
