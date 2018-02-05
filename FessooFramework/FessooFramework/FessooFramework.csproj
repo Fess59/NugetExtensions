@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\FessooFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -71,12 +72,13 @@
     <Compile Include="Components\Logger\Realizations\FileLogger.cs" />
     <Compile Include="Components\Logger\Realizations\ServiceLogger.cs" />
     <Compile Include="Components\Logger\Tests\LoggerCases.cs" />
+    <Compile Include="Components\_q\ExceptionModule.cs" />
     <Compile Include="Core\SystemCoreConfiguration.cs" />
-    <Compile Include="Components\AnaliticsModule.cs" />
-    <Compile Include="Components\DataModule.cs" />
-    <Compile Include="Components\SingltonApplicationModule.cs" />
-    <Compile Include="Components\TestModule.cs" />
-    <Compile Include="Components\TrackModule.cs" />
+    <Compile Include="Components\_q\AnaliticsModule.cs" />
+    <Compile Include="Components\_q\DataModule.cs" />
+    <Compile Include="Components\_q\SingltonApplicationModule.cs" />
+    <Compile Include="Components\_q\TestModule.cs" />
+    <Compile Include="Components\_q\TrackModule.cs" />
     <Compile Include="Objects\Data\CacheState.cs" />
     <Compile Include="Objects\Data\EntityHistory.cs" />
     <Compile Include="Objects\ALM\ALMObject.cs" />

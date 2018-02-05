@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace FessooFramework.Tools.Controllers
         }
         #endregion
         #region Property
+
+        /// <summary>   The dictionary. </summary>
         Dictionary<int, List<Action>> dict = new Dictionary<int, List<Action>>();
         #endregion
         #region Method
@@ -40,17 +43,17 @@ namespace FessooFramework.Tools.Controllers
         /// <param name="priority"></param>
         public void Set(Action action, int priority = 0)
         {
-            //TODO DCT.Execute((data) => {
+            DCTDefault.Execute(c => {
                 if (action == null) throw new NullReferenceException("ActionController. Вызываемый метод при заверешнии измения объекта не может быть равен NULL");
-                //DCT.SendInfo("Привязка создана объектом " + action.Target.ToString());
+                DCTDefault.Send("Привязка создана объектом " + action.Target.ToString());
                 if (!dict.ContainsKey(priority))
                     dict.Add(priority, new List<Action>());
                 dict.FirstOrDefault(q => q.Key == priority).Value.Add(action);
-            //TODO }, ExecutionGroup.ObjectController);
+            });
         }
         public void Execute()
         {
-            //TODO DCT.Execute((data) =>{
+            DCTDefault.Execute((data) =>{
                 try
                 {
                     if (dict == null && !dict.Any()) return;
@@ -63,10 +66,10 @@ namespace FessooFramework.Tools.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("!!! Критическая ошибка при выполнении _AfterChange !!!" + Environment.NewLine + ex);
+                    DCTDefault.SendExceptions(ex, "CRITICAL");
                     throw;
                 }
-            //TODO }, ExecutionGroup.ObjectController);
+            });
         }
         /// <summary>
         /// Метод удаляет подписка на событие 
@@ -75,7 +78,7 @@ namespace FessooFramework.Tools.Controllers
         /// <param name="priority"></param>
         public void Remove(Action action)
         {
-            //TODO DCT.Execute((data) =>{
+            DCTDefault.Execute((data) =>{
             if (action == null) throw new NullReferenceException("ActionController. Вызываемый метод при заверешнии измения объекта не может быть равен NULL");
                 if (!dict.Any()) return;
                 foreach (var list in dict.ToArray())
@@ -83,11 +86,11 @@ namespace FessooFramework.Tools.Controllers
                     if (list.Value.Any() && list.Value.Any(q => EqualityComparer<object>.Default.Equals(q, action)))
                         list.Value.RemoveAll(q => q.Equals(action));
                 }
-            //TODO  }, ExecutionGroup.ObjectController);
+            });
         }
         private void execute(Action action)
         {
-            //TODO  DCT.Execute((data) =>{
+            DCTDefault.Execute((data) =>{
             try
             {
                     action();
@@ -97,7 +100,7 @@ namespace FessooFramework.Tools.Controllers
                     Console.WriteLine("!!! Критическая ошибка при выполнении execute - один из Action вызывает ошибку при выполении!!!" + Environment.NewLine + ex);
                     throw;
                 }
-            //TODO }, ExecutionGroup.ObjectController);
+            });
         }
         public void Dispose()
         {

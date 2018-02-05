@@ -108,13 +108,14 @@ namespace Example
         #region Entity test
         public static void EntityTest()
         {
-            DCTDefault.Send("START");
+            DCTDefault.Send("START - EntityTest");
             DCTExample.Execute(c => {
                 c.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "1" });
                 EntityTest2();
                 c.FirstModels.Add(new _0_Base.Models.FirstModel() { Decription = "3" });
                 c.SaveChanges();
             });
+            DCTDefault.Send("STOP - EntityTest");
         }
         public static void EntityTest2()
         {

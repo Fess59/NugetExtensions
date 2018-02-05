@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -156,10 +157,11 @@ namespace FessooFramework.Tools.Controllers
 
         public void Clear()
         {
-            // TODO DCT.Execute((data) =>{
-            if (_DefaultValue != null)
-                _SetValue(_DefaultValue);
-            // TODO }, ExecutionGroup.ObjectController);
+            DCTDefault.Execute((data) =>
+            {
+                if (_DefaultValue != null)
+                    _SetValue(_DefaultValue);
+            });
         }
 
         /// <summary>   Clears the asynchronous.  
@@ -169,8 +171,7 @@ namespace FessooFramework.Tools.Controllers
 
         public void ClearAsync()
         {
-            /* TODO  DCT.ExecuteAsync((data) =>*/
-            Clear()/*, ExecutionGroup.ObjectController)*/;
+            DCTDefault.ExecuteAsync(c => Clear());
         }
 
         /// <summary>   Only clear.
@@ -180,11 +181,12 @@ namespace FessooFramework.Tools.Controllers
 
         public void OnlyClear()
         {
-            //TODO DCT.Execute((data) =>{
-            if (_Value != null)
-                ObjectHelper.Dispose(_Value);
-            _Value = _DefaultValue;
-            //}, ExecutionGroup.ObjectController);
+            DCTDefault.Execute((data) =>
+            {
+                if (_Value != null)
+                    ObjectHelper.Dispose(_Value);
+                _Value = _DefaultValue;
+            });
         }
 
         /// <summary>   Refreshes this object. </summary>
@@ -193,17 +195,18 @@ namespace FessooFramework.Tools.Controllers
 
         public void Refresh()
         {
-            //TODO DCT.Execute((data) => {
-            if (GetValue != null)
+            DCTDefault.Execute((data) =>
             {
-                var newValue = GetValue();
-                _ComparerValue(newValue);
-            }
-            else
-            {
-                Change.Execute();
-            }
-            //}, ExecutionGroup.ObjectController);
+                if (GetValue != null)
+                {
+                    var newValue = GetValue();
+                    _ComparerValue(newValue);
+                }
+                else
+                {
+                    Change.Execute();
+                }
+            });
         }
 
         /// <summary>   Sets value asynchronous. </summary>
@@ -215,7 +218,7 @@ namespace FessooFramework.Tools.Controllers
         public void SetValueAsync(T newValue)
         {
             var _nv = newValue;
-            // TODO  DCT.ExecuteAsync(data => SetValue(_nv), ExecutionGroup.ObjectController);
+            DCTDefault.ExecuteAsync(data => SetValue(_nv));
         }
 
         /// <summary>   Sets a value.
@@ -231,7 +234,7 @@ namespace FessooFramework.Tools.Controllers
 
         public void SetValue(T newValue)
         {
-            // TODO DCT.Execute(data => {
+            DCTDefault.Execute(data => {
             try
             {
                 if (OnlyGet)
@@ -242,11 +245,10 @@ namespace FessooFramework.Tools.Controllers
             }
             catch (Exception ex)
             {
-                // TODO  DCT.SendInfo(ex.ToString());
-                throw;
+                    DCTDefault.SendExceptions(ex, "CRITICAl");
+                    throw;
             }
-
-            //}, ExecutionGroup.ObjectController);
+            });
         }
         #endregion
         #region Private methods

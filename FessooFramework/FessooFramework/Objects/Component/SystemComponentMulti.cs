@@ -30,7 +30,7 @@ namespace FessooFramework.Objects
         #endregion
         #region Methods
         /// <summary>
-        /// TODO
+        /// TODO Документация
         /// </summary>
         /// <param name="itemType"></param>
         /// <returns></returns>
@@ -41,7 +41,7 @@ namespace FessooFramework.Objects
             return result;
         }
         /// <summary>
-        /// TODO
+        /// TODO Документация
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<TElement> GetAll()

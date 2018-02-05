@@ -11,7 +11,7 @@ namespace FessooFramework.Objects.Data
     /// <summary>   An entity object.
     ///             Базовый объект базы данныx
     ///             Реализует концепцию опционального ведения истории изменения объекта 
-    ///             TODO Подвязку сохранения изменний вынести в настройки ядра </summary>
+    ///             TODO CORE Подвязку сохранения изменний вынести в настройки ядра </summary>
     /// 
     ///
     /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>

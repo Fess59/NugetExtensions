@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FessooFramework.Tools.DCT;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,8 +27,8 @@ namespace FessooFramework.Tools.Helpers
         public static void Dispose(object obj)
         {
             var comment = "";
-            //TODO DCT.Execute((data) =>
-            //{
+            DCTDefault.Execute((data) =>
+            {
                 if (obj == null) return;
                 if (obj is IDisposable)
                 {
@@ -41,7 +42,7 @@ namespace FessooFramework.Tools.Helpers
                     ((IDisposable)obj).Dispose();
                 }
                 obj = null;
-            //}, ExecutionGroup.ObjectHelper, comment: comment, continueExceptionMethod: (data, ex) => { comment += ex.ToString(); });
+            }, /* TODO DCT comment: comment,*/ continueExceptionMethod: (data, ex) => { comment += ex.ToString(); });
 
         }
     }

@@ -16,7 +16,7 @@ namespace FessooFramework.Objects.SourceData
         {
             get
             {
-                //TODO ADD dispose state and commont stateconfiguration
+                //TODO SystemObject ADD dispose state and commont stateconfiguration
                 //if (State == SystemState.Unload)
                 //    throw new Exception("Не возможно использовать объект, тк контекст данных был освобождём");
                 if (source == null)
