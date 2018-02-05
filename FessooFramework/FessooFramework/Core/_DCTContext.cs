@@ -15,7 +15,7 @@ namespace FessooFramework.Core
 
     public class _DCTContext : SystemObject
     {
-        #region TrackModule
+        #region Property
 
         /// <summary>   Gets or sets the identifier of the track.
         ///              </summary>

@@ -41,7 +41,13 @@ namespace FessooFramework.Components.LoggerComponent
         /// <summary>   Pathname of the file log folder. </summary>
         public static ObjectController<string> FileFolder = new ObjectController<string>("Logs");
         /// <summary>   Full pathname of the file. </summary>
-        public static ObjectController<string> FilePath = new ObjectController<string>(SystemCore.Current.CoreConfiguration.RootDirectory);
+        public static ObjectController<string> FilePath = new ObjectController<string>(SystemCoreConfiguration.RootDirectory);
+        #endregion
+        #region Constructor
+        static LoggerHelper()
+        {
+
+        }
         #endregion
         #region Method
         /// <summary>   Sends a message.

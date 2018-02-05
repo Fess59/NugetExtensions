@@ -54,12 +54,4 @@ namespace FessooFramework.Objects.SourceData
         }
         #endregion
     }
-    public static class DataContextTools
-    {
-        public static DbSet<TEntity> GetSet<TEntity>(this DbContext context)
-            where TEntity : class
-        {
-            return context.Set<TEntity>();
-        }
-    }
 }

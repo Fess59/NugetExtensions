@@ -65,6 +65,5 @@ namespace FessooFramework.Objects.Data
             _ToHistory("Remove");
         }
         #endregion
-      
     }
 }
