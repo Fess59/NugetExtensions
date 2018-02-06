@@ -16,7 +16,7 @@ namespace FessooFramework.Objects
         ///
         /// <value>  The identifier. Default value <see cref="Guid.NewGuid()"/></value>
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         /// <summary>   Gets or sets the create date. </summary>
         ///

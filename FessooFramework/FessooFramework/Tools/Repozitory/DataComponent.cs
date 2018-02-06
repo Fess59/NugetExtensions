@@ -1,15 +1,13 @@
 ﻿using FessooFramework.Objects.Data;
-using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
 using FessooFramework.Tools.IOC;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Example._0_Base.Data.DataComponent
+namespace FessooFramework.Tools.Repozitory
 {
     /// <summary>   A data component.
     ///             Компонент определяет базовые методы для работы с со списками
@@ -18,7 +16,7 @@ namespace Example._0_Base.Data.DataComponent
     /// <remarks>   Fess59, 02.02.2018. </remarks>
     ///
     /// <typeparam name="TModel">   Type of the model. </typeparam>
-    public class DataComponentBase : _IOCElement
+    public class DataComponent : _IOCElement
     {
         #region Property
         /// <summary>   Gets or sets the type of the current.
@@ -36,9 +34,9 @@ namespace Example._0_Base.Data.DataComponent
         /// <param name="type"> The type. </param>
         ///
         /// <returns>   A DataComponent. </returns>
-        internal static DataComponentBase New(Type type)
+        internal static DataComponent New(Type type)
         {
-            return new DataComponentBase()
+            return new DataComponent()
             {
                 CurrentType = type,
                 UID = type.ToString()
@@ -62,5 +60,3 @@ namespace Example._0_Base.Data.DataComponent
         #endregion
     }
 }
-
-

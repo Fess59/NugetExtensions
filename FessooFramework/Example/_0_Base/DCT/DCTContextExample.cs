@@ -1,8 +1,10 @@
 ﻿using Example._0_Base.Data;
 using Example._0_Base.Data.Contexts;
+using Example._0_Base.Data.DataComponent.ModelX;
 using Example._0_Base.Models;
 using FessooFramework.Core;
 using FessooFramework.Objects.SourceData;
+using FessooFramework.Tools.Repozitory;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

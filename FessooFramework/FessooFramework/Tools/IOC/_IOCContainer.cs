@@ -152,7 +152,7 @@ namespace FessooFramework.Tools.IOC
 
         public virtual T Create(string uid)
         {
-            throw new NotImplementedException("IOC container not implemented methods Create, please override Create or disable argument 'HasElementCreate' from container base constructor");
+            throw new NotImplementedException($"IOC {this.GetType().Name} not implemented methods Create, please override Create or disable argument 'HasElementCreate' from container base constructor");
         }
 
         /// <summary>   Enumerates where in this collection. </summary>

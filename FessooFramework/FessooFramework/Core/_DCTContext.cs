@@ -72,6 +72,15 @@ namespace FessooFramework.Core
             base.Dispose();
             _Store.Dispose();
         }
+
+        /// <summary>   Database set by Type. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
+        ///
+        /// <typeparam name="T">    Generic type parameter. </typeparam>
+        ///
+        /// <returns>   A DbSet&lt;T&gt; </returns>
+
         public DbSet<T> DbSet<T>() where T : EntityObject
         {
             return _Store.DbSet<T>();

@@ -1,5 +1,6 @@
 ﻿using FessooFramework.Objects.Data;
 using FessooFramework.Tools.Helpers;
+using FessooFramework.Tools.Repozitory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,44 +11,20 @@ using System.Threading.Tasks;
 
 namespace Example._0_Base.Data.DataComponent.ModelX
 {
-    public class ModelX : EntityObject
+    public class ModelX : EntityObjectALM<ModelX, ModelXState>
     {
+        #region Property
         public string Description { get; set; }
-        [NotMapped]
-        public ModelXState StateEnum
-        {
-            get => EnumHelper.GetValue<ModelXState>(State);
-            set => State = (int)value;
-        }
-
-        /// <summary> Сохраняем изменения объекта  на основании его состояния. Для фиксации измениний в базе не обходимо вызвать SaveChanges</summary>
-        ///
-        /// <remarks>   Fess59, 02.02.2018. </remarks>
-
-        public void _Save()
-        {
-            DataContainer.Save(this);
-        }
-        public DbSet<ModelX> _DbSet()
-        {
-            return DbSet();
-        }
-        public T _Convert<T>() where T : class => DataContainer.Convert<T>(this);
-
-        public static DbSet<ModelX> DbSet()
-        {
-            return DataContainer.DbSet<ModelX>();
-        }
-      
-    }
-
-   //TODO Create classicator from state
-    public enum ModelXState
-    {
-        Create = 0,
-        Edited = 1,
-        Edited2 = 2,
-        Edited3 = 3,
-        Error = 4
+        #endregion
+        #region Abstracts
+        protected override int GetStateValue(ModelXState state) { return (int)state; }
+        protected override IEnumerable<ModelXState> DefaultState => new ModelXState[] { ModelXState.Error };
+        protected override IEnumerable<EntityObjectALMConfiguration<ModelX, ModelXState>> Configurations => new EntityObjectALMConfiguration<ModelX, ModelXState>[] {
+            EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Create, ModelXState.Edited, ModelXHelper.Edited),
+              EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Edited, ModelXState.Edited2, ModelXHelper.Edited2),
+               EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Edited, ModelXState.Edited3, ModelXHelper.Edited3),
+              EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Error, ModelXState.Error, ModelXHelper.Error),
+        };
+        #endregion
     }
 }

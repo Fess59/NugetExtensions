@@ -20,9 +20,11 @@ namespace Example
             DCTExample.Execute(c =>
             {
                 CoreTest();
-                DataComponentTest();
-                Console.Read();
             });
+
+            DataComponentTest();
+
+            Console.Read();
         }
         #region DCT test
         private static void DCTNameTest()
@@ -127,71 +129,70 @@ namespace Example
         #region DataComponent test
         public static void DataComponentTest()
         {
-            //1. Создание элемента в контейнере
-            //Container adds
-            //typeof(ModelX).ToDataContainer();
-            //typeof(ModelX).ToDataContainer();
-
-
             //ALM
             var model = new ModelX();
-            #region 1 Edited2 to Error
-            //Create + Create to Edited
-            model.StateEnum = ModelXState.Edited;
-            model._Save();
-            DCTExample.Context.SaveChanges();
-            //Edited to Edited2
-            model.StateEnum = ModelXState.Edited2;
-            model._Save();
-            DCTExample.Context.SaveChanges();
-            //Edited2 to Error
-            model.StateEnum = ModelXState.Error;
-            model._Save();
-            DCTExample.Context.SaveChanges();
-            #endregion
+            DCTExample.Execute(c =>
+            {
+                #region 1 default
+                //Create + Create to Edited
+                model.StateEnum = ModelXState.Edited;
+                model._Save();
+                DCTExample.Context.SaveChanges();
 
-            #region 2 Create to Edited2 - error
-            var model2 = new ModelX();
-            //Create + Create to Edited
-            model2.StateEnum = ModelXState.Edited2;
-            model2._Save();
-            DCTExample.Context.SaveChanges();
-            #endregion
+                //Edited to Edited2
+                model.StateEnum = ModelXState.Edited2;
+                model._Save();
+                DCTExample.Context.SaveChanges();
 
-            #region 3 Create to Error - error
-            var model3 = new ModelX();
-            //Create + Create to Edited
-            model3.StateEnum = ModelXState.Error;
-            model3._Save();
-            DCTExample.Context.SaveChanges();
-            #endregion
+                //Edited2 to Error
+                model.StateEnum = ModelXState.Error;
+                model._Save();
+                DCTExample.Context.SaveChanges();
+                #endregion
+                #region 2 Create to Edited2 - error
+                var model2 = new ModelX();
+                //Create + Create to Edited
+                model2.StateEnum = ModelXState.Edited2;
+                model2._Save();
+                DCTExample.Context.SaveChanges();
+                #endregion
+                #region 3 Create to Error - error
+                var model3 = new ModelX();
+                //Create + Create to Edited
+                model3.StateEnum = ModelXState.Error;
+                model3._Save();
+                DCTExample.Context.SaveChanges();
+                #endregion
+                #region 4 Create to Edited
+                var model4 = new ModelX();
+                //Create + Create to Edited
+                model4.StateEnum = ModelXState.Edited;
+                model4._Save();
+                DCTExample.Context.SaveChanges();
+                #endregion
+                #region 5 Create to Edited2
+                var model5 = new ModelX();
+                //Create + Create to Edited
+                model5.StateEnum = ModelXState.Edited;
+                model5._Save();
+                DCTExample.Context.SaveChanges();
+                model5.StateEnum = ModelXState.Edited2;
+                model5._Save();
+                DCTExample.Context.SaveChanges();
+                #endregion
 
-            #region 4 Create to Edited
-            var model4 = new ModelX();
-            //Create + Create to Edited
-            model4.StateEnum = ModelXState.Edited;
-            model4._Save();
-            DCTExample.Context.SaveChanges();
-            #endregion
 
-            #region 5 Create to Edited2
-            var model5 = new ModelX();
-            //Create + Create to Edited
-            model5.StateEnum = ModelXState.Edited;
-            model5._Save();
-            DCTExample.Context.SaveChanges();
 
-            model5.StateEnum = ModelXState.Edited2;
-            model5._Save();
-            DCTExample.Context.SaveChanges();
-            #endregion
-            //Query
-            var set = model._DbSet();
-            set = ModelX.DbSet();
-            set = DCTExample.Context.DbSet<ModelX>();
+                //Query
+                var set = model._DbSet();
+                set = ModelX.DbSet();
+                set = DCTExample.Context.DbSet<ModelX>();
+                set = c.DbSet<ModelX>();
 
-            //Creators
-            var visualModel = model._Convert<ModelXView>();
+                //Creators
+                var visualModel = model._Convert<ModelXView>();
+            });
+
         }
         #endregion
     }

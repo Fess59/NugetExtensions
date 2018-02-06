@@ -1,7 +1,9 @@
 ﻿using FessooFramework.Tools;
 using FessooFramework.Tools.Helpers;
+using FessooFramework.Tools.Repozitory;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +18,7 @@ namespace FessooFramework.Objects.Data
     ///
     /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>
 
-    public class EntityObject : DataObject
+    public class EntityObject: DataObject
     {
         #region Property
         /// <summary>   Gets or sets the save changes. </summary>
@@ -32,15 +34,12 @@ namespace FessooFramework.Objects.Data
         ///             Default state = 0 </summary>
         ///
         /// <value> The state. </value>
-
         public int State { get; set; }
-
         #endregion
         #region Constructor
         /// <summary>   Default constructor. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 11.01.2018. </remarks>
-
         public EntityObject() : base()
         {
             State = 0;

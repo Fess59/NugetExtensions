@@ -71,13 +71,9 @@
     <Compile Include="_0_Base\Data\Contexts\DefaultDB2.cs" />
     <Compile Include="_0_Base\Data\Contexts\DefaultDB.cs" />
     <Compile Include="_0_Base\Data\Contexts\DefaultSQLiteDB.cs" />
-    <Compile Include="_0_Base\Data\DataComponent\ALMComponentBase.cs" />
-    <Compile Include="_0_Base\Data\DataComponent\ALMConfiguration.cs" />
-    <Compile Include="_0_Base\Data\DataComponent\DataComponent.cs" />
-    <Compile Include="_0_Base\Data\DataComponent\DataContainer.cs" />
-    <Compile Include="_0_Base\Data\DataComponent\DataContainerExtension.cs" />
     <Compile Include="_0_Base\Data\DataComponent\ModelX\ModelX.cs" />
-    <Compile Include="_0_Base\Data\DataComponent\ModelX\ModelXALM.cs" />
+    <Compile Include="_0_Base\Data\DataComponent\ModelX\ModelXHelper.cs" />
+    <Compile Include="_0_Base\Data\DataComponent\ModelX\ModelXState.cs" />
     <Compile Include="_0_Base\Data\DataComponent\ModelX\ModelXView.cs" />
     <Compile Include="_0_Base\DCT\DCTContextExample.cs" />
     <Compile Include="_0_Base\DCT\DCTExample.cs" />
