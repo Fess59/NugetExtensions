@@ -53,7 +53,7 @@ namespace FessooFramework.Objects.Data
         ///// <remarks>   Fess59, 02.02.2018. </remarks>
         public void _Save()
         {
-            Update();
+            Update(this);
         }
         /// <summary> Database set. </summary>
         ///
@@ -91,19 +91,19 @@ namespace FessooFramework.Objects.Data
         /// </summary>
         /// <param name="newObj"></param>
         /// <returns></returns>
-        private bool Update()
+        private bool Update(EntityObject newObj)
         {
             var result = false;
             DCTDefault.Execute(c =>
             {
                 var dbSet = DCTDefault.Context.DbSet<TObjectType>();
-                var OldObj = dbSet.FirstOrDefault(q => q.Id == this.Id);
-                var NewObj = this as TObjectType;
+                var OldObj = dbSet.FirstOrDefault(q => q.Id == newObj.Id);
+                var NewObj = newObj as TObjectType;
                 //Create
                 if (OldObj == null)
                 {
                     OldObj = new TObjectType();
-                    OldObj.Id = this.Id;
+                    OldObj.Id = newObj.Id;
                     OldObj.State = 0;
                     OldObj = DCTDefault.Context.DbSet<TObjectType>().Add(OldObj);
                 }
@@ -122,7 +122,7 @@ namespace FessooFramework.Objects.Data
                 if (configuration != null)
                 {
                     configuration.Execute(OldObj, NewObj);
-                    OldObj.StateEnum = NewObj.StateEnum;
+                    OldObj.State = NewObj.State;
                     result = true;
                 }
                 else
@@ -146,10 +146,10 @@ namespace FessooFramework.Objects.Data
             if (!Configurations.Any())
                 throw new Exception($"Для типа {typeof(TStateType).ToString()} необходимо настроить переходы жизненного цикла. Реализуйте метод _StateConfiguration");
             var countCheck = Configurations.GroupBy(q => new { q.State, q.NextState });
-            foreach (var item in countCheck.Where(q => q.Count() > 1))
-            {
-                throw new Exception($"Для типа {typeof(TStateType).ToString()} состояние {item.Key.ToString()}, настроено более одного раза");
-            }
+            //foreach (var item in countCheck.Where(q => q.Count() > 1))
+            //{
+            //    throw new Exception($"Для типа {typeof(TStateType).ToString()} состояние {item.Key.ToString()}, настроено более одного раза");
+            //}
             return Configurations;
         }
         /// <summary>

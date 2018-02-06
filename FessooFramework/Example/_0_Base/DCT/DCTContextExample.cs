@@ -34,6 +34,7 @@ namespace FessooFramework.Tools.DCT
         {
             _Store.Add<DefaultDB>();
             _Store.Add<DefaultDB2>();
+            _Store.Add<DefaultDB3>();
         }
     }
 }

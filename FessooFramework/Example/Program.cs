@@ -1,5 +1,6 @@
 ﻿using Example._0_Base.Data;
 using Example._0_Base.Data.DataComponent.ModelX;
+using Example._0_Base.Data.Models.Model3;
 using Example.Tests;
 using FessooFramework.Core;
 using FessooFramework.Tools.DCT;
@@ -20,9 +21,27 @@ namespace Example
             DCTExample.Execute(c =>
             {
                 CoreTest();
+                var r = new Model3();
+                r.StateEnum = Model3State.Edit;
+                r._Save();
+                c.SaveChanges();
+                r.StateEnum = Model3State.Complete;
+                r._Save();
+                c.SaveChanges();
+                r.StateEnum = Model3State.Edit;
+                r._Save();
+                c.SaveChanges();
+                var r2 = new Model3();
+                r2.StateEnum = Model3State.Complete;
+                r2._Save();
+                c.SaveChanges();
+                //DataComponentTest();
+                var list = Model3.DbSet().ToArray();
+                foreach (var item in list)
+                {
+                    ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
+                }
             });
-
-            DataComponentTest();
 
             Console.Read();
         }

@@ -16,6 +16,7 @@ namespace FessooFramework.Tools.Repozitory
     public class DataContainer : IOContainer<DataComponent>
     {
         #region Property
+        IOContainer<CreatorElement> creators = new IOContainer<CreatorElement>();
         #endregion
         #region Constructor
         public DataContainer(string text) : base(true)
@@ -51,4 +52,8 @@ namespace FessooFramework.Tools.Repozitory
         }
         #endregion
     }
+
+
+    public class CreatorElement : _IOCElement
+    { }
 }

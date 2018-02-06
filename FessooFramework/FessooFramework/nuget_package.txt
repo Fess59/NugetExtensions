@@ -1,2 +1,2 @@
 nuget pack FessooFramework.csproj
-nuget push FessooFramework.1.0.0.4.nupkg oy2karttewf6irbuaenqip5jgrw2fu3uphuvjveohukod4 -Source https://api.nuget.org/v3/index.json
+nuget push FessooFramework.1.0.0.6.nupkg oy2pwm2vrtlf776rsrvqfcwec4xal33eba3eqi3xkkctdq -Source https://api.nuget.org/v3/index.json

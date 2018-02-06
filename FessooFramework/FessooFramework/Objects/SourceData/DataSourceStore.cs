@@ -58,6 +58,7 @@ namespace FessooFramework.Objects.SourceData
             var result = default(DbSet<T>);
             DCTDefault.Execute(c =>
             {
+                var type = typeof(T).ToString();
 
                 var dbContexts = Container.Where(q => q.CheckType<T>());
                 if (dbContexts.Count() > 0)

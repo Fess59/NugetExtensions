@@ -17,7 +17,6 @@ namespace FessooFramework.Objects.Data
     /// 
     ///
     /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>
-
     public class EntityObject: DataObject
     {
         #region Property
