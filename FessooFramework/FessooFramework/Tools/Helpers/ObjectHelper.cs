@@ -27,7 +27,7 @@ namespace FessooFramework.Tools.Helpers
         public static void Dispose(object obj)
         {
             var comment = "";
-            DCTDefault.Execute((data) =>
+            DCT.DCT.Execute((data) =>
             {
                 if (obj == null) return;
                 if (obj is IDisposable)

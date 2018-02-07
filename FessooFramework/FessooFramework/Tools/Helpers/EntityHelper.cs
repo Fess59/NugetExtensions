@@ -29,7 +29,7 @@ namespace FessooFramework.Tools.Helpers
         public static string CreateConnectionString(EntityProviders provider, string DBName, string DBAddress, bool IntegratedSecurity = false, string Login = "", string Password = "")
         {
             string result = "";
-            DCTDefault.Execute((data) =>
+            DCT.DCT.Execute((data) =>
             {
                 var providerName = EnumHelper.GetDescription(provider);
                 switch (provider)

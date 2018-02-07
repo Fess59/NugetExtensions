@@ -37,7 +37,7 @@ namespace FessooFramework.Objects
         public TElement GetElement(TElementEnum itemType)
         {
             TElement result = default(TElement);
-            DCTDefault.Execute(c => result = Container.GetByName(itemType.ToString()));
+            DCT.Execute(c => result = Container.GetByName(itemType.ToString()));
             return result;
         }
         /// <summary>

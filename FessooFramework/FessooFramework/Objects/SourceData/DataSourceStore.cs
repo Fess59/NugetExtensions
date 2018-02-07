@@ -101,7 +101,7 @@ namespace FessooFramework.Objects.SourceData
         public DbSet<T> DbSet<T>() where T : EntityObject
         {
             var result = default(DbSet<T>);
-            DCTDefault.Execute(c =>
+            DCT.Execute(c =>
             {
                 var type = typeof(T).ToString();
 

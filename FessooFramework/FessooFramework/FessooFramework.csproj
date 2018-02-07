@@ -80,6 +80,7 @@
     <Compile Include="Components\_q\SingltonApplicationModule.cs" />
     <Compile Include="Components\_q\TestModule.cs" />
     <Compile Include="Components\_q\TrackModule.cs" />
+    <Compile Include="Core\_DCT.cs" />
     <Compile Include="Objects\Data\CacheState.cs" />
     <Compile Include="Objects\Data\EntityObjectALM.cs" />
     <Compile Include="Objects\Data\EntityHistory.cs" />
@@ -116,7 +117,7 @@
     <Compile Include="Core\Pools\VMPool.cs" />
     <Compile Include="Core\_Bootstrapper.cs" />
     <Compile Include="Core\_DCTContext.cs" />
-    <Compile Include="Core\_DCT.cs" />
+    <Compile Include="Core\_DCTBase.cs" />
     <Compile Include="Core\SystemCore.cs" />
     <Compile Include="Tools\DCT\DCTDefault.cs" />
     <Compile Include="Tools\Helpers\ConsoleHelper.cs" />

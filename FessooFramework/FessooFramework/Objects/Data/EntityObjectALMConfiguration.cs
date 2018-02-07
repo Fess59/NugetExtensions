@@ -57,7 +57,7 @@ namespace FessooFramework.Objects.Data
         public TObjectType Execute(TObjectType oldObj, TObjectType newObj)
         {
             var result = oldObj;
-            DCTDefault.Execute(q => result = _Execute(oldObj, newObj));
+            DCT.Execute(q => result = _Execute(oldObj, newObj));
             return result;
         }
         /// <summary>

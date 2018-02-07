@@ -37,7 +37,9 @@ namespace FessooFramework.Components
         ///             Глобальная конфигурация ядра </summary>
         ///
         /// <value> The core configuration. </value>
-        public SystemCoreConfiguration _Configuration => SystemCore.Current.CoreConfiguration;
+        public SystemCoreConfiguration _Configuration => SystemCore.Current == null ? null : SystemCore.Current.CoreConfiguration;
+        public DataContextStore _Store { get { return _store = _store ?? (SystemCore.Current == null ? new DataContextStore() : SystemCore.Current.GetStore()); } }
+        private DataContextStore _store { get; set; }
         #endregion
         #region Constructor
         /// <summary>   Default constructor. </summary>
@@ -58,7 +60,7 @@ namespace FessooFramework.Components
 
         public void SaveChanges()
         {
-            _Configuration.Store.SaveChanges();
+            _Store.SaveChanges();
         }
         /// <summary>
         ///     Обертка для IDisposable.Dispose в SystemObject Создана для возможности очистки объекта во
@@ -75,7 +77,7 @@ namespace FessooFramework.Components
         public override void Dispose()
         {
             base.Dispose();
-            _Configuration.Store.Dispose();
+            _Store.Dispose();
         }
 
         /// <summary>   Database set by Type. </summary>
@@ -88,7 +90,7 @@ namespace FessooFramework.Components
 
         public DbSet<T> DbSet<T>() where T : EntityObject
         {
-            return _Configuration.Store.DbSet<T>();
+            return _Store.DbSet<T>();
         }
         #endregion
         #region Abstraction

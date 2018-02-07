@@ -53,7 +53,7 @@ namespace FessooFramework.Tools.Repozitory
         public static TResult Convert<TResult>(EntityObject obj) where TResult : class
         {
             var result = default(TResult);
-            DCTDefault.Execute(c =>
+            DCT.DCT.Execute(c =>
             {
                 //var dataComponent = Current.GetByName(obj.GetType().ToString());
                 //result = dataComponent.Convert<TResult>(obj);

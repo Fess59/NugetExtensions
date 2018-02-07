@@ -73,7 +73,7 @@ namespace FessooFramework.Tools.IOC
         public T GetByName(string uid)
         {
             T result = default(T);
-            DCTDefault.Execute(c =>
+            DCT.DCT.Execute(c =>
             {
                 if (HasElementCreate)
                 {
@@ -116,7 +116,7 @@ namespace FessooFramework.Tools.IOC
         public T Add(T element)
         {
             var result = default(T);
-            DCTDefault.Execute(c =>
+            DCT.DCT.Execute(c =>
             {
                 if (Collection.Any(q => q.UID == element.UID))
                     throw new Exception($"IOC element with the specified UID has already been added => {this.GetType().Name}.Add({element.UID})");

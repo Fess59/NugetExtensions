@@ -75,7 +75,7 @@ namespace FessooFramework.Objects.Data
         /// <returns></returns>
         public static DbSet<TObjectType> DbSet()
         {
-            return DCTDefault.Context.DbSet<TObjectType>();
+            return DCT.Context.DbSet<TObjectType>();
         }
         #region ALM
         /// <summary>
@@ -86,9 +86,9 @@ namespace FessooFramework.Objects.Data
         private bool Update(EntityObject newObj)
         {
             var result = false;
-            DCTDefault.Execute(c =>
+            DCT.Execute(c =>
             {
-                var dbSet = DCTDefault.Context.DbSet<TObjectType>();
+                var dbSet = DCT.Context.DbSet<TObjectType>();
                 var OldObj = dbSet.FirstOrDefault(q => q.Id == newObj.Id);
                 var NewObj = newObj as TObjectType;
                 //Create
@@ -97,7 +97,7 @@ namespace FessooFramework.Objects.Data
                     OldObj = new TObjectType();
                     OldObj.Id = newObj.Id;
                     OldObj.State = 0;
-                    OldObj = DCTDefault.Context.DbSet<TObjectType>().Add(OldObj);
+                    OldObj = DCT.Context.DbSet<TObjectType>().Add(OldObj);
                 }
                 var oldState = OldObj.StateEnum;
                 var newState = NewObj.StateEnum;

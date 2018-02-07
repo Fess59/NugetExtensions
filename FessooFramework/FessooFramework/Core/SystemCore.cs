@@ -1,6 +1,7 @@
 ﻿using FessooFramework.Components;
 using FessooFramework.Components.LoggerComponent;
 using FessooFramework.Objects;
+using FessooFramework.Objects.SourceData;
 using FessooFramework.Tools.Helpers;
 using FessooFramework.Tools.IOC;
 using System;
@@ -52,11 +53,29 @@ namespace FessooFramework.Core
         {
             if (text != "Fdsf4ew5gsf")
                 throw new Exception("Please use the Bootstrapper.Run to initialize system. Re-initialization is not allowed");
+            CoreConfiguration = new SystemCoreConfiguration();
         }
         #endregion
         #region ALM realization
+
+        /// <summary>   Gets the store.
+        ///             Получить модель данных для контекста </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <returns>   The store. </returns>
+
+        internal DataContextStore GetStore()
+        {
+            DataContextStore Store = new DataContextStore();
+            Bootstrapper.SetDbContext(ref Store);
+            return Store;
+        }
+        /// <summary>   The store. 
+        ///             Данные контекста</summary>
+
         protected override void _StateChanged(SystemState newState, SystemState oldState)
-        {   
+        {
             switch (newState)
             {
                 case SystemState.Created:
@@ -66,9 +85,8 @@ namespace FessooFramework.Core
                     ConsoleHelper.SendMessage($"1. SystemCore '{Name}': Load or replace core components");
 
                     //0. Получаю основные настройки системы
-                    var coreConfiguration = new SystemCoreConfiguration();
+                    var coreConfiguration = CoreConfiguration;
                     Bootstrapper.SetConfiguration(ref coreConfiguration);
-                    Bootstrapper.SetDbContext(ref coreConfiguration.Store);
                     CoreConfiguration = coreConfiguration;
 
                     //1. Добавляю базовые компоненты системы
@@ -121,10 +139,10 @@ namespace FessooFramework.Core
                         component._SetState(State);
 
                     foreach (var component in ComponentsContainer.GetAll())
-                       ConsoleHelper.SendMessage(component.ToInfo());
+                        ConsoleHelper.SendMessage(component.ToInfo());
 
                     //6. Ядро готово к работе
-                    ConsoleHelper.SendMessage($"Core launch completed! Elapsed  { TimeSpan.FromTicks( DateTime.Now.Ticks - CreateDate.Ticks)} мс");
+                    ConsoleHelper.SendMessage($"Core launch completed! Elapsed  { TimeSpan.FromTicks(DateTime.Now.Ticks - CreateDate.Ticks)} мс");
                     break;
                 case SystemState.Unload:
                     break;

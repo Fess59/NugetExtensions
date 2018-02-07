@@ -38,9 +38,7 @@ namespace FessooFramework.Core
         /// <value> True if test module enable, false if not. </value>
 
         public bool ComponentTestEnable { get; set; }
-        /// <summary>   The store. 
-        ///             Данные контекста</summary>
-        public DataContextStore Store = new DataContextStore();
+
 
         public override void Default()
         {

@@ -23,12 +23,12 @@ namespace FessooFramework.Tools.DCT
     public class DCTContextExample : DCTContext
     {
         #region Context examples
-        public DefaultDB ExampleDB => _Configuration.Store.Context<DefaultDB>();
+        public DefaultDB ExampleDB => _Store.Context<DefaultDB>();
         #endregion
         #region DbSet Examples
-        public DbSet<FirstModel> FirstModels => _Configuration.Store.Context<DefaultDB>().GetSet<FirstModel>();
-        public DbSet<SecondModel> SecondModels => _Configuration.Store.Context<DefaultDB2>().GetSet<SecondModel>();
-        public DbSet<ThirdModel> ThirdModels => _Configuration.Store.Context<DefaultDB2>().ThirdModels;
+        public DbSet<FirstModel> FirstModels => _Store.Context<DefaultDB>().GetSet<FirstModel>();
+        public DbSet<SecondModel> SecondModels => _Store.Context<DefaultDB2>().GetSet<SecondModel>();
+        public DbSet<ThirdModel> ThirdModels => _Store.Context<DefaultDB2>().ThirdModels;
         #endregion
         public DCTContextExample()
         {

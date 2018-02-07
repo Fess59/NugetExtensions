@@ -42,14 +42,14 @@ namespace FessooFramework.Components
         }
         internal static void Execute(Action action, bool isAsync = true, string name = "")
         {
-            DCTDefault.Execute(data =>
+            DCT.Execute(data =>
             {
                 if (action == null)
                     throw new NullReferenceException("CurrentDispatcher.Execute - Action не может быть пустым");
                 //Если контекст синхронизации не доступен в данном приложении
                 if (CurrentSynchronizationContext == null)
                 {
-                    DCTDefault.ExecuteAsync(c => action());
+                    DCT.ExecuteAsync(c => action());
                     return;
                 }
                 if (isAsync)
@@ -68,7 +68,7 @@ namespace FessooFramework.Components
 
         internal static void Dispacher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            DCTDefault.Execute(data => { e.Handled = true; });
+            DCT.Execute(data => { e.Handled = true; });
         }
 
         /// <summary>   Executes the given arguments. </summary>
@@ -81,7 +81,7 @@ namespace FessooFramework.Components
 
         static void execute(object args)
         {
-            DCTDefault.Execute(data =>
+            DCT.Execute(data =>
             {
                 if (args == null)
                     throw new NullReferenceException("CurrentDispatcher.Execute - Action не может быть пустым");

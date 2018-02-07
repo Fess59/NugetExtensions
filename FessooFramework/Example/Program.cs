@@ -19,7 +19,6 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
-
             DCTExample.Execute(c =>
             {
                 var r = new Model3();
@@ -49,11 +48,11 @@ namespace Example
         #region DCT test
         private static void DCTNameTest()
         {
-            DCTDefault.Execute(c => { });
-            DCTDefault.Execute<string>(c => { return ""; });
-            DCTDefault.ExecuteAsync(c => { });
-            DCTDefault.ExecuteAsync<string>(c => { return ""; }, (c, result) => { });
-            DCTDefault.ExecuteMainThread(c => { });
+            DCT.Execute(c => { });
+            DCT.Execute<string>(c => { return ""; });
+            DCT.ExecuteAsync(c => { });
+            DCT.ExecuteAsync<string>(c => { return ""; }, (c, result) => { });
+            DCT.ExecuteMainThread(c => { });
         }
 
         private static void DCTTest()
@@ -65,10 +64,10 @@ namespace Example
                 {
                     ConsoleHelper.SendMessage($"Context 2 ID {data2.Id}");
                 });
-                DCTDefault.Execute(data3 =>
+                DCT.Execute(data3 =>
                 {
                     ConsoleHelper.SendMessage($"Context 3 ID {data3.Id}");
-                    DCTDefault.Execute(data4 =>
+                    DCT.Execute(data4 =>
                     {
                         ConsoleHelper.SendMessage($"Context 4 ID {data4.Id}");
                     });
@@ -88,7 +87,7 @@ namespace Example
         }
         private static void InternalMethod()
         {
-            var context = DCTDefault.Context;
+            var context = DCT.Context;
             ConsoleHelper.SendMessage($"Internal ID {context.Id}");
         }
         #endregion
@@ -96,11 +95,11 @@ namespace Example
         static void ALMtest()
         {
             var almo = new ALMModel();
-            DCTDefault.Execute(c =>
+            DCT.Execute(c =>
             {
                 almo._SetState(ALMModelState.First);
             });
-            DCTDefault.Execute(c =>
+            DCT.Execute(c =>
             {
                 almo._SetState(ALMModelState.Create);
                 almo._SetState(ALMModelState.First);
@@ -113,7 +112,7 @@ namespace Example
         {
             var soe = new SystemObjectExample();
             var sce = new SystemComponentExample();
-            DCTDefault.Execute(c =>
+            DCT.Execute(c =>
             {
                 sce._SetState(FessooFramework.Objects.SystemState.Initialized);
                 sce._SetState(FessooFramework.Objects.SystemState.Configured);

@@ -157,7 +157,7 @@ namespace FessooFramework.Tools.Controllers
 
         public void Clear()
         {
-            DCTDefault.Execute((data) =>
+            DCT.DCT.Execute((data) =>
             {
                 if (_DefaultValue != null)
                     _SetValue(_DefaultValue);
@@ -171,7 +171,7 @@ namespace FessooFramework.Tools.Controllers
 
         public void ClearAsync()
         {
-            DCTDefault.ExecuteAsync(c => Clear());
+            DCT.DCT.ExecuteAsync(c => Clear());
         }
 
         /// <summary>   Only clear.
@@ -181,7 +181,7 @@ namespace FessooFramework.Tools.Controllers
 
         public void OnlyClear()
         {
-            DCTDefault.Execute((data) =>
+            DCT.DCT.Execute((data) =>
             {
                 if (_Value != null)
                     ObjectHelper.Dispose(_Value);
@@ -195,7 +195,7 @@ namespace FessooFramework.Tools.Controllers
 
         public void Refresh()
         {
-            DCTDefault.Execute((data) =>
+            DCT.DCT.Execute((data) =>
             {
                 if (GetValue != null)
                 {
@@ -218,7 +218,7 @@ namespace FessooFramework.Tools.Controllers
         public void SetValueAsync(T newValue)
         {
             var _nv = newValue;
-            DCTDefault.ExecuteAsync(data => SetValue(_nv));
+            DCT.DCT.ExecuteAsync(data => SetValue(_nv));
         }
 
         /// <summary>   Sets a value.
@@ -231,18 +231,18 @@ namespace FessooFramework.Tools.Controllers
         ///
         public void SetValue(T newValue)
         {
-            DCTDefault.Execute(data => {
+            DCT.DCT.Execute(data => {
             try
             {
                 if (OnlyGet)
                     throw new Exception("Read only - для объекта не возможно задать значение");
                 if (CheckValue != null && !CheckValue(newValue))
                     return;
-                _ComparerValue(newValue);
+                    _ComparerValue(newValue);
             }
             catch (Exception ex)
             {
-                    DCTDefault.SendExceptions(ex, "CRITICAl");
+                    DCT.DCT.SendExceptions(ex, "CRITICAl");
                     throw;
             }
             });

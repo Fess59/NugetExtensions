@@ -43,21 +43,21 @@ namespace FessooFramework.Tools.Controllers
         /// <param name="priority"></param>
         public void Set(Action action, int priority = 0)
         {
-            DCTDefault.Execute(c => {
+            DCT.DCT.Execute(c => {
                 if (action == null) throw new NullReferenceException("ActionController. Вызываемый метод при заверешнии измения объекта не может быть равен NULL");
-                DCTDefault.Send("Привязка создана объектом " + action.Target.ToString());
+                DCT.DCT.Send("Привязка создана объектом " + action.Target.ToString());
                 if (!dict.ContainsKey(priority))
                     dict.Add(priority, new List<Action>());
-                dict.FirstOrDefault(q => q.Key == priority).Value.Add(action);
+                dict.FirstOrDefault((KeyValuePair<int, List<Action>> q) => q.Key == priority).Value.Add(action);
             });
         }
         public void Execute()
         {
-            DCTDefault.Execute((data) =>{
+            DCT.DCT.Execute((data) =>{
                 try
                 {
                     if (dict == null && !dict.Any()) return;
-                    var collections = dict.OrderByDescending(q => q.Key).ToArray();
+                    var collections = dict.OrderByDescending((KeyValuePair<int, List<Action>> q) => q.Key).ToArray();
                     foreach (var list in collections)
                     {
                         foreach (var action in list.Value.ToArray())
@@ -66,7 +66,7 @@ namespace FessooFramework.Tools.Controllers
                 }
                 catch (Exception ex)
                 {
-                    DCTDefault.SendExceptions(ex, "CRITICAL");
+                    DCT.DCT.SendExceptions(ex, "CRITICAL");
                     throw;
                 }
             });
@@ -78,7 +78,7 @@ namespace FessooFramework.Tools.Controllers
         /// <param name="priority"></param>
         public void Remove(Action action)
         {
-            DCTDefault.Execute((data) =>{
+            DCT.DCT.Execute((data) =>{
             if (action == null) throw new NullReferenceException("ActionController. Вызываемый метод при заверешнии измения объекта не может быть равен NULL");
                 if (!dict.Any()) return;
                 foreach (var list in dict.ToArray())
@@ -90,7 +90,7 @@ namespace FessooFramework.Tools.Controllers
         }
         private void execute(Action action)
         {
-            DCTDefault.Execute((data) =>{
+            DCT.DCT.Execute((data) =>{
             try
             {
                     action();
