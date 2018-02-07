@@ -26,8 +26,6 @@ namespace FessooFramework.Objects.Data
         ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
-        ///
-        /// <param name="list"> [in,out] The list. </param>
         protected abstract IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> Configurations { get; }
         /// <summary>
         /// Базовые состояния, переход в которые возможен из любого состояния
@@ -48,39 +46,33 @@ namespace FessooFramework.Objects.Data
             get => EnumHelper.GetValue<TStateType>(State);
             set => State = GetStateValue(value);
         }
-        ///// <summary> Сохраняем изменения объекта  на основании его состояния. Для фиксации измениний в базе не обходимо вызвать SaveChanges</summary>
-        /////
-        ///// <remarks>   Fess59, 02.02.2018. </remarks>
+        /// <summary> Сохраняем изменения объекта  на основании его состояния. Для фиксации измениний в базе не обходимо вызвать SaveChanges</summary>
+        ///
+        /// <remarks>   Fess59, 02.02.2018. </remarks>
         public void _Save()
         {
             Update(this);
         }
-        /// <summary> Database set. </summary>
-        ///
-        /// <remarks> AM Kozhevnikov, 06.02.2018. </remarks>
-        ///
-        /// <typeparam name="T">  Generic type parameter. </typeparam>
-        ///
-        /// <returns> A DbSet&lt;T&gt; </returns>
+       /// <summary>
+       ///Получаем DbSet для этой модели
+       /// </summary>
+       /// <returns></returns>
         public DbSet<TObjectType> _DbSet()
         {
-            return DCTDefault.Context.DbSet<TObjectType>();
+            return DbSet();
         }
-        ///// <summary>   Gets the convert. </summary>
-        /////
-        ///// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
-        /////
-        ///// <typeparam name="T">    Generic type parameter. </typeparam>
-        /////
-        ///// <returns>   A T. </returns>
-        public TResult _Convert<TResult>() where TResult : class => DataContainer.Convert<TResult>(this);
-        /// <summary>   Database set. </summary>
+        // <summary>   Gets the convert. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
         ///
-        /// <typeparam name="T">    Generic type parameter. </typeparam>
+        /// <typeparam name="TResult">    Generic type parameter. </typeparam>
         ///
-        /// <returns>   A DbSet&lt;T&gt; </returns>
+        /// <returns>   A T. </returns>
+        public TResult _Convert<TResult>() where TResult : class => DataContainer.Convert<TResult>(this);
+        /// <summary>
+        /// Получаем DbSet для этой модели
+        /// </summary>
+        /// <returns></returns>
         public static DbSet<TObjectType> DbSet()
         {
             return DCTDefault.Context.DbSet<TObjectType>();
@@ -155,8 +147,6 @@ namespace FessooFramework.Objects.Data
         /// <summary>
         /// Вызывается в случае ошибки обработки перехода объекта в другое состояние
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="state"></param>
         protected virtual int SetError()
         {
             return -1;

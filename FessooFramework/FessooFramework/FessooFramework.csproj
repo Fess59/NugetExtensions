@@ -61,6 +61,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\DCTContext.cs" />
     <Compile Include="Components\DispatcherHelper.cs" />
     <Compile Include="Components\Logger\LoggerHelper.cs" />
     <Compile Include="Components\Logger\Models\LoggerMessage.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="Core\_DCTContext.cs" />
     <Compile Include="Core\_DCT.cs" />
     <Compile Include="Core\SystemCore.cs" />
-    <Compile Include="Tools\DCT\DCTContextDefault.cs" />
     <Compile Include="Tools\DCT\DCTDefault.cs" />
     <Compile Include="Tools\Helpers\ConsoleHelper.cs" />
     <Compile Include="Tools\Helpers\ContextHelper.cs" />

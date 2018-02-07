@@ -224,14 +224,11 @@ namespace FessooFramework.Tools.Controllers
         /// <summary>   Sets a value.
         ///             Присвоить значение - аналог Obj.Value = newValue</summary>
         /// 
-        /// <param name="newValue"></param> </summary>
-        ///
+        /// <param name="newValue"></param> 
         /// <remarks>   AM Kozhevnikov, 23.01.2018. </remarks>
         ///
         /// <exception cref="Exception">    Thrown when an exception error condition occurs. </exception>
         ///
-        /// <param name="newValue"> . </param>
-
         public void SetValue(T newValue)
         {
             DCTDefault.Execute(data => {

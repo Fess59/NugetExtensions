@@ -1,7 +1,9 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Objects.SourceData;
 using FessooFramework.Tools.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -36,6 +38,9 @@ namespace FessooFramework.Core
         /// <value> True if test module enable, false if not. </value>
 
         public bool ComponentTestEnable { get; set; }
+        /// <summary>   The store. 
+        ///             Данные контекста</summary>
+        public DataContextStore Store = new DataContextStore();
 
         public override void Default()
         {

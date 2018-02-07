@@ -76,7 +76,7 @@ namespace FessooFramework.Tools.Helpers
         {
             //Получаем полный путь до файла
             var fullName = path + @"\" + name + ".xml";
-            ///Проверяем путь до файла, при необходимости создаем
+            //Проверяем путь до файла, при необходимости создаем
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             //Создаем или перезаписываем файл

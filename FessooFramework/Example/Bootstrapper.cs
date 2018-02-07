@@ -7,10 +7,11 @@ using Example._0_Base.Data.Contexts;
 using Example.Tests.CoreExample.Components;
 using FessooFramework.Core;
 using FessooFramework.Objects;
+using FessooFramework.Objects.SourceData;
 
-namespace Example.Tests.CoreExample
+namespace Example
 {
-    public class Bootstrapper : FessooFramework.Core.Bootstrapper
+    public class Bootstrapper : FessooFramework.Core.Bootstrapper<Bootstrapper>
     {
         public override string ApplicationName => "Application Example";
 
@@ -21,6 +22,13 @@ namespace Example.Tests.CoreExample
 
         public override void SetConfiguration(ref SystemCoreConfiguration settings)
         {
+        }
+
+        public override void SetDbContext(ref DataContextStore _Store)
+        {
+            _Store.Add<DefaultDB>();
+            _Store.Add<DefaultDB2>();
+            _Store.Add<DefaultDB3>();
         }
     }
 }

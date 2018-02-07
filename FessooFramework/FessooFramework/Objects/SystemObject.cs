@@ -105,6 +105,14 @@ namespace FessooFramework.Objects
         }
         #endregion
         #region ALM realization
+
+        /// <summary>   State changed. Состояние объекта было изменено. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="newState"> State of the new. </param>
+        /// <param name="oldState"> State of the old. </param>
+
         protected override void _StateChanged(SystemState newState, SystemState oldState)
         {
             switch (newState)
@@ -140,6 +148,16 @@ namespace FessooFramework.Objects
                     break;
             }
         }
+        /// <summary>
+        ///     State configuration. Настройка конфигурации для измения состояни жизненного цикла.
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <returns>
+        ///     An enumerator that allows foreach to be used to process state configuration in this
+        ///     collection.
+        /// </returns>
         protected override IEnumerable<ALMConf<SystemState>> _StateConfiguration()
         {
             return new ALMConf<SystemState>[]
@@ -182,7 +200,7 @@ namespace FessooFramework.Objects
                         }
                         catch (Exception ex)
                         {
-                            ConsoleHelper.SendWarning(MethodBase.GetCurrentMethod(), $"Case ошибка при выполнении! Описание - '{c.Description}'");
+                            ConsoleHelper.SendWarning(MethodBase.GetCurrentMethod(), $"Case ошибка при выполнении! Описание - '{c.Description}' Ошибка: {Environment.NewLine + ex}");
                         }
 
                     }
@@ -192,15 +210,48 @@ namespace FessooFramework.Objects
         #endregion
     }
 
+    /// <summary>   A testing case. Кейс тестирования объекта </summary>
+    ///
+    /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
     public struct TestingCase
     {
+        /// <summary>   Gets or sets the component case.
+        ///             Логика тестирования объекта, должен вернуть False если проверка не пройдена </summary>
+        ///
+        /// <value> The component case. </value>
+
         public Func<bool> ComponentCase { get; set; }
+
+        /// <summary>   Gets or sets the description. Описание кейса для логгера</summary>
+        ///
+        /// <value> The description. </value>
+
         public string Description { get; set; }
+
+        /// <summary>   Constructor.  </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="description">      The description. Описание кейса для логгера </param>
+        /// <param name="componentCase">    The component case.  Логика тестирования объекта, должен вернуть False если проверка не пройдена </param>
+
         TestingCase(string description, Func<bool> componentCase)
         {
             Description = description;
             ComponentCase = componentCase;
         }
+
+        /// <summary>   News. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="description">      The description. Описание кейса для логгера </param>
+        /// <param name="componentCase">    The component case.  Логика тестирования объекта, должен
+        ///                                 вернуть False если проверка не пройдена. </param>
+        ///
+        /// <returns>   A TestingCase. </returns>
+
         public static TestingCase New(string description, Func<bool> componentCase)
         {
             return new TestingCase()

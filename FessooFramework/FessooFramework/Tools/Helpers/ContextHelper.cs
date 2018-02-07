@@ -32,8 +32,8 @@ namespace FessooFramework.Tools.Helpers
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
         ///
-        /// <typeparam name="T">    Generic type parameter. </typeparam>
         /// <param name="value">    The value. </param>
+        /// <param name="name">    The value. </param>
         ///
         /// <returns>   A T. </returns>
 
@@ -42,22 +42,5 @@ namespace FessooFramework.Tools.Helpers
             Thread.SetData(Thread.GetNamedDataSlot(name), value);
             return value;
         }
-
-        /// <summary>   Check or create context.
-        ///             Проверяет наличие данных по имени и типу, при необходимости создаёт копию по умолчанию </summary>
-        ///
-        /// <remarks>   Fess59, 26.01.2018. </remarks>
-        ///
-        /// <typeparam name="T">    Generic type parameter. </typeparam>
-        /// <param name="contextName">  Name of the context. </param>
-        ///
-        /// <returns>   A T. </returns>
-
-        //public static T CheckOrCreateContext<T>(string contextName) where T : class, new()
-        //{
-        //    var context = ContextHelper.GetContext(contextName);
-        //    var data = context == null ? ContextHelper.SetContext(new T(), contextName) : context;
-        //    return data;
-        //}
     }
 }

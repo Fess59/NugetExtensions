@@ -18,9 +18,10 @@ namespace Example
     {
         static void Main(string[] args)
         {
+            CoreTest();
+
             DCTExample.Execute(c =>
             {
-                CoreTest();
                 var r = new Model3();
                 r.StateEnum = Model3State.Edit;
                 r._Save();
@@ -126,7 +127,7 @@ namespace Example
         #region CoreTest
         public static void CoreTest()
         {
-            new Example.Tests.CoreExample.Bootstrapper().Run();
+            Example.Bootstrapper.Current.Run();
         }
         #endregion
         #region Entity test

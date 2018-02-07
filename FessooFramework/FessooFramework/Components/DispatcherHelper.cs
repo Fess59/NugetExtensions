@@ -12,6 +12,10 @@ using System.Windows.Threading;
 
 namespace FessooFramework.Components
 {
+    /// <summary>   A dispatcher helper. Компонент для управления сихронизации потоков с основным UI потоком </summary>
+    ///
+    /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
     public class DispatcherHelper : SystemComponent
     {
         #region Property
@@ -54,10 +58,27 @@ namespace FessooFramework.Components
                     CurrentSynchronizationContext.Send((a) => execute(a), action);
             }, name: "DispatcherHelper");
         }
+
+        /// <summary>   Event handler. Called by Dispacher for unhandled exception events. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="sender">   Source of the event. </param>
+        /// <param name="e">        Dispatcher unhandled exception event information. </param>
+
         internal static void Dispacher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             DCTDefault.Execute(data => { e.Handled = true; });
         }
+
+        /// <summary>   Executes the given arguments. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <throwses cref="NullReferenceException">    Thrown when a value was unexpectedly null. </throwses>
+        ///
+        /// <param name="args"> The arguments. </param>
+
         static void execute(object args)
         {
             DCTDefault.Execute(data =>
@@ -76,23 +97,58 @@ namespace FessooFramework.Components
         #endregion
         #region Component realization
 
-        #endregion
+        /// <summary>
+        ///     Configurings this object. Настройка текущего модуля - наложение кастомных настроек и
+        ///     подписки глобальных настроек.
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
         public override void _2_Configuring()
         {
             SetDispatherAsDefault(Dispatcher.CurrentDispatcher);
         }
+
+        /// <summary>   Loadings this object. Загрузка данных для объекта и обработка данных. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
         protected override void _3_Loaded()
         {
         }
+
+        /// <summary>
+        ///     Testing this object. Проверка компонента на определённые условия - в будующем в этом
+        ///     месте требуется подключение модуля динамической отладки с выводом предпреждений.
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <returns>
+        ///     An enumerator that allows foreach to be used to process testing in this collection.
+        /// </returns>
+
         protected override IEnumerable<TestingCase> _4_Testing()
         {
             return Enumerable.Empty<TestingCase>();
         }
+
+        /// <summary>   Launchings this object. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
         public override void _5_Launching()
         {
         }
+
+        /// <summary>   Complitings this object. Работа с модулем была завершена. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
         protected override void _6_Unload()
         {
         }
+        #endregion
+
     }
 }

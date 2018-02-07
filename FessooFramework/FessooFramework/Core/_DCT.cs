@@ -25,7 +25,6 @@ namespace FessooFramework.Core
     ///
     /// <remarks>   Fess59, 26.01.2018. </remarks>
     ///
-    /// <typeparam name="TContext"> Type of the context. </typeparam>
     public static class _DCT
     {
         #region DCT base
@@ -37,12 +36,14 @@ namespace FessooFramework.Core
         /// <exception cref="NullReferenceException">    Thrown when a value was unexpectedly null. </exception>
         ///
         /// <typeparam name="TResult">   Type of the result. </typeparam>
+        /// <param name="name">                    The name. Имя группы в которая выполняет обработку, обычно это имя класса  </param>
         /// <param name="method">                    The method. Выполняемый блок кода  </param>
-        /// <param name="_data">                     (Optional) The data. Контекст данных </param>
         /// <param name="continueExceptionMethod">   (Optional) The continue exception method. Выполнится при ошибке в method </param>
         /// <param name="continueMethod">            (Optional) The continue method. Выполнится после method и continueExceptionMethod  </param>
-        /// <param name="complete">                  (Optional) The complete. Для отправки результата в другой блок кода, используется в ExecuteAsync<TReusult>  </param>
+        /// <param name="complete">                  (Optional) The complete. Для отправки результата в другой блок кода, используется в ExecuteAsync  </param>
         ///
+        /// <typeparam name="TContext"> Type of the context. Имплементация компонента DCTContext </typeparam>
+        /// 
         /// <returns>    A TResult. </returns>
         private static TResult execute<TContext, TResult>(
             string name,
@@ -50,7 +51,7 @@ namespace FessooFramework.Core
             Action<TContext, Exception> continueExceptionMethod = null,
             Action<TContext> continueMethod = null,
              Action<TContext, TResult> complete = null)
-             where TContext : _DCTContext, new()
+             where TContext : DCTContext, new()
         {
             TResult result = default(TResult);
             bool isOwner = false;
@@ -86,8 +87,8 @@ namespace FessooFramework.Core
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
         ///
+        /// <param name="name">                    The name. Имя группы в которая выполняет обработку, обычно это имя класса  </param>
         /// <param name="method">                   The method. Выполняемый блок кода. </param>
-        /// <param name="_data">                    (Optional) The data. Контекст данных. </param>
         /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
@@ -95,15 +96,27 @@ namespace FessooFramework.Core
         private static void execute<TContext>(string name, Action<TContext> method,
            Action<TContext, Exception> continueExceptionMethod = null,
            Action<TContext> continueMethod = null)
-             where TContext : _DCTContext, new()
+             where TContext : DCTContext, new()
         {
             execute<TContext, object>(name, data => { method(data); return null; }, continueExceptionMethod, continueMethod);
         }
         #endregion
         #region Context base
+
+        /// <summary>   Name of the context. В памяти потока </summary>
         static string contextName = "DCTContext";
+
+        /// <summary>   Gets the context. Имплементация компонента DCTContext
+        ///              </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <typeparam name="TContext"> Type of the context. Имплементация компонента DCTContext </typeparam>
+        ///
+        /// <returns>   A TContext. </returns>
+
         public static TContext Context<TContext>()
-             where TContext : _DCTContext, new()
+             where TContext : DCTContext, new()
         {
             return GetContext<TContext>();
         }
@@ -116,21 +129,21 @@ namespace FessooFramework.Core
         ///
         /// <returns>    The context. </returns>
         private static TContext GetContext<TContext>(TContext value = null)
-              where TContext : _DCTContext, new()
+              where TContext : DCTContext, new()
         {
-                var obj = ContextHelper.GetContext(contextName);
-                if (obj == null)
-                {
-                    obj = new TContext();
-                    ContextHelper.SetContext(obj, contextName);
-                }
-                var context = obj as TContext;
-                if (value != null)
-                {
-                    var parentTrackId = context.TrackId == value.TrackId ? context.ParentTrackId : value.ParentTrackId;
-                    context.ParentTrackId = parentTrackId;
-                }
-                return context;
+            var obj = ContextHelper.GetContext(contextName);
+            if (obj == null)
+            {
+                obj = new TContext();
+                ContextHelper.SetContext(obj, contextName);
+            }
+            var context = obj as TContext;
+            if (value != null)
+            {
+                var parentTrackId = context.TrackId == value.TrackId ? context.ParentTrackId : value.ParentTrackId;
+                context.ParentTrackId = parentTrackId;
+            }
+            return context;
         }
         /// <summary>   Determines if we can check context. </summary>
         ///
@@ -138,7 +151,7 @@ namespace FessooFramework.Core
         ///
         /// <returns>   True if it succeeds, false if it fails. </returns>
         private static bool CheckContext<TContext>()
-              where TContext : _DCTContext, new()
+              where TContext : DCTContext, new()
         {
             var result = false;
             var context = ContextHelper.GetContext(contextName);
@@ -147,7 +160,7 @@ namespace FessooFramework.Core
             return result;
         }
         private static void DisposeContext<TContext>(TContext data, bool isOwner)
-              where TContext : _DCTContext, new()
+              where TContext : DCTContext, new()
         {
             try
             {
@@ -173,8 +186,10 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
+        /// <param name="name">                    The name. Имя группы в которая выполняет обработку, обычно это имя класса  </param>
+        /// 
         public static void Execute<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
-             where TContext : _DCTContext, new()
+             where TContext : DCTContext, new()
         {
             if (name == "")
                 name = GetCategoryName();
@@ -191,26 +206,33 @@ namespace FessooFramework.Core
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
         ///
+        /// <typeparam name="TContext"> Type of the context. Имплементация компонента DCTContext </typeparam>
+        /// 
         /// <returns>   A TResult. </returns>
-        public static TResult Execute<TContext,TResult>(Func<TContext, TResult> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
-             where TContext : _DCTContext, new()
+        public static TResult Execute<TContext, TResult>(Func<TContext, TResult> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+             where TContext : DCTContext, new()
         {
-            return execute<TContext,TResult>(GetCategoryName(), action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            return execute<TContext, TResult>(GetCategoryName(), action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }
         /// <summary>   Executes the asynchronous operation. With result </summary>
         ///
         /// <remarks>   Fess59, 26.01.2018. </remarks>
         ///
-        /// <typeparam name="TResult">  Type of the result. </typeparam>
         /// <param name="action">                   The action. </param>
         /// <param name="complete">                 The complete. Для отправки результата в другой блок
-        ///                                         кода, используется в ExecuteAsync<TReusult> </param>
+        ///                                         кода, используется в ExecuteAsync </param>
         /// <param name="continueExceptionMethod">  (Optional) The continue exception method. Выполнится
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteAsync<TContext,TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
-             where TContext : _DCTContext, new()
+        /// <param name="name">                    The name. Имя группы в которая выполняет обработку, обычно это имя класса  </param>
+        /// 
+        /// <typeparam name="TResult">  Type of the result. </typeparam>
+        /// <typeparam name="TContext"> Type of the context. Имплементация компонент DCTContext </typeparam>
+        /// 
+        /// 
+        public static void ExecuteAsync<TContext, TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, string name = "")
+             where TContext : DCTContext, new()
         {
             if (name == "")
                 name = GetCategoryName();
@@ -226,10 +248,10 @@ namespace FessooFramework.Core
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteAsync<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
-             where TContext : _DCTContext, new()
+             where TContext : DCTContext, new()
         {
             var name = GetCategoryName();
-            ExecuteAsync<TContext,object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
+            ExecuteAsync<TContext, object>(data => { action(data); return null; }, null, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, name: name);
         }
         /// <summary>   Executes the main thread operation. With result async </summary>
         ///
@@ -240,8 +262,10 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteMainThread<TContext,TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
-             where TContext : _DCTContext, new()
+        ///  <param name="complete">                 The complete. Для отправки результата в другой блок
+        ///                                         кода, используется в ExecuteAsync </param>
+        public static void ExecuteMainThread<TContext, TResult>(Func<TContext, TResult> action, Action<TContext, TResult> complete, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+             where TContext : DCTContext, new()
         {
             var name = GetCategoryName();
             DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: (data, result) => ExecuteAsync<TContext>(dataAsync => complete.Invoke(dataAsync, result))));
@@ -256,48 +280,102 @@ namespace FessooFramework.Core
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteMainThread<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
-             where TContext : _DCTContext, new()
+             where TContext : DCTContext, new()
         {
             var name = GetCategoryName();
             DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
         }
         #endregion
         #region Logger module
+
+        /// <summary>   Sends the informations. Отправка сообщения через логгер </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="text">     The text. </param>
+        /// <param name="category"> The category. </param>
+
         public static void SendInformations(string text, string category)
         {
             Send(LoggerMessageType.Information, text, category);
         }
+
+        /// <summary>   Sends a warning. Отправка предупреждения через логгер, с произвольной категорией и текстом</summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="text">     The text. </param>
+        /// <param name="category"> The category. </param>
+
         public static void SendWarning(string text, string category)
         {
             Send(LoggerMessageType.Warning, text, category);
         }
+
+        /// <summary>
+        ///     Sends the exceptions. Отправка ошибки через логгер, с произвольной категорией и текстом.
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="text">     The text. </param>
+        /// <param name="category"> The category. </param>
+
         public static void SendExceptions(string text, string category)
         {
             Send(LoggerMessageType.Exception, text, category);
         }
+
+        /// <summary>   Sends the exceptions. Отправка ошибки через логгер, с произвольной категорией.</summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="ex">       The ex. </param>
+        /// <param name="category"> The category. </param>
+
         public static void SendExceptions(Exception ex, string category)
         {
             Send(LoggerMessageType.Exception, LoggerHelper.ExToString(ex), category);
         }
+
+        /// <summary>   Send this message. Отправка сообщения через логгер. Тип - Information, категория - Message</summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="text"> The text. </param>
+
         public static void Send(string text)
         {
             Send(LoggerMessage.New(LoggerMessageType.Information, text, "Message"));
         }
+
+        /// <summary>   Send this message. Отправка сообщения через логгер с произвольным типом, текстом и категорией </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="messageType">  Type of the message. </param>
+        /// <param name="text">         The text. </param>
+        /// <param name="category">     The category. </param>
+
         private static void Send(LoggerMessageType messageType, string text, string category)
         {
             Send(LoggerMessage.New(messageType, text, category));
         }
+
+        /// <summary>
+        ///     Send this message. Отправка модели сообщения через логгер 
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+        ///
+        /// <param name="message">  The message. </param>
+
         private static void Send(LoggerMessage message)
         {
             LoggerHelper.SendMessage(message);
         }
         #endregion
         #region Tools
-        public static int MethodNameLevel = 2;
-        private static string GetMethodNameWrapper(int frame = 1)
-        {
-            return GetCategoryName(frame);
-        }
         /// <summary>
         /// Получаем имя текущего метода
         /// </summary>

@@ -102,8 +102,20 @@ namespace FessooFramework.Tools.Controllers
                 }
             });
         }
-        public void Dispose()
+
+        /// <summary>
+        ///     Обертка для IDisposable.Dispose в SystemObject Создана для возможности очистки объекта во
+        ///     всех наследуемых сущностях
+        ///     
+        ///     Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или
+        ///     сбросом неуправляемых ресурсов.
+        /// </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
+
+        public override void Dispose()
         {
+            base.Dispose();
             ObjectHelper.Dispose(dict);
         }
         #endregion

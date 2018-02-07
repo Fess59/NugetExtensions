@@ -54,7 +54,6 @@ namespace FessooFramework.Components.LoggerComponent.Realizations
                 var absolutePath = $@"{path}\{folder}";
                 if (!Directory.Exists(absolutePath)) Directory.CreateDirectory(absolutePath);
                 //Файл
-                var group = "Logs";
                 var fileName = $"[{DateTime.Now.ToString("MM-dd-yy")}][{message.MessageType.ToString()}] {message.Category}";
                 var absoluteFilepath = $@"{absolutePath}\{fileName}.txt";
                 //Запись

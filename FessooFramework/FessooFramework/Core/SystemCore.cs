@@ -32,7 +32,7 @@ namespace FessooFramework.Core
         ///
         /// <value> The bootstrapper. </value>
 
-        private Bootstrapper Bootstrapper { get; set; }
+        private _Bootstrapper Bootstrapper { get; set; }
 
         /// <summary>   Gets or sets the components container. </summary>
         ///
@@ -68,6 +68,7 @@ namespace FessooFramework.Core
                     //0. Получаю основные настройки системы
                     var coreConfiguration = new SystemCoreConfiguration();
                     Bootstrapper.SetConfiguration(ref coreConfiguration);
+                    Bootstrapper.SetDbContext(ref coreConfiguration.Store);
                     CoreConfiguration = coreConfiguration;
 
                     //1. Добавляю базовые компоненты системы
@@ -138,7 +139,7 @@ namespace FessooFramework.Core
         ///
         /// <param name="b">    A Bootstrapper to process. </param>
 
-        internal void SetBootstrapper(Bootstrapper b)
+        internal void SetBootstrapper(_Bootstrapper b)
         {
             Bootstrapper = b;
         }
