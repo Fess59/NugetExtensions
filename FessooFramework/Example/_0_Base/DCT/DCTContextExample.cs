@@ -32,7 +32,6 @@ namespace FessooFramework.Tools.DCT
         #endregion
         public DCTContextExample()
         {
-          
         }
     }
 }

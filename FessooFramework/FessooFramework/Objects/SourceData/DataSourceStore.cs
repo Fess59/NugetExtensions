@@ -63,14 +63,12 @@ namespace FessooFramework.Objects.SourceData
         /// </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
-
         public override void Dispose()
         {
             base.Dispose();
             foreach (var item in Container.GetAll())
                 item.Dispose();
         }
-
         /// <summary>   Gets the context. Получение DbContext по типу </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
@@ -78,7 +76,6 @@ namespace FessooFramework.Objects.SourceData
         /// <typeparam name="T">    Generic type parameter. </typeparam>
         ///
         /// <returns>   A T. </returns>
-
         public T Context<T>() where T : DbContext
         {
             var name = typeof(T).ToString();
@@ -87,7 +84,6 @@ namespace FessooFramework.Objects.SourceData
             var dbContext = context as T;
             return dbContext;
         }
-
         /// <summary>   Database set. Получение DbSet по модели данных </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 07.02.2018. </remarks>
@@ -97,7 +93,6 @@ namespace FessooFramework.Objects.SourceData
         /// <typeparam name="T">    Generic type parameter. </typeparam>
         ///
         /// <returns>   A DbSet&lt;T&gt; </returns>
-
         public DbSet<T> DbSet<T>() where T : EntityObject
         {
             var result = default(DbSet<T>);

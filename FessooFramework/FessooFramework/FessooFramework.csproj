@@ -116,7 +116,6 @@
     <Compile Include="Core\Pools\TaskSchedulePool.cs" />
     <Compile Include="Core\Pools\VMPool.cs" />
     <Compile Include="Core\_Bootstrapper.cs" />
-    <Compile Include="Core\_DCTContext.cs" />
     <Compile Include="Core\_DCTBase.cs" />
     <Compile Include="Core\SystemCore.cs" />
     <Compile Include="Tools\DCT\DCTDefault.cs" />
