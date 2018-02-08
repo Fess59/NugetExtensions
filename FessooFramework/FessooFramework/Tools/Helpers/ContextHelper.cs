@@ -25,7 +25,6 @@ namespace FessooFramework.Tools.Helpers
         {
             return Thread.GetData(Thread.GetNamedDataSlot(name));
         }
-
         /// <summary>   Sets a context.
         ///              Кладем объект в область данных потока по наименованию и типу
         ///              </summary>
@@ -36,7 +35,6 @@ namespace FessooFramework.Tools.Helpers
         /// <param name="name">    The value. </param>
         ///
         /// <returns>   A T. </returns>
-
         public static object SetContext(object value, string name) 
         {
             Thread.SetData(Thread.GetNamedDataSlot(name), value);

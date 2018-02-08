@@ -22,15 +22,39 @@ namespace FessooFramework.Objects.Data
         where TObjectType : EntityObjectALM<TObjectType, TStateType>, new()
          where TStateType : struct, IConvertible
     {
+        #region Configuration
         /// <summary>   State configuration.
         ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
         protected abstract IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> Configurations { get; }
+
+        /// <summary>   State configuration.
+        ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        private IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> configurations
+        {
+            get
+            {
+                if (_Configurations == null)
+                    _Configurations = Configurations;
+                return _Configurations;
+            }
+        }
+        /// <summary>   State configuration.
+        ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        private static IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> _Configurations { get; set; }
+        #endregion
+        #region Default state
         /// <summary>
         /// Базовые состояния, переход в которые возможен из любого состояния
         /// </summary>
         protected abstract IEnumerable<TStateType> DefaultState { get; }
+        #endregion
+
         /// <summary>
         /// Реализует метод конвертации Enum в int
         /// </summary>
@@ -44,7 +68,11 @@ namespace FessooFramework.Objects.Data
         public TStateType StateEnum
         {
             get => EnumHelper.GetValue<TStateType>(State);
-            set => State = GetStateValue(value);
+            set
+            {
+                State = GetStateValue(value);
+                _Save();
+            }
         }
         /// <summary> Сохраняем изменения объекта  на основании его состояния. Для фиксации измениний в базе не обходимо вызвать SaveChanges</summary>
         ///
@@ -53,10 +81,10 @@ namespace FessooFramework.Objects.Data
         {
             Update(this);
         }
-       /// <summary>
-       ///Получаем DbSet для этой модели
-       /// </summary>
-       /// <returns></returns>
+        /// <summary>
+        ///Получаем DbSet для этой модели
+        /// </summary>
+        /// <returns></returns>
         public DbSet<TObjectType> _DbSet()
         {
             return DbSet();
@@ -135,14 +163,14 @@ namespace FessooFramework.Objects.Data
         /// </returns>
         IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> GetStateConfiguration()
         {
-            if (!Configurations.Any())
+            if (!configurations.Any())
                 throw new Exception($"Для типа {typeof(TStateType).ToString()} необходимо настроить переходы жизненного цикла. Реализуйте метод _StateConfiguration");
-            var countCheck = Configurations.GroupBy(q => new { q.State, q.NextState });
+            var countCheck = configurations.GroupBy(q => new { q.State, q.NextState });
             //foreach (var item in countCheck.Where(q => q.Count() > 1))
             //{
             //    throw new Exception($"Для типа {typeof(TStateType).ToString()} состояние {item.Key.ToString()}, настроено более одного раза");
             //}
-            return Configurations;
+            return configurations;
         }
         /// <summary>
         /// Вызывается в случае ошибки обработки перехода объекта в другое состояние

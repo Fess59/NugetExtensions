@@ -23,17 +23,13 @@ namespace Example
             {
                 var r = new Model3();
                 r.StateEnum = Model3State.Edit;
-                r._Save();
                 c.SaveChanges();
                 r.StateEnum = Model3State.Complete;
-                r._Save();
                 c.SaveChanges();
                 r.StateEnum = Model3State.Edit;
-                r._Save();
                 c.SaveChanges();
                 var r2 = new Model3();
                 r2.StateEnum = Model3State.Complete;
-                r2._Save();
                 c.SaveChanges();
                 //DataComponentTest();
                 var list = Model3.DbSet().ToArray();
