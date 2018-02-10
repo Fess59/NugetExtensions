@@ -77,8 +77,8 @@
     <Compile Include="_0_Base\Data\Models\ModelX\ModelXHelper.cs" />
     <Compile Include="_0_Base\Data\Models\ModelX\ModelXState.cs" />
     <Compile Include="_0_Base\Data\Models\ModelX\ModelXView.cs" />
-    <Compile Include="_0_Base\DCT\DCTContextExample.cs" />
-    <Compile Include="_0_Base\DCT\DCTExample.cs" />
+    <Compile Include="_0_Base\Core\DCTContextExample.cs" />
+    <Compile Include="_0_Base\Core\DCTExample.cs" />
     <Compile Include="_0_Base\Models\ALMModel.cs" />
     <Compile Include="_0_Base\CustomComponents\SingltonApplicationHelper.cs" />
     <Compile Include="Bootstrapper.cs" />

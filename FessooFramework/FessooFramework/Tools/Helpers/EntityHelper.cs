@@ -29,7 +29,7 @@ namespace FessooFramework.Tools.Helpers
         public static string CreateConnectionString(EntityProviders provider, string DBName, string DBAddress, bool IntegratedSecurity = false, string Login = "", string Password = "")
         {
             string result = "";
-            DCT.DCT.Execute((data) =>
+            try
             {
                 var providerName = EnumHelper.GetDescription(provider);
                 switch (provider)
@@ -71,7 +71,7 @@ namespace FessooFramework.Tools.Helpers
                         break;
                     case EntityProviders.SQLite:
                         {
-                            var entityBuilder =  new SQLiteConnectionStringBuilder()
+                            var entityBuilder = new SQLiteConnectionStringBuilder()
                             { DataSource = $@"|DataDirectory|\DefaultSQLiteDB.db", ForeignKeys = true, Version = 3 };
                             result = entityBuilder.ConnectionString;
                         }
@@ -79,8 +79,11 @@ namespace FessooFramework.Tools.Helpers
                     default:
                         break;
                 }
-               
-            });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return result;
         }
 
