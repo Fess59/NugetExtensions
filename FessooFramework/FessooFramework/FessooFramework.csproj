@@ -87,6 +87,7 @@
     <Compile Include="Objects\ALM\ALMObject.cs" />
     <Compile Include="Objects\ALM\ALMStateConfiguration.cs" />
     <Compile Include="Objects\Component\SystemComponentMulti.cs" />
+    <Compile Include="Objects\Data\EntityObjectALMCreator.cs" />
     <Compile Include="Objects\Data\EntityObjectALMConfiguration.cs" />
     <Compile Include="Objects\SourceData\DataSourceBase.cs" />
     <Compile Include="Objects\SourceData\DataSourceDbContext.cs" />

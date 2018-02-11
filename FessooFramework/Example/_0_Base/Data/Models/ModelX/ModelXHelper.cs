@@ -30,5 +30,13 @@ namespace Example._0_Base.Data.DataComponent.ModelX
             oldObj.Description = "Error";
             return oldObj;
         }
+
+        internal static ModelXService ModelXToModelService(ModelX model)
+        {
+            return new ModelXService()
+            {
+                Description = model.Description
+            };
+        }
     }
 }

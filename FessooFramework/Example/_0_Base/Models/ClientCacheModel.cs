@@ -5,10 +5,6 @@ namespace Example._0_Base.ClientModels
 {
     public class ClientCacheModel2 : CacheObject
     {
-        public override Enum SetDataType()
-        {
-            return CurrentDataType.ClientModel;
-        }
         public override TimeSpan SetTTL()
         {
             return TimeSpan.FromDays(30);
@@ -21,10 +17,6 @@ namespace Example._0_Base.ClientModels
     }
     public class ClientCacheModel : CacheObject
     {
-        public override Enum SetDataType()
-        {
-            throw new NotImplementedException();
-        }
 
         public override TimeSpan SetTTL()
         {

@@ -33,7 +33,7 @@ namespace FessooFramework.Core
         ///
         /// <value> The bootstrapper. </value>
 
-        private _Bootstrapper Bootstrapper { get; set; }
+        private static _Bootstrapper Bootstrapper { get; set; }
 
         /// <summary>   Gets or sets the components container. </summary>
         ///
@@ -68,7 +68,8 @@ namespace FessooFramework.Core
         internal DataContextStore GetStore()
         {
             DataContextStore Store = new DataContextStore();
-            Bootstrapper.SetDbContext(ref Store);
+            if (Bootstrapper != null)
+                Bootstrapper.SetDbContext(ref Store);
             return Store;
         }
         /// <summary>   The store. 

@@ -17,6 +17,9 @@ namespace Example._0_Base.Data.Models.Model3
             new EntityObjectALMConfiguration<Model3, Model3State>(Model3State.Complete, Model3State.Edit, (a,b)=>{ a.Description = "Re-edit"; return a; })
         };
         protected override IEnumerable<Model3State> DefaultState => new Model3State[] { Model3State.Error };
+
+        protected override IEnumerable<EntityObjectALMCreator<Model3>> CreatorsService => throw new NotImplementedException();
+
         protected override int GetStateValue(Model3State state)
         {
             return (int)state;

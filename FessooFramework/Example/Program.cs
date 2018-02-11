@@ -37,6 +37,8 @@ namespace Example
                 {
                     ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
                 }
+                var model = new ModelX();
+                var visualModel = model._ConvertToServiceModel<ModelXService>();
             });
 
             Console.Read();
@@ -205,7 +207,7 @@ namespace Example
                 set = c.DbSet<ModelX>();
 
                 //Creators
-                var visualModel = model._Convert<ModelXView>();
+                var visualModel = model._ConvertToServiceModel<ModelXService>();
             });
 
         }

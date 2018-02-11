@@ -25,6 +25,19 @@ namespace Example._0_Base.Data.DataComponent.ModelX
                EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Edited, ModelXState.Edited3, ModelXHelper.Edited3),
               EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Error, ModelXState.Error, ModelXHelper.Error),
         };
+
+        protected override IEnumerable<EntityObjectALMCreator<ModelX>> CreatorsService => new EntityObjectALMCreator <ModelX>[] 
+        {
+              EntityObjectALMCreator<ModelX>.New(typeof(ModelXService), ModelXToModelXService, new Version(1,0,0,0))
+        };
+
+        private ModelXService ModelXToModelXService(ModelX obj)
+        {
+            return new ModelXService()
+            {
+                Description = obj.Description
+            };
+        }
         #endregion
     }
 }

@@ -22,6 +22,21 @@ namespace FessooFramework.Objects.Data
         where TObjectType : EntityObjectALM<TObjectType, TStateType>, new()
          where TStateType : struct, IConvertible
     {
+        #region Property
+        /// <summary>
+        /// Состояние объекта в Enum
+        /// </summary>
+        [NotMapped]
+        public TStateType StateEnum
+        {
+            get => EnumHelper.GetValue<TStateType>(State);
+            set
+            {
+                State = GetStateValue(value);
+                _Save();
+            }
+        }
+        #endregion
         #region Configuration
         /// <summary>   State configuration.
         ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
@@ -54,25 +69,14 @@ namespace FessooFramework.Objects.Data
         /// </summary>
         protected abstract IEnumerable<TStateType> DefaultState { get; }
         #endregion
-
+        #region DB integrations
         /// <summary>
-        /// Реализует метод конвертации Enum в int
+        /// Получаем DbSet для этой модели
         /// </summary>
-        /// <param name="state"></param>
         /// <returns></returns>
-        protected abstract int GetStateValue(TStateType state);
-        /// <summary>
-        /// Состояние объекта в Enum
-        /// </summary>
-        [NotMapped]
-        public TStateType StateEnum
+        public static DbSet<TObjectType> DbSet()
         {
-            get => EnumHelper.GetValue<TStateType>(State);
-            set
-            {
-                State = GetStateValue(value);
-                _Save();
-            }
+            return DCT.Context.DbSet<TObjectType>();
         }
         /// <summary> Сохраняем изменения объекта  на основании его состояния. Для фиксации измениний в базе не обходимо вызвать SaveChanges</summary>
         ///
@@ -89,23 +93,82 @@ namespace FessooFramework.Objects.Data
         {
             return DbSet();
         }
-        // <summary>   Gets the convert. </summary>
+        #endregion
+        #region Convertors
+        /// <summary>   Gets the convert. </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
         ///
         /// <typeparam name="TResult">    Generic type parameter. </typeparam>
         ///
         /// <returns>   A T. </returns>
-        public TResult _Convert<TResult>() where TResult : class => DataContainer.Convert<TResult>(this);
-        /// <summary>
-        /// Получаем DbSet для этой модели
-        /// </summary>
-        /// <returns></returns>
-        public static DbSet<TObjectType> DbSet()
+        public TResult _ConvertToServiceModel<TResult>() where TResult : CacheObject
         {
-            return DCT.Context.DbSet<TObjectType>();
+            var result = default(TResult);
+            if (creatorsService == null || !creatorsService.Any())
+                throw new Exception($"CREATORS to ServiceModel not found any from '{typeof(TObjectType).Name}'");
+            var creators = _CreatorsService.Where(q=>q.ObjectType == typeof(TObjectType) && q.FinallyType == typeof(TResult));
+            if (!creators.Any())
+                throw new Exception($"CREATORS to ServiceModel not found from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}'");
+            if (creators.Count() > 1)
+                throw new Exception($"CREATORS to ServiceModel найдено несколько схем конвертации для модели '{typeof(TObjectType).Name}' в модель '{typeof(TResult).Name}'");
+            var creator = creators.FirstOrDefault();
+            result = creator.Execute<TResult>((TObjectType)this);
+            if (result == null)
+                throw new NullReferenceException($"CREATORS to ServiceModel from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}' return NULL");
+            return result;
         }
+
+
+
+        /// <summary>   State configuration.
+        ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        protected abstract IEnumerable<EntityObjectALMCreator<TObjectType>> CreatorsService { get; }
+
+        /// <summary>   State configuration.
+        ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        private IEnumerable<EntityObjectALMCreator<TObjectType>> creatorsService
+        {
+            get
+            {
+                if (_CreatorsService == null)
+                    _CreatorsService = CreatorsService;
+                return _CreatorsService;
+            }
+        }
+        /// <summary>
+        /// Хранилище конверторов из модели в данных в модель службы
+        /// </summary>
+        private static IEnumerable<EntityObjectALMCreator<TObjectType>> _CreatorsService  { get; set; } 
+        ///// <summary>   State configuration.
+        /////             Настройка конфигурации для измения состояния жизненного цикла </summary>
+        /////
+        ///// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        //protected abstract IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> CreatorsService { get; }
+
+
+        //// <summary>   Gets the convert. </summary>
+        /////
+        ///// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
+        /////
+        ///// <typeparam name="TResult">    Generic type parameter. </typeparam>
+        /////
+        ///// <returns>   A T. </returns>
+        //public TResult _ConvertToServiceModel<TResult>() where TResult : class => DataContainer.Convert<TResult>(this);
+
+
+        #endregion
         #region ALM
+        /// <summary>
+        /// Реализует метод конвертации Enum в int
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        protected abstract int GetStateValue(TStateType state);
         /// <summary>
         /// Основной метод - обновление модели данных
         /// </summary>

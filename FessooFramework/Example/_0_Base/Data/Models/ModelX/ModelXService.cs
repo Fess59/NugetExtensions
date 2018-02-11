@@ -7,21 +7,18 @@ using System.Threading.Tasks;
 
 namespace Example._0_Base.Data.DataComponent.ModelX
 {
-    public class ModelXView : CacheObject
+    public class ModelXService : CacheObject
     {
-        public override Enum SetDataType()
-        {
-            throw new NotImplementedException();
-        }
+        public string Description { get; set; }
 
         public override TimeSpan SetTTL()
         {
-            throw new NotImplementedException();
+            return new TimeSpan();
         }
 
         public override Version SetVersion()
         {
-            throw new NotImplementedException();
+            return new System.Version(1,0,0,0);
         }
     }
 }

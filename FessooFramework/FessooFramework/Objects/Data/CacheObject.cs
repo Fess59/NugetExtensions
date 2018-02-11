@@ -61,7 +61,7 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> The type of the data. </value>
 
-        public int DataType { get; set; }
+        public string DataType { get; set; }
 
         /// <summary>   Data type enum.
         ///             Тип объекта кэша в формате CacheState </summary>
@@ -81,7 +81,6 @@ namespace FessooFramework.Objects.Data
         public CacheObject()
         {
             Version = SetVersion().ToString();
-            DataType = Convert.ToInt32(SetDataType());
             TTL = SetTTL().Ticks;
         }
         #endregion
@@ -101,7 +100,6 @@ namespace FessooFramework.Objects.Data
         #endregion
         #region Abstract 
         public abstract Version SetVersion();
-        public abstract Enum SetDataType();
         public abstract TimeSpan SetTTL();
         #endregion
     }

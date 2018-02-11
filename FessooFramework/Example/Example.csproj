@@ -76,7 +76,7 @@
     <Compile Include="_0_Base\Data\Models\ModelX\ModelX.cs" />
     <Compile Include="_0_Base\Data\Models\ModelX\ModelXHelper.cs" />
     <Compile Include="_0_Base\Data\Models\ModelX\ModelXState.cs" />
-    <Compile Include="_0_Base\Data\Models\ModelX\ModelXView.cs" />
+    <Compile Include="_0_Base\Data\Models\ModelX\ModelXService.cs" />
     <Compile Include="_0_Base\Core\DCTContextExample.cs" />
     <Compile Include="_0_Base\Core\DCTExample.cs" />
     <Compile Include="_0_Base\Models\ALMModel.cs" />
