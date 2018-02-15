@@ -87,7 +87,7 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, bool isAsync = true)
         {
             _ExecuteMainThread<TContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
         }

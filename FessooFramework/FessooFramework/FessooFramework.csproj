@@ -96,6 +96,7 @@
     <Compile Include="Objects\Component\SystemComponentMulti.cs" />
     <Compile Include="Objects\Data\EntityObjectALMCreator.cs" />
     <Compile Include="Objects\Data\EntityObjectALMConfiguration.cs" />
+    <Compile Include="Objects\Delegate\CommandManagerHelper.cs" />
     <Compile Include="Objects\Message\RequestMessageBase.cs" />
     <Compile Include="Objects\Message\ResponseMessageBase.cs" />
     <Compile Include="Objects\Message\ServiceMessage.cs" />
