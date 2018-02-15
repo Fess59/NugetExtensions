@@ -29,12 +29,12 @@ namespace ExampleDataServiceDAL.DataModels
 
         protected override IEnumerable<EntityObjectALMCreator<ExampleData>> CreatorsService => new EntityObjectALMCreator<ExampleData>[] 
         {
-            EntityObjectALMCreator<ExampleData>.New<ExampleDataModel>( ExampleDataToExampleDataModel, new Version(1,0,0,0))
+            EntityObjectALMCreator<ExampleData>.New<ExampleDataCache>( ExampleDataToExampleDataModel, new Version(1,0,0,0))
         };
 
-        private ExampleDataModel ExampleDataToExampleDataModel(ExampleData arg)
+        private ExampleDataCache ExampleDataToExampleDataModel(ExampleData arg)
         {
-            return new ExampleDataModel()
+            return new ExampleDataCache()
             {
                 Description = arg.D
             };

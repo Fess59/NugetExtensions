@@ -102,7 +102,7 @@ namespace FessooFramework.Objects.Data
         /// <typeparam name="TResult">    Generic type parameter. </typeparam>
         ///
         /// <returns>   A T. </returns>
-        public TResult _ConvertToServiceModel<TResult>() where TResult : CacheObject
+        public override TResult _ConvertToServiceModel<TResult>()
         {
             var result = default(TResult);
             if (creatorsService == null || !creatorsService.Any())
@@ -144,23 +144,6 @@ namespace FessooFramework.Objects.Data
         /// Хранилище конверторов из модели в данных в модель службы
         /// </summary>
         private static IEnumerable<EntityObjectALMCreator<TObjectType>> _CreatorsService  { get; set; } 
-        ///// <summary>   State configuration.
-        /////             Настройка конфигурации для измения состояния жизненного цикла </summary>
-        /////
-        ///// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
-        //protected abstract IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> CreatorsService { get; }
-
-
-        //// <summary>   Gets the convert. </summary>
-        /////
-        ///// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
-        /////
-        ///// <typeparam name="TResult">    Generic type parameter. </typeparam>
-        /////
-        ///// <returns>   A T. </returns>
-        //public TResult _ConvertToServiceModel<TResult>() where TResult : class => DataContainer.Convert<TResult>(this);
-
-
         #endregion
         #region ALM
         /// <summary>
@@ -241,6 +224,18 @@ namespace FessooFramework.Objects.Data
         protected virtual int SetError()
         {
             return -1;
+        }
+        #endregion
+        #region Container
+        public  override EntityObject _ObjectLoadById(Guid id)
+        {
+            var obj = DbSet().Find(id);
+            return obj;
+        }
+        public override IEnumerable<EntityObject> _CollectionObjectLoad()
+        {
+            var objs = DbSet().ToArray();
+            return objs;
         }
         #endregion
     }

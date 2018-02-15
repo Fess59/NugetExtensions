@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ExampleDataServiceModels
 {
     [DataContract(IsReference = false)]
-    public class ExampleDataModel : CacheObject
+    public class ExampleDataCache : CacheObject
     {
         [DataMember]
         public string Description { get; set; }

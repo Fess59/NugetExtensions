@@ -25,6 +25,19 @@ namespace FessooFramework.Tools.DataContexts.Models
             get => EnumHelper.GetValue<RoleType>(UID);
             set => UID = (int)value;
         }
+        public override IEnumerable<EntityObject> _CollectionObjectLoad()
+        {
+            throw new NotImplementedException();
+        }
+        public override TResult _ConvertToServiceModel<TResult>()
+        {
+            throw new NotImplementedException("Передача модели данных UserRole на клиент не поддерживается");
+        }
+
+        public override EntityObject _ObjectLoadById(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum RoleType

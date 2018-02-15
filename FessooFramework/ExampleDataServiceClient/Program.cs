@@ -17,7 +17,7 @@ namespace ExampleDataServiceClient
                 c.ServiceClient.Ping();
 
                 //var collection = c.ServiceClient.CollectionLoad<ExampleDataModel>();
-                var collection = c._Store.ServiceContext<ServiceClient>().CollectionLoad<ExampleDataModel>();
+                var collection = c._Store.ServiceContext<ServiceClient>().CollectionLoad<ExampleDataCache>();
                 foreach (var item in collection)
                 {
                     Console.WriteLine($"Description = {item.Description}");

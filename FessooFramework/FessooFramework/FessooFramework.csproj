@@ -166,6 +166,7 @@
     <Compile Include="Tools\Repozitory\DataContainer.cs" />
     <Compile Include="Tools\Repozitory\DataContainerExtension.cs" />
     <Compile Include="Tools\Web\BaseServiceClient.cs" />
+    <Compile Include="Tools\Web\DataService\Configuration\DataServiceBaseConfiguration.cs" />
     <Compile Include="Tools\Web\DataService\DataServiceAPI.cs" />
     <Compile Include="Tools\Web\DataService\DataServiceClient.cs" />
     <Compile Include="Tools\Web\DataService\ServiceModels\GetCollection.cs" />

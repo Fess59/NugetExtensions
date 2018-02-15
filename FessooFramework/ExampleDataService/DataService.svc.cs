@@ -10,6 +10,7 @@ using ExampleDataServiceDAL.DataModels;
 using ExampleDataServiceModels;
 using FessooFramework.Objects.Data;
 using FessooFramework.Objects.Message;
+using FessooFramework.Tools.Web.DataService.Configuration;
 
 namespace ExampleDataService
 {
@@ -17,6 +18,11 @@ namespace ExampleDataService
     [ServiceContract]
     public class DataService : FessooFramework.Tools.Web.DataService.DataServiceAPI
     {
+        public override IEnumerable<DataServiceConfigurationBase> Convertors => new DataServiceConfigurationBase[]
+        {
+            new DataServiceConfiguration<ExampleData, ExampleDataCache>(),
+        };
+
         [WebInvoke(
            Method = "POST",
            UriTemplate = "Ping",
@@ -62,27 +68,5 @@ namespace ExampleDataService
             return result;
         }
 
-        public override IEnumerable<CacheObject> GetData(Type type)
-        {
-            var result = Enumerable.Empty<CacheObject>();
-            DCT.Execute(c => {
-                var str = type.ToString();
-                switch (type.ToString())
-                {
-                    case "ExampleDataServiceModels.ExampleDataModel":
-                        var cacheModels = c._Store.DbSet<ExampleData>().ToArray();
-                        var list = new List<ExampleDataModel>();
-                        foreach (var item in cacheModels)
-                        {
-                            list.Add(item._ConvertToServiceModel<ExampleDataModel>());
-                        }
-                        result = list.ToArray();
-                        break;
-                    default:
-                        break;
-                }
-            });
-            return result;
-        }
     }
 }

@@ -20,7 +20,6 @@ namespace Example._0_Base.Data.Contexts
         protected override void Seed(MainDB context) {
             DCT.Execute(c => {
                 context = c._Store.Context<MainDB>();
-                
             });
         }
     }
