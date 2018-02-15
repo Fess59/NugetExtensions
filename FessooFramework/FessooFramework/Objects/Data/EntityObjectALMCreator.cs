@@ -70,12 +70,12 @@ namespace FessooFramework.Objects.Data
         /// <param name="execute"></param>
         /// <param name="version"></param>
         /// <returns></returns>
-        public static EntityObjectALMCreator<TObjectType> New(Type finallyType, Func<TObjectType, object> execute, Version version)
-
+        public static EntityObjectALMCreator<TObjectType> New<TFinalyType>(Func<TObjectType, TFinalyType> execute, Version version)
+            where TFinalyType : CacheObject
         {
             return new EntityObjectALMCreator<TObjectType>(execute)
             {
-                FinallyType = finallyType,
+                FinallyType = typeof(TFinalyType),
                 ObjectType = typeof(TObjectType),
                 Version = version
             };

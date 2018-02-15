@@ -1,4 +1,5 @@
-﻿using FessooFramework.Tools.IOC;
+﻿using FessooFramework.Tools.Helpers;
+using FessooFramework.Tools.IOC;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,24 +22,40 @@ namespace FessooFramework.Objects.SourceData
                 //if (State == SystemState.Unload)
                 //    throw new Exception("Не возможно использовать объект, тк контекст данных был освобождём");
                 if (source == null)
+                {
                     source = new TContext();
+                    if (HasRemoteServer)
+                        source.Database.Connection.ConnectionString = EntityHelper.CreateRemoteSQL(DbName, Address, Login, Password);
+                    else
+                        source.Database.Connection.ConnectionString = EntityHelper.CreateLocalSQL(DbName);
+                }
+
                 return source;
             }
         }
         private TContext source { get; set; }
+        private bool HasRemoteServer { get; set; }
+        private string DbName { get; set; }
+        private string Address { get; set; }
+        private string Login { get; set; }
+        private string Password { get; set; }
         #endregion
         #region Constructor
-        public DataSourceDbContext()
+        public DataSourceDbContext(string dbName, string address, string login, string password)
         {
-           
+            HasRemoteServer = true;
+            DbName = dbName;
+            Address = address;
+            Login = login;
+            Password = password;
+        }
+        public DataSourceDbContext(string name)
+        {
+            HasRemoteServer = false;
+            DbName = name;
         }
         #endregion
         #region Methods
-
-       
-       
-
-
         #endregion
         #region Abstraction
         public override DbContext GetContext()

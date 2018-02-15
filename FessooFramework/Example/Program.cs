@@ -3,8 +3,14 @@ using Example._0_Base.Data.DataComponent.ModelX;
 using Example._0_Base.Data.Models.Model3;
 using Example.Tests;
 using FessooFramework.Core;
+using FessooFramework.Tools.DataContexts;
+using FessooFramework.Tools.DataContexts.Models;
+using FessooFramework.Tools.DataContexts.ServiceModels;
 using FessooFramework.Tools.DCT;
 using FessooFramework.Tools.Helpers;
+using FessooFramework.Tools.Services;
+using FessooFramework.Tools.Services.ServiceModels;
+using FessooFramework.Tools.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,27 +25,28 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
-            DCTExample.Execute(c =>
-            {
-                var r = new Model3();
-                r.StateEnum = Model3State.Edit;
-                c.SaveChanges();
-                r.StateEnum = Model3State.Complete;
-                c.SaveChanges();
-                r.StateEnum = Model3State.Edit;
-                c.SaveChanges();
-                var r2 = new Model3();
-                r2.StateEnum = Model3State.Complete;
-                c.SaveChanges();
-                //DataComponentTest();
-                var list = Model3.DbSet().ToArray();
-                foreach (var item in list)
-                {
-                    ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
-                }
-                var model = new ModelX();
-                var visualModel = model._ConvertToServiceModel<ModelXService>();
-            });
+            UserCreate();
+            //DCTExample.Execute(c =>
+            //{
+            //    var r = new Model3();
+            //    r.StateEnum = Model3State.Edit;
+            //    c.SaveChanges();
+            //    r.StateEnum = Model3State.Complete;
+            //    c.SaveChanges();
+            //    r.StateEnum = Model3State.Edit;
+            //    c.SaveChanges();
+            //    var r2 = new Model3();
+            //    r2.StateEnum = Model3State.Complete;
+            //    c.SaveChanges();
+            //    //DataComponentTest();
+            //    var list = Model3.DbSet().ToArray();
+            //    foreach (var item in list)
+            //    {
+            //        ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
+            //    }
+            //    var model = new ModelX();
+            //    var visualModel = model._ConvertToServiceModel<ModelXService>();
+            //});
 
             Console.Read();
         }
@@ -210,6 +217,36 @@ namespace Example
                 var visualModel = model._ConvertToServiceModel<ModelXService>();
             });
 
+        }
+        #endregion
+        #region MainDbAPI
+        private static void UserCreate()
+        {
+            ////1. Регистрация пользователя
+            //var r = new Request_Registration()
+            //{
+            //    Email = "ttt@ttt.ru",
+            //    Birthday = new DateTime(2018, 01, 01),
+            //    Phone = "899988888",
+            //    Password = "123QWE",
+            //    FirstName = "Alex",
+            //    SecondName = "S",
+            //    MiddleName = "M",
+            //};
+            //var service1 = BaseServiceClient._Send<Request_Registration, Response_Registration>(r);
+            ////var service1 = MainServiceAPI.User_Registration(r);
+            //DCTExample.SendInformations($"{service1.Comment} State = {service1.StateEnum}", "MainServiceAPI");
+            ////2. Авторизация 
+            //var r2 = new Request_SignIn()
+            //{
+            //    Login = "ttt@ttt.ru",
+            //    Password = "123QWE",
+            //};
+            //var service2 = MainServiceAPI.User_SignIn(r2);
+            //DCTExample.SendInformations($"{service2.Comment} State = {service2.StateEnum}", "MainServiceAPI");
+
+
+           
         }
         #endregion
     }

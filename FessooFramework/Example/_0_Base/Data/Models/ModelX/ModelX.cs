@@ -28,7 +28,7 @@ namespace Example._0_Base.Data.DataComponent.ModelX
 
         protected override IEnumerable<EntityObjectALMCreator<ModelX>> CreatorsService => new EntityObjectALMCreator <ModelX>[] 
         {
-              EntityObjectALMCreator<ModelX>.New(typeof(ModelXService), ModelXToModelXService, new Version(1,0,0,0))
+              EntityObjectALMCreator<ModelX>.New<ModelXService>(ModelXToModelXService, new Version(1,0,0,0))
         };
 
         private ModelXService ModelXToModelXService(ModelX obj)

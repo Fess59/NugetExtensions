@@ -72,6 +72,7 @@
     <Compile Include="_0_Base\Data\Contexts\DefaultDB2.cs" />
     <Compile Include="_0_Base\Data\Contexts\DefaultDB.cs" />
     <Compile Include="_0_Base\Data\Contexts\DefaultSQLiteDB.cs" />
+    <Compile Include="_0_Base\Data\Contexts\MainDB.cs" />
     <Compile Include="_0_Base\Data\Models\Model3\Model3.cs" />
     <Compile Include="_0_Base\Data\Models\ModelX\ModelX.cs" />
     <Compile Include="_0_Base\Data\Models\ModelX\ModelXHelper.cs" />
@@ -91,11 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\FessooFramework\FessooFramework.csproj">
       <Project>{bc3cffb9-7052-4f1f-8edf-a05773f83caf}</Project>

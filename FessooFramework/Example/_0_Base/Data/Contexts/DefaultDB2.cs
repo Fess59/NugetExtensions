@@ -29,9 +29,6 @@ namespace Example._0_Base.Data.Contexts
         {
             base.Configuration.ProxyCreationEnabled = false;
             base.Configuration.LazyLoadingEnabled = true;
-            //base.Database.Connection.ConnectionString = EntityHelper.CreateRemoteSQL("DefaultDB2", "192.168.26.116", @"ExtUser", "123QWEasd");
-            base.Database.Connection.ConnectionString = EntityHelper.CreateLocalSQL("DefaultDB2");
-
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
