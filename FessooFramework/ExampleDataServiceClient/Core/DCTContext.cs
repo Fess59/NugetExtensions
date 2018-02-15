@@ -9,10 +9,10 @@ namespace ExampleDataServiceClient.Core
 {
     public class ClientContext : DCTContext
     {
-        public ServiceClient ServiceClient => _Store.ServiceContext<ServiceClient>();
+        public DataClient ServiceClient => _Store.ServiceContext<DataClient>();
         public ClientContext()
         {
-            _Store.Add<ServiceClient>();
+            _Store.Add<DataClient>();
         }
     }
 }

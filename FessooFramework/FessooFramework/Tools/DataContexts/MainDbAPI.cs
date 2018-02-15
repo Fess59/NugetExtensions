@@ -1,6 +1,5 @@
 ﻿using FessooFramework.Tools.DataContexts.Models;
-using FessooFramework.Tools.DataContexts.ServiceModels;
-using FessooFramework.Tools.Services.ServiceModels;
+using FessooFramework.Tools.Web.MainService.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

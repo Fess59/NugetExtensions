@@ -1,22 +1,31 @@
 ﻿using FessooFramework.Tools.DataContexts;
-using FessooFramework.Tools.DataContexts.Models;
-using FessooFramework.Tools.DataContexts.ServiceModels;
 using FessooFramework.Tools.Helpers;
-using FessooFramework.Tools.Services.ServiceModels;
+using FessooFramework.Tools.Web.MainService.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FessooFramework.Tools.Services
+namespace FessooFramework.Tools.Web.MainService
 {
-    public static class MainServiceAPI
+    public abstract class MainServiceAPI : ServiceBaseAPI
     {
-        public static Response_Registration User_Registration(Request_Registration request)
+        #region Property
+        public override string Name => "MainServiceAPI";
+        protected override IEnumerable<ServiceRequestConfigBase> Configurations =>
+            new ServiceRequestConfigBase[] {
+                ServiceRequestConfig<Request_Registration, Response_Registration>.New(_User_Registration),
+                ServiceRequestConfig<Request_SignIn, Response_SignIn>.New(_User_SignIn),
+                  ServiceRequestConfig<Request_SessionCheck, Response_SessionCheck>.New(_User_SessionCheck),
+            };
+        #endregion
+        //public abstract Response_Registration User_Registration(Request_Registration request);
+        public static Response_Registration _User_Registration(Request_Registration request)
         {
             var result = new Response_Registration();
-            DCT.DCT.Execute(c => {
+            DCT.DCT.Execute(c =>
+            {
                 var emailHash = CryptographyHelper.StringToSha256String(request.Email, request.Password);
                 //Проверка полученных данных
                 if (string.IsNullOrWhiteSpace(emailHash) || string.IsNullOrWhiteSpace(request.Email))
@@ -56,10 +65,12 @@ namespace FessooFramework.Tools.Services
             });
             return result;
         }
-        public static Response_SignIn User_SignIn(Request_SignIn request)
+        //public abstract Response_SignIn User_SignIn(Request_SignIn request);
+        public static Response_SignIn _User_SignIn(Request_SignIn request)
         {
             var result = new Response_SignIn();
-            DCT.DCT.Execute(c => {
+            DCT.DCT.Execute(c =>
+            {
                 var emailHash = CryptographyHelper.StringToSha256String(request.Login, request.Password);
                 //Проверка полученных данных
                 if (string.IsNullOrWhiteSpace(emailHash) || string.IsNullOrWhiteSpace(request.Login))
@@ -89,10 +100,12 @@ namespace FessooFramework.Tools.Services
             });
             return result;
         }
-        public static Response_SignIn User_SessionCheck(Request_SignIn request)
+        //public abstract Response_SessionCheck User_SessionCheck(Request_SessionCheck request);
+        public static Response_SessionCheck _User_SessionCheck(Request_SessionCheck request)
         {
-            var result = new Response_SignIn();
-            DCT.DCT.Execute(c => {
+            var result = new Response_SessionCheck();
+            DCT.DCT.Execute(c =>
+            {
                 //var emailHash = CryptographyHelper.StringToSha256String(request.Login, request.Password);
                 ////Проверка полученных данных
                 //if (string.IsNullOrWhiteSpace(emailHash) || string.IsNullOrWhiteSpace(request.Login))

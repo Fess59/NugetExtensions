@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExampleDataServiceClient
 {
-    public class ServiceClient : FessooFramework.Tools.Web.DataService.DataServiceClient
+    public class DataClient : FessooFramework.Tools.Web.DataService.DataServiceClient
     {
         public override string Address => "http://localhost:56535/DataService.svc";
 

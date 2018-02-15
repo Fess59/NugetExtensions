@@ -20,7 +20,11 @@ namespace FessooFramework.Tools.Web.DataService
             {
                 var request = new RequestGetCollection();
                 request.CurrentType = typeof(TCacheObject).AssemblyQualifiedName;
+                request.HashUID = c._SessionInfo.HashUID;
+                request.SessionUID = c._SessionInfo.SessionUID;
                 var response = Execute<RequestGetCollection, ResponseGetCollection>(request);
+                Console.WriteLine($"SessionUID Reponse = {response.SessionUID}");
+                Console.WriteLine($"HashUID Response = {response.HashUID}");
                 result = response.GetObjectCollections<TCacheObject>().ToArray();
             });
             return result;

@@ -44,9 +44,10 @@
   <ItemGroup>
     <Compile Include="Core\DCT.cs" />
     <Compile Include="Core\DCTContext.cs" />
+    <Compile Include="MainClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataServiceClient.cs" />
+    <Compile Include="DataClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

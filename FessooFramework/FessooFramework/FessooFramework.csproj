@@ -67,7 +67,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\DCTContext.cs" />
+    <Compile Include="Components\Context\ClientDataInfo.cs" />
+    <Compile Include="Components\Context\DCTContext.cs" />
     <Compile Include="Components\DispatcherHelper.cs" />
     <Compile Include="Components\Logger\LoggerHelper.cs" />
     <Compile Include="Components\Logger\Models\LoggerMessage.cs" />
@@ -111,11 +112,6 @@
     <Compile Include="Tools\DataContexts\Models\UserProfile.cs" />
     <Compile Include="Tools\DataContexts\Models\UserRole.cs" />
     <Compile Include="Tools\DataContexts\Models\UserSession.cs" />
-    <Compile Include="Tools\Services\MainServiceAPIClient.cs" />
-    <Compile Include="Tools\Services\ServiceModels\MainRegistration.cs" />
-    <Compile Include="Tools\Services\MainServiceAPI.cs" />
-    <Compile Include="Tools\Services\ServiceModels\MainSessionCheck.cs" />
-    <Compile Include="Tools\Services\ServiceModels\MainSignIn.cs" />
     <Compile Include="Tools\Web\BaseServiceAPI.cs" />
     <Compile Include="Tools\Controllers\ActionController.cs" />
     <Compile Include="Objects\BaseObject.cs" />
@@ -170,6 +166,11 @@
     <Compile Include="Tools\Web\DataService\DataServiceAPI.cs" />
     <Compile Include="Tools\Web\DataService\DataServiceClient.cs" />
     <Compile Include="Tools\Web\DataService\ServiceModels\GetCollection.cs" />
+    <Compile Include="Tools\Web\MainService\MainServiceAPI.cs" />
+    <Compile Include="Tools\Web\MainService\MainServiceClient.cs" />
+    <Compile Include="Tools\Web\MainService\ServiceModels\MainRegistration.cs" />
+    <Compile Include="Tools\Web\MainService\ServiceModels\MainSessionCheck.cs" />
+    <Compile Include="Tools\Web\MainService\ServiceModels\MainSignIn.cs" />
     <Compile Include="Tools\Web\ServiceRequestConfig.cs" />
     <Compile Include="Tools\Web\ServiceRequestConfigBase.cs" />
     <Compile Include="Tools\Web\ServiceResponseConfig.cs" />

@@ -42,12 +42,15 @@ namespace FessooFramework.Tools.Web
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public ServiceMessage _Execute( ServiceMessage data)
+        public ServiceMessage _Execute(ServiceMessage data)
         {
             var result = default(ServiceMessage);
-            DCT.DCT.Execute(c => {
-                var obj = (RequestMessageBase)data.Desirialize();
-                var response = obj._Execute(this ,obj);
+            DCT.DCT.Execute(c =>
+            {
+                var request = (RequestMessageBase)data.Desirialize();
+                c._SessionInfo.HashUID = request.HashUID;
+                c._SessionInfo.SessionUID = request.SessionUID;
+                var response = request._Execute(this, request);
                 if (response == null)
                     throw new NullReferenceException($"Request - {data.FullName}. Ошибка ответа - Response не может быть null, если метод вызывает асинхронно, необходимо вернуть ответ о успешно принятом сообщении");
                 //var typeResponse = CheckResponseType(serviceInstance, response.GetType().FullName);
@@ -88,6 +91,8 @@ namespace FessooFramework.Tools.Web
             }
         }
         internal TResponse ExecuteResponse<TRequest, TResponse>(TRequest obj)
+              where TRequest : RequestMessageBase
+                where TResponse : ResponseMessageBase
         {
             var result = default(TResponse);
             DCT.DCT.Execute(c =>
@@ -97,7 +102,12 @@ namespace FessooFramework.Tools.Web
                 var configuration = _Configurations.SingleOrDefault(q => q.CurrentType == typeof(TRequest));
                 if (configuration == null)
                     throw new Exception($"ServiceClient - для клиента службы {ClassName}, нет ни одной реализации для {typeof(TResponse).ToString()}");
-                result = (TResponse)configuration.Execute(obj);
+                var response = (TResponse)configuration.Execute(obj);
+                if (string.IsNullOrWhiteSpace(response.HashUID))
+                    response.HashUID = c._SessionInfo.HashUID;
+                if (string.IsNullOrWhiteSpace(response.SessionUID))
+                    response.SessionUID = c._SessionInfo.SessionUID;
+                result = response;
             });
             return result;
         }

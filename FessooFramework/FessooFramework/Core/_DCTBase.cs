@@ -280,11 +280,11 @@ namespace FessooFramework.Core
         ///                                         при ошибке в method. </param>
         /// <param name="continueMethod">           (Optional) The continue method. Выполнится после
         ///                                         method и continueExceptionMethod. </param>
-        internal static void _ExecuteMainThread<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+        internal static void _ExecuteMainThread<TContext>(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, bool isAsync = true)
              where TContext : DCTContext, new()
         {
             var name = GetCategoryName();
-            DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
+            DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod), isAsync: isAsync, name: name);
         }
         #endregion
         #region Logger module
