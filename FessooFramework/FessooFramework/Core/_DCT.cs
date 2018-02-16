@@ -89,7 +89,7 @@ namespace FessooFramework.Core
         ///                                         method и continueExceptionMethod. </param>
         public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, bool isAsync = true)
         {
-            _ExecuteMainThread<TContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+            _ExecuteMainThread<TContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, isAsync: isAsync);
         }
         #endregion
         #region Send message methods
