@@ -19,6 +19,7 @@ namespace FessooFramework.Components
     public class DispatcherHelper : SystemComponent
     {
         #region Property
+        public static bool HasSynchronizationContext => CurrentSynchronizationContext != null;
         /// <summary>
         ///     Диспетчер основного потока
         /// </summary>
@@ -37,6 +38,8 @@ namespace FessooFramework.Components
         internal static void SetDispatherAsDefault(Dispatcher dispatcher)
         {
             CurrentSynchronizationContext = SynchronizationContext.Current;
+            if (CurrentSynchronizationContext == null)
+                DCT.SendWarning($"Не удалось настроить SynchronizationContext - требуеться WPF приложение или вызов Bootstrapper.Run был произведён не из основного потока", "DispatcherHelper");
             Dispacher = dispatcher;
             Dispacher.UnhandledException += Dispacher_UnhandledException;
         }
@@ -49,9 +52,11 @@ namespace FessooFramework.Components
                 //Если контекст синхронизации не доступен в данном приложении
                 if (CurrentSynchronizationContext == null)
                 {
+                    DCT.SendInformations($"Тип вызова TaskAsync", "DispatcherHelper");
                     DCT.ExecuteAsync(c => action());
                     return;
                 }
+                DCT.SendInformations($"Тип вызова SynchronizationContext IsAsync={isAsync}", "DispatcherHelper");
                 if (isAsync)
                     CurrentSynchronizationContext.Post((a) => execute(a), action);
                 else
