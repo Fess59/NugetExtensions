@@ -14,10 +14,10 @@ namespace FessooFramework.Objects.Data
     ///             Базовый объект базы данныx
     ///             Реализует концепцию опционального ведения истории изменения объекта 
     ///             TODO CORE Подвязку сохранения изменний вынести в настройки ядра </summary>
-    /// 
+    ///
     ///
     /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>
-    public class EntityObject: DataObject
+    public abstract class EntityObject: DataObject
     {
         #region Property
         /// <summary>   Gets or sets the save changes. </summary>
@@ -71,6 +71,9 @@ namespace FessooFramework.Objects.Data
             HasRemoved = true;
             _ToHistory("Remove");
         }
+        public abstract TResult _ConvertToServiceModel<TResult>() where TResult : CacheObject;
+        public abstract EntityObject _ObjectLoadById(Guid Id);
+        public abstract IEnumerable<EntityObject> _CollectionObjectLoad();
         #endregion
     }
 }

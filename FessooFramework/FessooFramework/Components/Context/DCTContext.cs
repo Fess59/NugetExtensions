@@ -1,4 +1,5 @@
-﻿using FessooFramework.Core;
+﻿using FessooFramework.Components.Context;
+using FessooFramework.Core;
 using FessooFramework.Objects;
 using FessooFramework.Objects.Data;
 using FessooFramework.Objects.SourceData;
@@ -26,12 +27,10 @@ namespace FessooFramework.Components
         /// <value> The identifier of the track. </value>
 
         public Guid TrackId { get; set; }
-
         /// <summary>   Gets or sets the identifier of the parent track. 
         ///             Идентификатор родителя</summary>
         ///
         /// <value> The identifier of the parent track. </value>
-
         public Guid ParentTrackId { get; internal set; }
         /// <summary>   Gets the core configuration.
         ///             Глобальная конфигурация ядра </summary>
@@ -40,6 +39,8 @@ namespace FessooFramework.Components
         public SystemCoreConfiguration _Configuration => SystemCore.Current == null ? null : SystemCore.Current.CoreConfiguration;
         public DataContextStore _Store { get { return _store = _store ?? (SystemCore.Current == null ? new DataContextStore() : SystemCore.Current.GetStore()); } }
         private DataContextStore _store { get; set; }
+        public ClientSessionInfo _SessionInfo { get { return _sessionInfo = _sessionInfo ??  new ClientSessionInfo(); } }
+        private ClientSessionInfo _sessionInfo { get; set; }
         #endregion
         #region Constructor
         /// <summary>   Default constructor. </summary>

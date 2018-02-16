@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace FessooFramework.Objects.Data
     ///             Базовый модель тип модели и схема его данных определяется на основе Version и DataType </summary>
     ///
     /// <remarks>   Fess59, 24.01.2018. </remarks>
-    public abstract class CacheObject : DataObject
+    [Serializable]
+    public class CacheObject : DataObject
     {
         #region Property
         /// <summary>   Gets or sets the TTL.
@@ -21,6 +23,8 @@ namespace FessooFramework.Objects.Data
         ///             Логика контроля время жизни реализована в  методе _TTLCheck</summary>
         ///
         /// <value> The TTL. </value>
+        /// 
+        
         public long TTL { get; set; }
 
         /// <summary>   Gets or sets the timestamp.
@@ -28,6 +32,8 @@ namespace FessooFramework.Objects.Data
         ///             По этому параметру формируется список загрузки объектов для клиента</summary>
         ///
         /// <value> The timestamp. </value>
+        /// 
+        
         public long Timestamp { get; set; }
 
         /// <summary>   Gets or sets the version.
@@ -35,6 +41,8 @@ namespace FessooFramework.Objects.Data
         ///             Используется при формировании списка загрузки объектов клиента - если версия клиента ниже, часть списка он не загрузит</summary>
         ///
         /// <value> The version. </value>
+        /// 
+        
 
         public string Version { get; set; }
 
@@ -42,7 +50,8 @@ namespace FessooFramework.Objects.Data
         ///             Состояние жизненного цикла объекта кэша в формате int</summary>
         ///
         /// <value> The state. </value>
-
+        /// 
+        
         public int State { get; set; }
 
         /// <summary>   Gets or sets the state enum.
@@ -60,7 +69,8 @@ namespace FessooFramework.Objects.Data
         ///             Тип объекта кэша в формате int </summary>
         ///
         /// <value> The type of the data. </value>
-
+        /// 
+        
         public string DataType { get; set; }
 
         /// <summary>   Data type enum.
@@ -80,8 +90,7 @@ namespace FessooFramework.Objects.Data
         #region Constructor
         public CacheObject()
         {
-            Version = SetVersion().ToString();
-            TTL = SetTTL().Ticks;
+            //TTL = SetTTL().Ticks;
         }
         #endregion
         #region Methods
@@ -97,10 +106,6 @@ namespace FessooFramework.Objects.Data
             if (DateTime.Now.Ticks > CreateDate.Ticks + TTL)
                 _Remove();
         }
-        #endregion
-        #region Abstract 
-        public abstract Version SetVersion();
-        public abstract TimeSpan SetTTL();
         #endregion
     }
 }
