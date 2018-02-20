@@ -43,6 +43,21 @@ namespace FessooFramework.Tools.Web
             });
             return result;
         }
+        public void Execute<TRequest, TResponse>(TRequest request, Action<TResponse> complite)
+          where TRequest : RequestMessageBase
+         where TResponse : ResponseMessageBase
+        {
+            var result = default(TResponse);
+            DCT.DCT.ExecuteAsyncQueue<TResponse>(c =>
+            {
+                var message = ServiceMessage.New(request);
+                message.FullName = typeof(TRequest).FullName;
+                var response = WebHelper.SendPOST<ServiceMessage>(message, Address + @"/Execute");
+                result = response.Desirialize<TResponse>();
+                ExecuteResponse(result);
+                return result;
+            }, (c,a)=>complite(a));
+        }
         public bool Ping()
         {
             var result = false;

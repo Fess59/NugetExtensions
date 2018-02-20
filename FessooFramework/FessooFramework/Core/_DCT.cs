@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Components;
+using FessooFramework.Tools.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,19 @@ namespace FessooFramework.Core
         public static void ExecuteMainThread(Action<TContext> action, Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null, bool isAsync = true)
         {
             _ExecuteMainThread<TContext>(action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod);
+        }
+        internal static void ExecuteAsyncQueue<TResult>(Func<TContext, TResult> action,
+         Action<TContext, TResult> complete,
+         Action<TContext, Exception> continueExceptionMethod = null, 
+         Action<TContext> continueMethod = null)
+        {
+            _ExecuteAsyncQueue<TContext, TResult>(action, complete, continueExceptionMethod, continueMethod);
+        }
+        internal static void ExecuteAsyncQueue(Action<TContext> action,
+        Action<TContext, Exception> continueExceptionMethod = null,
+        Action<TContext> continueMethod = null)
+        {
+            _ExecuteAsyncQueue<TContext>(action, continueExceptionMethod, continueMethod);
         }
         #endregion
         #region Send message methods

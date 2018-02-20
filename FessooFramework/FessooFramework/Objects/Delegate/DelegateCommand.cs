@@ -139,7 +139,7 @@ namespace FessooFramework.Objects.Delegate
             {
                 if (!_isAutomaticRequeryDisabled)
                 {
-                    //TODO CommandManager.RequerySuggested += value;
+                    CommandManager.RequerySuggested += value;
                 }
                 CommandManagerHelper.AddWeakReferenceHandler(ref _canExecuteChangedHandlers, value, 2);
             }
@@ -147,7 +147,7 @@ namespace FessooFramework.Objects.Delegate
             {
                 if (!_isAutomaticRequeryDisabled)
                 {
-                    //TODO CommandManager.RequerySuggested -= value;
+                    CommandManager.RequerySuggested -= value;
                 }
                 CommandManagerHelper.RemoveWeakReferenceHandler(_canExecuteChangedHandlers, value);
             }
@@ -297,7 +297,7 @@ namespace FessooFramework.Objects.Delegate
             {
                 if (!_isAutomaticRequeryDisabled)
                 {
-                    //TODO CommandManager.RequerySuggested += value;
+                    CommandManager.RequerySuggested += value;
                 }
                 CommandManagerHelper.AddWeakReferenceHandler(ref _canExecuteChangedHandlers, value, 2);
             }
@@ -305,7 +305,7 @@ namespace FessooFramework.Objects.Delegate
             {
                 if (!_isAutomaticRequeryDisabled)
                 {
-                    //TODO  CommandManager.RequerySuggested -= value;
+                    CommandManager.RequerySuggested -= value;
                 }
                 CommandManagerHelper.RemoveWeakReferenceHandler(_canExecuteChangedHandlers, value);
             }

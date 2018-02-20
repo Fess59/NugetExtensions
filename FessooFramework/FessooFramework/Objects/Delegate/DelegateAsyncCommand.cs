@@ -29,7 +29,7 @@ namespace FessooFramework.Objects.Delegate
 
             _worker.DoWork += (s, e) =>
             {
-                //TODO CommandManager.InvalidateRequerySuggested();
+                CommandManager.InvalidateRequerySuggested();
                 action();
             };
 
@@ -42,7 +42,7 @@ namespace FessooFramework.Objects.Delegate
                 if (error != null && e.Error != null)
                     error(e.Error);
 
-                //TODO CommandManager.InvalidateRequerySuggested();
+                CommandManager.InvalidateRequerySuggested();
             };
 
             _canExecute = canExecute;
@@ -73,16 +73,12 @@ namespace FessooFramework.Objects.Delegate
         /// <summary>
         /// Let us use command manager for thread safety
         /// </summary>
-       public event EventHandler CanExecuteChanged {
-        add { }
-            remove { }
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
-       //TODO  public event EventHandler CanExecuteChanged
-        //{
-        //    add
-        //    {  CommandManager.RequerySuggested += value; }
-        //        remove {  CommandManager.RequerySuggested -= value; }
-        //        }
 
         /// <summary>
         /// Here we'll invoke the background worker

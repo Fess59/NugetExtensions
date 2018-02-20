@@ -58,26 +58,7 @@ namespace FessooFramework.Tools.Web
             });
             return result;
         }
-        //private static Type CheckRequestType(ServiceBaseAPI serviceInstance, string fullNameClass)
-        //{
-        //    var type = serviceInstance.GetTypeByFullName(fullNameClass);
-        //    if (type == null)
-        //        throw new NullReferenceException($"Ошибка при получении Request, тип '{fullNameClass}' - не найден в этом проекте или проектах на которые есть ссылки");
-        //    var basedType = type.BaseType.FullName;
-        //    if (type.BaseType.FullName != typeof(RequestMessageBase).FullName)
-        //        throw new Exception($"Не корректная реализация {fullNameClass}. Объект запроса должен быть унаследован от {typeof(RequestMessageBase).FullName}");
-        //    return type;
-        //}
-        //private static Type CheckResponseType(ServiceBaseAPI serviceInstance, string fullNameClass)
-        //{
-        //    var type = serviceInstance.GetTypeByFullName(fullNameClass);
-        //    if (type == null)
-        //        throw new NullReferenceException($"Ошибка при отправке Response, тип '{fullNameClass}' - не найден в этом проекте или проектах на которые есть ссылки");
-        //    if (type.BaseType.FullName != typeof(ResponseMessageBase).FullName)
-        //        throw new Exception($"Не корректная реализация {fullNameClass}. Объект запроса должен быть унаследован от {typeof(ResponseMessageBase).FullName}");
-        //    return type;
-        //}
-        #endregion
+       #endregion
         #region Configurations
         protected abstract IEnumerable<ServiceRequestConfigBase> Configurations { get; }
         private static IEnumerable<ServiceRequestConfigBase> _Configurations { get; set; }

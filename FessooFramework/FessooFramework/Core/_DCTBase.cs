@@ -11,6 +11,7 @@ using FessooFramework.Components.LoggerComponent;
 using FessooFramework.Components.LoggerComponent.Models;
 using FessooFramework.Components;
 using FessooFramework.Objects;
+using FessooFramework.Tools.Controllers;
 
 namespace FessooFramework.Core
 {
@@ -285,6 +286,22 @@ namespace FessooFramework.Core
         {
             var name = GetCategoryName();
             DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod), isAsync: isAsync, name: name);
+        }
+        
+        internal static void _ExecuteAsyncQueue<TContext, TResult>(Func<TContext, TResult> action,
+           Action<TContext, TResult> complete,
+           Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+                where TContext : DCTContext, new()
+        {
+            var name = GetCategoryName();
+            QueueTaskController.Current.Execute(() => execute<TContext, TResult>(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod, complete: complete));
+        }
+        internal static void _ExecuteAsyncQueue<TContext>(Action<TContext> action,
+          Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)
+               where TContext : DCTContext, new()
+        {
+            var name = GetCategoryName();
+            QueueTaskController.Current.Execute(() => execute<TContext>(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod));
         }
         #endregion
         #region Logger module

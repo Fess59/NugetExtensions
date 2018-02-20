@@ -3,6 +3,7 @@ using Example._0_Base.Data.DataComponent.ModelX;
 using Example._0_Base.Data.Models.Model3;
 using Example.Tests;
 using FessooFramework.Core;
+using FessooFramework.Tools.Controllers;
 using FessooFramework.Tools.DataContexts;
 using FessooFramework.Tools.DataContexts.Models;
 using FessooFramework.Tools.DCT;
@@ -22,7 +23,7 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
-            UserCreate();
+            QueueTaskController2();
             //DCTExample.Execute(c =>
             //{
             //    var r = new Model3();
@@ -245,6 +246,40 @@ namespace Example
 
            
         }
+        #endregion
+        #region QueueController
+        private static void QueueTaskController2()
+        {
+            ConsoleHelper.SendMessage("Start");
+            //Start
+            for (int i = 0; i < 100; i++)
+            {
+                var ii = i;
+                var result = ii.ToString();
+                QueueTaskController.Current.Execute(() =>
+                {
+                    Thread.Sleep(100-ii);
+                    ConsoleHelper.SendMessage(result);
+                });
+            }
+            Thread.Sleep(10000);
+            //Continue
+            for (int i = 101; i < 130; i++)
+            {
+                var result = i.ToString();
+                QueueTaskController.Current.Execute(() => ConsoleHelper.SendMessage(result));
+            }
+            //Break
+            Thread.Sleep(35000);
+            //New start
+            for (int i = 131; i < 250; i++)
+            {
+                var result = i.ToString();
+                QueueTaskController.Current.Execute(() => ConsoleHelper.SendMessage(result));
+            }
+            ConsoleHelper.SendMessage("Finish");
+        }
+      
         #endregion
     }
 }

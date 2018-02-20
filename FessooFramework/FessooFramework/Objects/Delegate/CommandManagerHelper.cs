@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace FessooFramework.Objects.Delegate
 {
@@ -56,7 +57,7 @@ namespace FessooFramework.Objects.Delegate
                     EventHandler handler = handlerRef.Target as EventHandler;
                     if (handler != null)
                     {
-                        //todo CommandManager.RequerySuggested += handler;
+                        CommandManager.RequerySuggested += handler;
                     }
                 }
             }
@@ -71,7 +72,7 @@ namespace FessooFramework.Objects.Delegate
                     EventHandler handler = handlerRef.Target as EventHandler;
                     if (handler != null)
                     {
-                        //todo  CommandManager.RequerySuggested -= handler;
+                        CommandManager.RequerySuggested -= handler;
                     }
                 }
             }
