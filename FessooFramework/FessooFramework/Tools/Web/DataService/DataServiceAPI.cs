@@ -16,7 +16,7 @@ namespace FessooFramework.Tools.Web.DataService
         public override string Name => "DataServiceAPI";
         protected override IEnumerable<ServiceRequestConfigBase> Configurations =>
             new ServiceRequestConfigBase[] {
-                ServiceRequestConfig<RequestGetCollection, ResponseGetCollection>.New(GetCollection),
+                ServiceRequestConfig<RequestGet, ResponseGet>.New(ExecuteQuery),
             };
         #endregion
         #region Constructor
@@ -36,22 +36,86 @@ namespace FessooFramework.Tools.Web.DataService
             var configuration = _Convertors.SingleOrDefault(q => q.CacheType == dataModel);
             if (configuration == null)
                 throw new Exception($"Не определён конвертор для '{dataModel.ToString()}'");
-           return configuration;
+            return configuration;
         }
         #endregion
-
-
-        public ResponseGetCollection GetCollection(RequestGetCollection request)
+        #region Methods
+        public ResponseGet ExecuteQuery(RequestGet request)
         {
-            var result = default(ResponseGetCollection);
-            DCT.DCT.Execute(c => {
-                var type = Type.GetType(request.CurrentType);
-                var convertor = GetConvertor(type);
-                result = new ResponseGetCollection();
-                var data = convertor.CollectionObjectLoad();
+            var result = default(ResponseGet);
+            DCT.DCT.Execute(c =>
+            {
+                result = new ResponseGet();
+                result.QueryType = request.QueryType;
+                result.HasCollection = request.HasCollection;
+                var data = Enumerable.Empty<CacheObject>();
+                if (result.HasCollection)
+                    data = ExecuteObjectCollection(request);
+                else
+                    data = new CacheObject[] { ExecuteObject(request) };
                 result.SetObjectCollections(data);
             });
             return result;
         }
+        private CacheObject ExecuteObject(RequestGet request)
+        {
+            var result = default(CacheObject);
+            DCT.DCT.Execute(c =>
+            {
+                var type = Type.GetType(request.CurrentType);
+                var convertor = GetConvertor(type);
+                switch (request.QueryType)
+                {
+                    case "_ObjectLoad":
+                        result = convertor.ObjectLoad(request.Ids.FirstOrDefault());
+                        break;
+                    case "_SaveChanges":
+                        {
+                            var obj = convertor._JSONGetCollection(request.JSONObjectCollections);
+                            result = convertor.ObjectSave(obj).FirstOrDefault();
+                            break;
+                        }
+                    default:
+                        {
+                            var code = request.QueryType;
+                            var sessionUID = request.SessionUID;
+                            var hashUID = request.HashUID;
+                            var id = request.Ids.FirstOrDefault();
+                            var obj = convertor._JSONGetCollection(request.JSONObjectCollections).FirstOrDefault();
+                            result = convertor.CustomObjectLoad(code, sessionUID, hashUID, obj, id);
+                            break;
+                        }
+                }
+            });
+            return result;
+        }
+        private IEnumerable<CacheObject> ExecuteObjectCollection(RequestGet request)
+        {
+            var result = Enumerable.Empty<CacheObject>();
+            DCT.DCT.Execute(c =>
+            {
+                var type = Type.GetType(request.CurrentType);
+                var convertor = GetConvertor(type);
+                switch (request.QueryType)
+                {
+                    case "_CollectionLoad":
+                        result = convertor.CollectionObjectLoad();
+                        break;
+                    case "_SaveChanges":
+                        var obj = convertor._JSONGetCollection(request.JSONObjectCollections);
+                        result = convertor.ObjectSave(obj);
+                        break;
+                    default:
+                        var code = request.QueryType;
+                        var sessionUID = request.SessionUID;
+                        var hashUID = request.HashUID;
+                        var ids = request.Ids;
+                        result = convertor._CustomCollectionLoad(code, sessionUID, hashUID, request.JSONObjectCollections, ids);
+                        break;
+                }
+            });
+            return result;
+        }
+        #endregion
     }
 }

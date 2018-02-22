@@ -10,14 +10,22 @@ using System.Threading.Tasks;
 namespace FessooFramework.Tools.Web.DataService.ServiceModels
 {
     
-    public class RequestGetCollection: DataRequestMessage<RequestGetCollection, ResponseGetCollection>
+    public class RequestGet: DataRequestMessage<RequestGet, ResponseGet>
     {
-        
+        /// <summary>   Gets or sets the type of the message. </summary>
+        ///
+        /// <value> The type of the message. </value>
+
+        public string QueryType { get; set; }
+        public bool HasCollection { get; set; }
     }
     
-    public class ResponseGetCollection : DataResponseMessage<RequestGetCollection, ResponseGetCollection>
-
+    public class ResponseGet : DataResponseMessage<RequestGet, ResponseGet>
     {
-
+        /// <summary>   Gets or sets the type of the message. </summary>
+        ///
+        /// <value> The type of the message. </value>
+        public string QueryType { get; set; }
+        public bool HasCollection { get; set; }
     }
 }

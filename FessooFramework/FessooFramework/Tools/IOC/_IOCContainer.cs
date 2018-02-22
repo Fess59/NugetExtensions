@@ -116,14 +116,11 @@ namespace FessooFramework.Tools.IOC
         public T Add(T element)
         {
             var result = default(T);
-            DCT.DCT.Execute(c =>
-            {
-                if (Collection.Any(q => q.UID == element.UID))
-                    throw new Exception($"IOC element with the specified UID has already been added => {this.GetType().Name}.Add({element.UID})");
-                //throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
-                Collection.Add(element);
-                result = element;
-            });
+            if (Collection.Any(q => q.UID == element.UID))
+                throw new Exception($"IOC element with the specified UID has already been added => {this.GetType().Name}.Add({element.UID})");
+            //throw new ExceptionFlowIOContainer("AddRange", "IOC element with the specified UID has already been added");
+            Collection.Add(element);
+            result = element;
             return result;
         }
 

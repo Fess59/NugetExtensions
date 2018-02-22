@@ -29,8 +29,27 @@ namespace ExampleDataServiceDAL.DataModels
 
         protected override IEnumerable<EntityObjectALMCreator<ExampleData>> CreatorsService => new EntityObjectALMCreator<ExampleData>[] 
         {
-            EntityObjectALMCreator<ExampleData>.New<ExampleDataCache>( ExampleDataToExampleDataModel, new Version(1,0,0,0))
+            EntityObjectALMCreator<ExampleData>.New<ExampleDataCache>( ExampleDataToExampleDataModel, ExampleDataModelToExampleData ,new Version(1,0,0,0))
         };
+        private ExampleData ExampleDataModelToExampleData(ExampleDataCache arg)
+        {
+            var dataModel = new ExampleData()
+            {
+                Id = arg.Id,
+                D = arg.Description
+            };
+            dataModel.StateEnum = ExampleDataState.Edit;
+            return dataModel;
+        }
+        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
+        {
+            return base._CacheSave(objs);
+        }
+
+        public override IEnumerable<EntityObject> _CollectionObjectLoad()
+        {
+            return base._CollectionObjectLoad();
+        }
 
         private ExampleDataCache ExampleDataToExampleDataModel(ExampleData arg)
         {
@@ -39,7 +58,7 @@ namespace ExampleDataServiceDAL.DataModels
                 Description = arg.D
             };
         }
-
+       
         protected override int GetStateValue(ExampleDataState state)
         {
             return (int)state;

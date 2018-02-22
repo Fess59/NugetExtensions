@@ -29,6 +29,10 @@ namespace FessooFramework.Core
     ///
     public class _DCTBase : SystemObject
     {
+        #region Property
+        protected static Func<DCTContext> CreateContext { get; set; }
+        #endregion
+
         #region DCT base
         /// <summary>    Executes result.
         ///              Основной инструмент, в нём сосредоточена вся основная логика работы </summary>
@@ -62,8 +66,8 @@ namespace FessooFramework.Core
                 if (method == null) throw new NullReferenceException("Parameter 'method' cannot be null");
                 //Статус владельца контекста
                 isOwner = CheckContext<TContext>();
-                result = method(Context<TContext>());
-
+                var context = Context<TContext>();
+                result = method(context);
             }
             catch (Exception ex)
             {
@@ -76,7 +80,11 @@ namespace FessooFramework.Core
                 if (continueMethod != null)
                     execute<TContext>(name, dataCon => continueMethod(dataCon));
                 if (complete != null)
+                {
+                    if (result == null)
+                        throw new NullReferenceException("Возвращаемое значение не может быть null, callback метод не будет вызван");
                     execute<TContext>(name, dataCom => complete(dataCom, result));
+                }
                 //TODO Tracker and Analitics
                 //SendInformations($@"Complete", name);
             }
@@ -136,10 +144,15 @@ namespace FessooFramework.Core
             var obj = ContextHelper.GetContext(contextName);
             if (obj == null)
             {
-                obj = new TContext();
+                if (CreateContext == null)
+                    obj = new TContext();
+                else
+                    obj = CreateContext();
                 ContextHelper.SetContext(obj, contextName);
             }
             var context = obj as TContext;
+            if (obj != null && context == null)
+                ConsoleHelper.Send("DCTContext", $"Не возможно преобразовать базовый контекст данных {obj.GetType().Name} в наследуемый тип {typeof(TContext).Name}. Требуеться вызов кастомного DCT c типом {typeof(TContext).Name}");
             if (value != null)
             {
                 var parentTrackId = context.TrackId == value.TrackId ? context.ParentTrackId : value.ParentTrackId;
@@ -287,7 +300,7 @@ namespace FessooFramework.Core
             var name = GetCategoryName();
             DispatcherHelper.Execute(() => execute(name, action, continueExceptionMethod: continueExceptionMethod, continueMethod: continueMethod), isAsync: isAsync, name: name);
         }
-        
+
         internal static void _ExecuteAsyncQueue<TContext, TResult>(Func<TContext, TResult> action,
            Action<TContext, TResult> complete,
            Action<TContext, Exception> continueExceptionMethod = null, Action<TContext> continueMethod = null)

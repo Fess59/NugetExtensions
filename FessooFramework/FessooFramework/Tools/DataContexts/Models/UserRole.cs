@@ -25,10 +25,23 @@ namespace FessooFramework.Tools.DataContexts.Models
             get => EnumHelper.GetValue<RoleType>(UID);
             set => UID = (int)value;
         }
+
+        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<EntityObject> _CollectionObjectLoad()
         {
             throw new NotImplementedException();
         }
+
+        public override EntityObject _ConvertToDataModel<TResult>(TResult obj)
+        {
+
+            throw new NotImplementedException("Передача модели данных UserRole с клиента не поддерживается");
+        }
+
         public override TResult _ConvertToServiceModel<TResult>()
         {
             throw new NotImplementedException("Передача модели данных UserRole на клиент не поддерживается");

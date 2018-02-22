@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Tools.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ namespace FessooFramework.Objects.Data
     ///             Базовый модель тип модели и схема его данных определяется на основе Version и DataType </summary>
     ///
     /// <remarks>   Fess59, 24.01.2018. </remarks>
-    [Serializable]
     public class CacheObject : DataObject
     {
         #region Property
@@ -24,7 +24,7 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> The TTL. </value>
         /// 
-        
+        [JsonProperty("TTL")]
         public long TTL { get; set; }
 
         /// <summary>   Gets or sets the timestamp.
@@ -33,7 +33,7 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> The timestamp. </value>
         /// 
-        
+        [JsonProperty("Timestamp")]
         public long Timestamp { get; set; }
 
         /// <summary>   Gets or sets the version.
@@ -42,8 +42,8 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> The version. </value>
         /// 
-        
 
+        [JsonProperty("Version")]
         public string Version { get; set; }
 
         /// <summary>   Gets or sets the state.
@@ -51,7 +51,7 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> The state. </value>
         /// 
-        
+        [JsonProperty("State")]
         public int State { get; set; }
 
         /// <summary>   Gets or sets the state enum.
@@ -69,8 +69,7 @@ namespace FessooFramework.Objects.Data
         ///             Тип объекта кэша в формате int </summary>
         ///
         /// <value> The type of the data. </value>
-        /// 
-        
+        [JsonProperty("DataType")]
         public string DataType { get; set; }
 
         /// <summary>   Data type enum.
@@ -105,6 +104,14 @@ namespace FessooFramework.Objects.Data
         {
             if (DateTime.Now.Ticks > CreateDate.Ticks + TTL)
                 _Remove();
+        }
+        internal void SetProperty(Guid id, DateTime createDate, bool hasRemoved, string dataType, Version version)
+        {
+            Id = id;
+            CreateDate= createDate;
+            HasRemoved = hasRemoved;
+            DataType = dataType;
+            Version = version.ToString();
         }
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,7 +12,6 @@ namespace FessooFramework.Objects.Data
     ///             Базовый объект данных </summary>
     ///
     /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>
-    [Serializable]
     public class DataObject : BaseObject
     {
         /// <summary>   Gets or sets a value indicating whether this object has removed.
@@ -19,8 +19,8 @@ namespace FessooFramework.Objects.Data
         ///
         /// <value> True if this object has removed, false if not. </value>
         /// 
-        
 
+        [JsonProperty("HasRemoved")]
         public bool HasRemoved { get; set; }
 
         /// <summary>   Removes this object.

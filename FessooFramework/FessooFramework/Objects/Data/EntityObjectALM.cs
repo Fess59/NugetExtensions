@@ -118,9 +118,29 @@ namespace FessooFramework.Objects.Data
                 throw new NullReferenceException($"CREATORS to ServiceModel from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}' return NULL");
             return result;
         }
-
-
-
+        /// <summary>   Gets the convert. </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 06.02.2018. </remarks>
+        ///
+        /// <typeparam name="TResult">    Generic type parameter. </typeparam>
+        ///
+        /// <returns>   A T. </returns>
+        public override EntityObject _ConvertToDataModel<TResult>(TResult obj)
+        {
+            var result = default(EntityObject);
+            if (creatorsService == null || !creatorsService.Any())
+                throw new Exception($"CREATORS to ServiceModel not found any from '{typeof(TObjectType).Name}'");
+            var creators = _CreatorsService.Where(q => q.ObjectType == typeof(TObjectType) && q.FinallyType == typeof(TResult));
+            if (!creators.Any())
+                throw new Exception($"CREATORS to ServiceModel not found from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}'");
+            if (creators.Count() > 1)
+                throw new Exception($"CREATORS to ServiceModel найдено несколько схем конвертации для модели '{typeof(TObjectType).Name}' в модель '{typeof(TResult).Name}'");
+            var creator = creators.FirstOrDefault();
+            result = creator.ExecuteRollback<TResult>(obj);
+            if (result == null)
+                throw new NullReferenceException($"CREATORS to ServiceModel from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}' return NULL");
+            return result;
+        }
         /// <summary>   State configuration.
         ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
         ///
@@ -236,6 +256,18 @@ namespace FessooFramework.Objects.Data
         {
             var objs = DbSet().ToArray();
             return objs;
+        }
+        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs) 
+        {
+            var collections = Enumerable.Empty<TDataModel>();
+            DCT.Execute(c =>
+            {
+                if (objs.Any())
+                {
+                    c.SaveChanges();
+                }
+            });
+            return collections;
         }
         #endregion
     }

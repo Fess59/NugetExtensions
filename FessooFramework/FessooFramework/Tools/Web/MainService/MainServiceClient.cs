@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects.Data;
+using FessooFramework.Tools.Helpers;
 using FessooFramework.Tools.Web.MainService.ServiceModels;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ namespace FessooFramework.Tools.Web.MainService
     public abstract class MainServiceClient : BaseServiceClient
     {
         protected override IEnumerable<ServiceResponseConfigBase> Configurations => new ServiceResponseConfigBase[] { };
-        public bool Registration(string email, string phone, string password, string firstName, string secondName, string middleName,  DateTime? birthday = null)
+        public void Registration(Action<bool> callback, string email, string phone, string password, string firstName, string secondName, string middleName,  DateTime? birthday = null)
         {
-            var result = false;
-            DCT.DCT.Execute(c=> 
+            DCT.DCT.ExecuteAsyncQueue<bool>(c=> 
             {
+                var result = false;
                 birthday = birthday == null ? new DateTime(1900, 01, 01) : birthday;
                 var request = new Request_Registration()
                 {
@@ -37,14 +38,19 @@ namespace FessooFramework.Tools.Web.MainService
                     default:
                         break;
                 }
+                return result;
+            }, complete: (c, r) => {
+                if (callback == null)
+                    ConsoleHelper.Send("MainServiceClient", "В методе Registration не реализован Callback");
+                else
+                    callback(r);
             });
-            return result;
         }
-        public bool SignIn(string login, string password)
+        public void SignIn(Action<bool> callback, string login, string password)
         {
-            var result = false;
-            DCT.DCT.Execute(c =>
+            DCT.DCT.ExecuteAsyncQueue<bool>(c =>
             {
+                var result = false;
                 var request = new Request_SignIn()
                 {
                     Login = login,
@@ -60,14 +66,19 @@ namespace FessooFramework.Tools.Web.MainService
                     default:
                         break;
                 }
+                return result;
+            }, complete:(c,r) => {
+                if (callback == null)
+                    ConsoleHelper.Send("MainServiceClient", "В методе SignIn не реализован Callback");
+                else
+                    callback(r);
             });
-            return result;
         }
-        public bool SessionCheck(string hashUID, string sessionUID)
+        public void SessionCheck(Action<bool> callback, string hashUID, string sessionUID)
         {
-            var result = false;
-            DCT.DCT.Execute(c =>
+            DCT.DCT.ExecuteAsyncQueue(c =>
             {
+                var result = false;
                 var request = new Request_SessionCheck()
                 {
                     HashUID = hashUID,
@@ -83,8 +94,13 @@ namespace FessooFramework.Tools.Web.MainService
                     default:
                         break;
                 }
+                return result;
+            }, complete: (c,r) => {
+                if (callback == null)
+                    ConsoleHelper.Send("MainServiceClient", "В методе SessionCheck не реализован Callback");
+                else
+                    callback(r);
             });
-            return result;
         }
         private void SetHash(string hashUID, string sessionUID)
         {

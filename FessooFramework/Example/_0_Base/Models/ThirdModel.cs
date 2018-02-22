@@ -12,7 +12,17 @@ namespace Example._0_Base.Models
     {
         public string Decription { get; set; }
 
+        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<FessooFramework.Objects.Data.EntityObject> _CollectionObjectLoad()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override FessooFramework.Objects.Data.EntityObject _ConvertToDataModel<TResult>(TResult obj)
         {
             throw new NotImplementedException();
         }

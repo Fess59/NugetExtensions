@@ -20,6 +20,13 @@ namespace FessooFramework.Core
         /// <value> . </value>
         public static TContext Context { get { return Context<TContext>(); } }
         #endregion
+        #region Constructor
+        static _DCT()
+        {
+            if (CreateContext == null && typeof(TContext) != typeof(DCTContext))
+                CreateContext = () => new TContext(); 
+        }
+        #endregion
         #region Execute methods
         /// <summary>   Executes void. </summary>
         ///

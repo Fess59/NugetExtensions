@@ -17,7 +17,7 @@ namespace FessooFramework.Objects.Data
     ///
     ///
     /// <remarks>   AM Kozhevnikov, 24.01.2018. </remarks>
-    public abstract class EntityObject: DataObject
+    public abstract class EntityObject : DataObject
     {
         #region Property
         /// <summary>   Gets or sets the save changes. </summary>
@@ -72,8 +72,17 @@ namespace FessooFramework.Objects.Data
             _ToHistory("Remove");
         }
         public abstract TResult _ConvertToServiceModel<TResult>() where TResult : CacheObject;
+        public abstract EntityObject _ConvertToDataModel<TResult>(TResult obj) where TResult : CacheObject;
         public abstract EntityObject _ObjectLoadById(Guid Id);
         public abstract IEnumerable<EntityObject> _CollectionObjectLoad();
+        public abstract IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs) where TDataModel : EntityObject;
+        internal void SetProperty(Guid id, DateTime createDate, bool hasRemoved)
+        {
+            Id = id;
+            CreateDate = createDate;
+            HasRemoved = hasRemoved;
+        }
+
         #endregion
     }
 }

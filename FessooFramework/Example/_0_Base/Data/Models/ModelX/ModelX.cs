@@ -26,9 +26,9 @@ namespace Example._0_Base.Data.DataComponent.ModelX
               EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Error, ModelXState.Error, ModelXHelper.Error),
         };
 
-        protected override IEnumerable<EntityObjectALMCreator<ModelX>> CreatorsService => new EntityObjectALMCreator <ModelX>[] 
+        protected override IEnumerable<EntityObjectALMCreator<ModelX>> CreatorsService => new EntityObjectALMCreator<ModelX>[]
         {
-              EntityObjectALMCreator<ModelX>.New<ModelXService>(ModelXToModelXService, new Version(1,0,0,0))
+              EntityObjectALMCreator<ModelX>.New<ModelXService>(ModelXToModelXService, ModelXServiceToModelX, new Version(1,0,0,0))
         };
 
         private ModelXService ModelXToModelXService(ModelX obj)
@@ -37,6 +37,15 @@ namespace Example._0_Base.Data.DataComponent.ModelX
             {
                 Description = obj.Description
             };
+        }
+        private ModelX ModelXServiceToModelX(ModelXService obj)
+        {
+            var result = new ModelX()
+            {
+                Description = obj.Description
+            };
+            result.StateEnum = ModelXState.Edited;
+            return result;
         }
         #endregion
     }

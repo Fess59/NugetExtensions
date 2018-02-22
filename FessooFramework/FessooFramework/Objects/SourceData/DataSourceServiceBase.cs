@@ -24,13 +24,13 @@ namespace FessooFramework.Objects.SourceData
         }
         #endregion
         #region Methods
-        public TCacheObject ObjectLoad<TCacheObject>(Guid id) where TCacheObject : CacheObject
+        public void ObjectLoad<TCacheObject>(Guid id, Action<TCacheObject> callback) where TCacheObject : CacheObject
         {
-            return GetContext().ObjectLoad<TCacheObject>(id);
+            GetContext().ObjectLoad<TCacheObject>(callback, id);
         }
-        public IEnumerable<TCacheObject> ObjectCollection<TCacheObject>() where TCacheObject : CacheObject
+        public void ObjectCollection<TCacheObject>(Action<IEnumerable<TCacheObject>> callback) where TCacheObject : CacheObject
         {
-            return GetContext().CollectionLoad<TCacheObject>();
+            GetContext().CollectionLoad<TCacheObject>(callback);
         }
         public void SaveChanges()
         {

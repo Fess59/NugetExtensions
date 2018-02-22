@@ -1,6 +1,7 @@
 ﻿using FessooFramework.Objects.Data;
 using FessooFramework.Tools.Helpers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +21,6 @@ namespace FessooFramework.Objects.Message
       where TRequest : RequestMessageBase
       where TResponse : ResponseMessageBase
     {
-        #region Object
-        internal string JSONObject { get; set; }
-        internal string JSONObjectType { get; set; }
-        public void SetObject(object obj)
-        {
-            var type = obj.GetType();
-            JSONObjectType = type.AssemblyQualifiedName;
-            JSONObject = JsonConvert.SerializeObject(obj);
-        }
-        public TCacheType GetObject<TCacheType>()
-        {
-            var obj = JsonConvert.DeserializeObject(JSONObject, typeof(TCacheType));
-            return (TCacheType)obj;
-        }
-        #endregion
         #region Object collections
         public string JSONObjectCollections { get; set; }
         public string JSONObjectCollectionsType { get; set; }
@@ -50,5 +36,26 @@ namespace FessooFramework.Objects.Message
             return (IEnumerable<TCacheType>)obj;
         }
         #endregion
+
+
+        #region Property
+
+        #endregion
+        //#region Object
+        //internal string JSONObject { get; set; }
+        //internal string JSONObjectType { get; set; }
+        //public void SetObject(object obj)
+        //{
+        //    var type = obj.GetType();
+        //    JSONObjectType = type.AssemblyQualifiedName;
+        //    JSONObject = JsonConvert.SerializeObject(obj);
+        //}
+        //public TCacheType GetObject<TCacheType>()
+        //{
+        //    var obj = JsonConvert.DeserializeObject(JSONObject, typeof(TCacheType));
+        //    return (TCacheType)obj;
+        //}
+        //#endregion
+
     }
 }

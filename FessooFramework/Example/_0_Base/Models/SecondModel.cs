@@ -26,5 +26,14 @@ namespace Example._0_Base.Models
         {
             throw new NotImplementedException();
         }
+        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override FessooFramework.Objects.Data.EntityObject _ConvertToDataModel<TResult>(TResult obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
