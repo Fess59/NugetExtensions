@@ -14,10 +14,13 @@ namespace FessooFramework.Tools.Web.DataService
     {
         #region Property
         public override string Name => "DataServiceAPI";
-        protected override IEnumerable<ServiceRequestConfigBase> Configurations =>
+        protected sealed override IEnumerable<ServiceRequestConfigBase> Configurations =>
             new ServiceRequestConfigBase[] {
                 ServiceRequestConfig<RequestGet, ResponseGet>.New(ExecuteQuery),
-            };
+            }.Concat(CustomConfigurations);
+
+        protected abstract IEnumerable<ServiceRequestConfigBase> CustomConfigurations { get; }
+       
         #endregion
         #region Constructor
         public DataServiceAPI()

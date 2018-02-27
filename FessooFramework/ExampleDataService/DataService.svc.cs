@@ -10,6 +10,7 @@ using ExampleDataServiceDAL.DataModels;
 using ExampleDataServiceModels;
 using FessooFramework.Objects.Data;
 using FessooFramework.Objects.Message;
+using FessooFramework.Tools.Web;
 using FessooFramework.Tools.Web.DataService.Configuration;
 
 namespace ExampleDataService
@@ -22,6 +23,8 @@ namespace ExampleDataService
         {
             new DataServiceConfiguration<ExampleData, ExampleDataCache>(),
         };
+
+        protected override IEnumerable<ServiceRequestConfigBase> CustomConfigurations => new ServiceRequestConfigBase[] { };
 
         [WebInvoke(
            Method = "POST",
