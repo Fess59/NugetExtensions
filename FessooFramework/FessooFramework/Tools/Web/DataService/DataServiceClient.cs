@@ -46,7 +46,7 @@ namespace FessooFramework.Tools.Web.DataService
         public void SendQueryObject<TCacheObject>(Action<TCacheObject> callback, string code, TCacheObject obj = null, string sessionUID = "", string hashUID = "", Guid? id = null)
            where TCacheObject : CacheObject
         {
-            SendQueryCollection(result => result.FirstOrDefault(), code, sessionUID, hashUID, obj == null ? null : new[] { obj }, id == null ? null : new[] { id.Value }, hasCollection: false);
+            SendQueryCollection(result => callback(result.FirstOrDefault()), code, sessionUID, hashUID, obj == null ? null : new[] { obj }, id == null ? null : new[] { id.Value }, hasCollection: false);
         }
         #endregion
         #region CollectionLoad

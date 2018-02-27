@@ -11,5 +11,8 @@ namespace ExampleDataServiceClient
         public override string Address => "http://localhost:56535/DataService.svc";
 
         public override TimeSpan PostTimeout => TimeSpan.FromSeconds(100);
+
+        public override string HashUID => "Example";
+        public override string SessionUID => "Example";
     }
 }

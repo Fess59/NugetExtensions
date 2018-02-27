@@ -15,6 +15,9 @@ namespace FessooFramework.Tools.Web
         #region Property
         public abstract string Address { get;}
         public abstract TimeSpan PostTimeout { get; }
+        public abstract string HashUID { get; }
+        public abstract string SessionUID { get; }
+
         private static string ClassName { get; set; }
         #endregion
         #region Methods
@@ -35,6 +38,11 @@ namespace FessooFramework.Tools.Web
             var result = default(TResponse);
             DCT.DCT.Execute(c =>
             {
+                if (c._SessionInfo.HashUID == "")
+                    c._SessionInfo.HashUID = HashUID;
+                if (c._SessionInfo.SessionUID == "")
+                    c._SessionInfo.SessionUID = SessionUID;
+
                 var message = ServiceMessage.New(request);
                 message.FullName = typeof(TRequest).FullName;
                 var response = WebHelper.SendPOST<ServiceMessage>(message, Address + @"/Execute");

@@ -14,6 +14,10 @@ namespace ExampleServiceClient
 
         public override TimeSpan PostTimeout => TimeSpan.FromSeconds(100);
 
+        public override string HashUID => "ExampleService";
+
+        public override string SessionUID => "ExampleService";
+
         protected override IEnumerable<ServiceResponseConfigBase> Configurations => new ServiceResponseConfigBase[]{ ServiceResponseConfig<ResponseExampleModel>.New(a => Console.WriteLine(a.ResponseDescription + "!!!")) };
     }
 }
