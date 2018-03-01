@@ -11,7 +11,7 @@ namespace FessooFramework.Tools.Web.MainService
 {
     public abstract class MainServiceClient : BaseServiceClient
     {
-        protected override IEnumerable<ServiceResponseConfigBase> Configurations => new ServiceResponseConfigBase[] { };
+        protected override IEnumerable<ServiceResponseConfigBase> Configurations => new ServiceResponseConfigBase[] {  };
         public void Registration(Action<bool> callback, string email, string phone, string password, string firstName, string secondName, string middleName,  DateTime? birthday = null)
         {
             DCT.DCT.ExecuteAsyncQueue<bool>(c=> 

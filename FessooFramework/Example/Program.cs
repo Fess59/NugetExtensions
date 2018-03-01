@@ -23,28 +23,28 @@ namespace Example
         static void Main(string[] args)
         {
             CoreTest();
-            QueueTaskController2();
-            //DCTExample.Execute(c =>
-            //{
-            //    var r = new Model3();
-            //    r.StateEnum = Model3State.Edit;
-            //    c.SaveChanges();
-            //    r.StateEnum = Model3State.Complete;
-            //    c.SaveChanges();
-            //    r.StateEnum = Model3State.Edit;
-            //    c.SaveChanges();
-            //    var r2 = new Model3();
-            //    r2.StateEnum = Model3State.Complete;
-            //    c.SaveChanges();
-            //    //DataComponentTest();
-            //    var list = Model3.DbSet().ToArray();
-            //    foreach (var item in list)
-            //    {
-            //        ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
-            //    }
-            //    var model = new ModelX();
-            //    var visualModel = model._ConvertToServiceModel<ModelXService>();
-            //});
+            DCTExample.Execute(c =>
+            {
+                var r = new Model3();
+                r.StateEnum = Model3State.Edit;
+                r.StateEnum = Model3State.Edit;
+                c.SaveChanges();
+                r.StateEnum = Model3State.Complete;
+                c.SaveChanges();
+                r.StateEnum = Model3State.Edit;
+                c.SaveChanges();
+                var r2 = new Model3();
+                r2.StateEnum = Model3State.Complete;
+                c.SaveChanges();
+                //DataComponentTest();
+                var list = Model3.DbSet().ToArray();
+                foreach (var item in list)
+                {
+                    ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
+                }
+                var model = new ModelX();
+                var visualModel = model._ConvertToServiceModel<ModelXService>();
+            });
 
             Console.Read();
         }

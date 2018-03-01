@@ -86,11 +86,12 @@ namespace FessooFramework.Tools.Web
             DCT.DCT.Execute(c =>
             {
                 if (!_Configurations.Any())
-                    throw new Exception($"ServiceClient - для клиента службы {ClassName}, нет ни одной реализаций Response");
-                var configuration = _Configurations.SingleOrDefault(q => q.CurrentType == typeof(TResponse));
-                if (configuration == null)
-                    throw new Exception($"ServiceClient - для клиента службы {ClassName}, нет ни одной реализации для {typeof(TResponse).ToString()}");
-                configuration.Execute(obj);
+                {
+                    var configuration = _Configurations.SingleOrDefault(q => q.CurrentType == typeof(TResponse));
+                    if (configuration == null)
+                        throw new Exception($"ServiceClient - для клиента службы {ClassName}, нет ни одной реализации для {typeof(TResponse).ToString()}");
+                    configuration.Execute(obj);
+                }
             });
             return result;
         }

@@ -20,7 +20,6 @@ namespace ExampleDataServiceClient
         static string middlename = "mid";
         static void Main(string[] args)
         {
-
             DCT.Execute(c =>
             {
                 Registaration(email, phone, password, firstname, secondname, middlename);

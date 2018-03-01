@@ -1,4 +1,5 @@
 ﻿using FessooFramework.Objects;
+using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -50,13 +51,13 @@ namespace FessooFramework.Tools.Controllers
                     if (result && next != null)
                     {
                         next();
-                        DCT.DCT._Send($"QueueController {typeof(T).Name} execute");
+                        ConsoleHelper.SendMessage($"QueueController {typeof(T).Name} execute");
                         WaitCount = 0;
                     }
                     else
                     {
                         Thread.Sleep(1000);
-                        DCT.DCT._Send($"QueueController {typeof(T).Name} wait");
+                        ConsoleHelper.SendMessage($"QueueController {typeof(T).Name} wait");
                         WaitCount += 1;
                         if (WaitCount >= WaitCountMax)
                         {

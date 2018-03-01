@@ -188,10 +188,15 @@ namespace FessooFramework.Objects.Data
                 //Create
                 if (OldObj == null)
                 {
-                    OldObj = new TObjectType();
-                    OldObj.Id = newObj.Id;
-                    OldObj.State = 0;
-                    OldObj = DCT.Context.DbSet<TObjectType>().Add(OldObj);
+                    //Проверяю модель в уже добавленные
+                    OldObj = DCT.Context.DbSet<TObjectType>().Local.FirstOrDefault(q => q.Id == newObj.Id);
+                    if (OldObj == null)
+                    {
+                        OldObj = new TObjectType();
+                        OldObj.Id = newObj.Id;
+                        OldObj.State = 0;
+                        OldObj = DCT.Context.DbSet<TObjectType>().Add(OldObj);
+                    }
                 }
                 var oldState = OldObj.StateEnum;
                 var newState = NewObj.StateEnum;
