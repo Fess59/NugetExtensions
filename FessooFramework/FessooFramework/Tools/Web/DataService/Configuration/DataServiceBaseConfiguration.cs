@@ -16,9 +16,6 @@ namespace FessooFramework.Tools.Web.DataService.Configuration
         public abstract CacheObject ObjectLoad(Guid Id);
         public abstract IEnumerable<CacheObject> CollectionObjectLoad();
         public abstract IEnumerable<CacheObject> ObjectSave(IEnumerable<CacheObject> objs);
-
-        public abstract CacheObject CustomObjectLoad(string code, string sessionUID = "", string hashUID = "", CacheObject obj = null, Guid? id = null);
-        public abstract IEnumerable<CacheObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<CacheObject> obj = null, IEnumerable<Guid> id = null);
         internal abstract IEnumerable<CacheObject> _CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", string JSONObjectCollections = null, IEnumerable<Guid> id = null);
         internal abstract IEnumerable<CacheObject> _JSONGetCollection(string JSONObjectCollections);
     }
@@ -68,32 +65,43 @@ namespace FessooFramework.Tools.Web.DataService.Configuration
             var collections = Enumerable.Empty<TCacheModel>();
             DCT.DCT.Execute(c =>
             {
-                if (objs.Any())
-                {
-                    var dataModels = new List<TDataModel>();
-                    var data = new TDataModel();
-                    foreach (var obj in objs)
-                    {
-                        dataModels.Add((TDataModel)data._ConvertToDataModel((TCacheModel)obj));
-                    }
-                    var entitys = data._CacheSave(dataModels.ToArray());
-                    collections = dataModels.Select(q => q._ConvertToServiceModel<TCacheModel>());
-                }
+                var dataModels = CacheToEntity(objs);
+                var data = new TDataModel();
+                var entitys = data._CacheSave(dataModels.ToArray());
+                collections = dataModels.Select(q => q._ConvertToServiceModel<TCacheModel>());
             });
             return collections;
         }
         #endregion
-        #region Custom logic
-        public override CacheObject CustomObjectLoad(string code, string sessionUID = "", string hashUID = "", CacheObject obj = null, Guid? id = null)
+        #region Custom query
+        internal override IEnumerable<CacheObject> _CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", string JSONObjectCollections = null, IEnumerable<Guid> id = null)
         {
-            throw new NotImplementedException($"Для модели данных {typeof(TDataModel).Name}, не реализован абстрактный метод CustomObjectLoad");
-        }
-        public override IEnumerable<CacheObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<CacheObject> obj = null, IEnumerable<Guid> id = null)
-        {
-            throw new NotImplementedException($"Для модели данных {typeof(TDataModel).Name}, не реализован абстрактный метод CustomCollectionLoad");
+            var result = Enumerable.Empty<TCacheModel>();
+            DCT.DCT.Execute(c =>
+            {
+                var collection = _JSONGetCollection(JSONObjectCollections);
+                var data = new TDataModel();
+                var dataCollection = CacheToEntity(collection);
+                var entityCollection = data.CustomCollectionLoad(code, sessionUID, hashUID, dataCollection, id);
+                result =  entityCollection.Select(q => q._ConvertToServiceModel<TCacheModel>());
+            });
+            return result;
         }
         #endregion
         #region Tools
+        private IEnumerable<TDataModel> CacheToEntity(IEnumerable<CacheObject> objs)
+        {
+            var result = Enumerable.Empty<TDataModel>();
+            if (objs.Any())
+            {
+                   var dataModels = new List<TDataModel>();
+                var data = new TDataModel();
+                foreach (var obj in objs)
+                    dataModels.Add((TDataModel)data._ConvertToDataModel((TCacheModel)obj));
+                result = dataModels.ToArray();
+            }
+            return result;
+        }
         private TCacheModel EntityToCache(TDataModel obj)
         {
             return obj._ConvertToServiceModel<TCacheModel>();
@@ -102,11 +110,7 @@ namespace FessooFramework.Tools.Web.DataService.Configuration
         {
             return objs.Select(q => q._ConvertToServiceModel<TCacheModel>()).ToArray();
         }
-        internal override IEnumerable<CacheObject> _CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", string JSONObjectCollections = null, IEnumerable<Guid> id = null)
-        {
-            var collection = _JSONGetCollection(JSONObjectCollections);
-            return CustomCollectionLoad(code, sessionUID, hashUID, collection, id);
-        }
+
         internal override IEnumerable<CacheObject> _JSONGetCollection(string JSONObjectCollections)
         {
             var collection = Enumerable.Empty<TCacheModel>();

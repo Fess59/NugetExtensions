@@ -71,10 +71,36 @@ namespace FessooFramework.Objects.Data
             HasRemoved = true;
             _ToHistory("Remove");
         }
+        /// <summary>
+        /// Конвертация модели данных в модель представления
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public abstract TResult _ConvertToServiceModel<TResult>() where TResult : CacheObject;
+        /// <summary>
+        /// Конвертация модели представления в модель данных
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public abstract EntityObject _ConvertToDataModel<TResult>(TResult obj) where TResult : CacheObject;
+        /// <summary>
+        /// Получение объекта по идентификатору
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public abstract EntityObject _ObjectLoadById(Guid Id);
+        /// <summary>
+        /// Получение коллекции объектов на основе данных авторизации и сессии
+        /// </summary>
+        /// <returns></returns>
         public abstract IEnumerable<EntityObject> _CollectionObjectLoad();
+        /// <summary>
+        /// Сохранение данных в базу
+        /// </summary>
+        /// <typeparam name="TDataModel"></typeparam>
+        /// <param name="objs"></param>
+        /// <returns></returns>
         public abstract IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs) where TDataModel : EntityObject;
         internal void SetProperty(Guid id, DateTime createDate, bool hasRemoved)
         {
@@ -83,6 +109,10 @@ namespace FessooFramework.Objects.Data
             HasRemoved = hasRemoved;
         }
 
+        #endregion
+        #region Custom query from Data model
+        //public abstract CacheObject CustomObjectLoad(string code, string sessionUID = "", string hashUID = "", EntityObject obj = null, Guid? id = null);
+        public abstract IEnumerable<EntityObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<EntityObject> obj = null, IEnumerable<Guid> id = null);
         #endregion
     }
 }

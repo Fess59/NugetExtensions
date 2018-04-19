@@ -24,7 +24,6 @@ namespace FessooFramework.Tools.DataContexts.Models
                 EntityObjectALMConfiguration<UserSession, UserSessionState>.New(UserSessionState.Blocked, UserSessionState.Enable, Unblocked),
              EntityObjectALMConfiguration<UserSession, UserSessionState>.New(UserSessionState.Blocked, UserSessionState.Blocked, Blocked),
         };
-        protected override IEnumerable<UserSessionState> DefaultState => new[] { UserSessionState.Blocked };
         protected override IEnumerable<EntityObjectALMCreator<UserSession>> CreatorsService => throw new NotImplementedException($" Модель данных Application не может преобразована в модель данных клиента");
         protected override int GetStateValue(UserSessionState state)
         {
@@ -32,6 +31,13 @@ namespace FessooFramework.Tools.DataContexts.Models
         }
         #endregion
         #region ALM methods
+        protected override UserSession SetValueDefault(UserSession oldObj, UserSession newObj)
+        {
+            if (oldObj.UserProfileId == Guid.Empty)
+                oldObj.UserProfileId = newObj.UserProfileId;
+            oldObj.TTL = newObj.TTL;
+            return oldObj;
+        }
         private static UserSession Edited(UserSession arg1, UserSession arg2)
         {
             if (arg1.UserProfileId == Guid.Empty)
@@ -49,6 +55,8 @@ namespace FessooFramework.Tools.DataContexts.Models
         {
             throw new Exception("Разблокировка доступа для аккаунта пользователя не возможна, пожалуйста восстановите пароль через API");
         }
+
+      
         #endregion
     }
     public enum UserSessionState

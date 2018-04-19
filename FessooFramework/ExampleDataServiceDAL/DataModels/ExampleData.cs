@@ -1,4 +1,5 @@
-﻿using ExampleDataServiceModels;
+﻿using ExampleDataServiceDAL.Core;
+using ExampleDataServiceModels;
 using FessooFramework.Objects.Data;
 using System;
 using System.Collections.Generic;
@@ -14,32 +15,27 @@ namespace ExampleDataServiceDAL.DataModels
 
         protected override IEnumerable<EntityObjectALMConfiguration<ExampleData, ExampleDataState>> Configurations => new EntityObjectALMConfiguration<ExampleData, ExampleDataState>[] 
         {
-            EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Create, ExampleDataState.Edit, Edit),
-             EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Edit, ExampleDataState.Complete, Edit),
-               EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Edit, ExampleDataState.Edit, Edit),
-                  EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Error, ExampleDataState.Error, Edit),
+            EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Create, ExampleDataState.Edit, SetValueDefault),
+             EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Edit, ExampleDataState.Complete, SetValueDefault),
+               EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Edit, ExampleDataState.Edit, SetValueDefault),
+                  EntityObjectALMConfiguration<ExampleData, ExampleDataState>.New(ExampleDataState.Error, ExampleDataState.Error, SetValueDefault),
         };
-
-        private ExampleData Edit(ExampleData arg1, ExampleData arg2)
+        protected override ExampleData SetValueDefault(ExampleData oldObj, ExampleData newObj)
         {
-            arg1.D = arg2.D;
-            return arg1;
+            oldObj.D = newObj.D;
+            return oldObj;
         }
-        protected override IEnumerable<ExampleDataState> DefaultState => new[] { ExampleDataState.Error };
-
         protected override IEnumerable<EntityObjectALMCreator<ExampleData>> CreatorsService => new EntityObjectALMCreator<ExampleData>[] 
         {
             EntityObjectALMCreator<ExampleData>.New<ExampleDataCache>( ExampleDataToExampleDataModel, ExampleDataModelToExampleData ,new Version(1,0,0,0))
         };
-        private ExampleData ExampleDataModelToExampleData(ExampleDataCache arg)
+        private ExampleData ExampleDataModelToExampleData(ExampleDataCache arg, ExampleData entity)
         {
-            var dataModel = new ExampleData()
-            {
-                Id = arg.Id,
-                D = arg.Description
-            };
-            dataModel.StateEnum = ExampleDataState.Edit;
-            return dataModel;
+           var c = DCT.Context;
+            entity.Id = arg.Id;
+            entity.D = arg.Description;
+            entity.StateEnum = ExampleDataState.Edit;
+            return entity;
         }
         public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
         {
@@ -63,6 +59,8 @@ namespace ExampleDataServiceDAL.DataModels
         {
             return (int)state;
         }
+
+       
     }
     public enum ExampleDataState
     {

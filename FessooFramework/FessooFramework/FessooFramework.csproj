@@ -92,6 +92,7 @@
     <Compile Include="Components\_q\TrackModule.cs" />
     <Compile Include="Core\_DCT.cs" />
     <Compile Include="Objects\Data\CacheState.cs" />
+    <Compile Include="Objects\Data\DefaultState.cs" />
     <Compile Include="Objects\Data\EntityObjectALM.cs" />
     <Compile Include="Objects\Data\EntityHistory.cs" />
     <Compile Include="Objects\ALM\ALMObject.cs" />

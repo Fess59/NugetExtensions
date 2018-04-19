@@ -14,7 +14,7 @@ namespace ExampleDataServiceDAL.Core
         public DALContext()
         {
             _Store.Add<DALDB>("DALDB", "192.168.26.116", @"ExtUser", "123QWEasd");
-            _Store.Add<MainDB>("MainDB", "192.168.26.116", @"ExtUser", "123QWEasd");
+            _Store.Add<MainDB>("MainDB", "176.111.73.51", @"AMK2", "OnlineHelp59");
         }
     }
 }

@@ -35,5 +35,10 @@ namespace Example._0_Base.Models
         {
             throw new NotImplementedException();
         }
+
+        public override IEnumerable<FessooFramework.Objects.Data.EntityObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<FessooFramework.Objects.Data.EntityObject> obj = null, IEnumerable<Guid> id = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -39,8 +39,8 @@ namespace FessooFramework.Components
         public SystemCoreConfiguration _Configuration => SystemCore.Current == null ? null : SystemCore.Current.CoreConfiguration;
         public DataContextStore _Store { get { return _store = _store ?? (SystemCore.Current == null ? new DataContextStore() : SystemCore.Current.GetStore()); } }
         private DataContextStore _store { get; set; }
-        public ClientSessionInfo _SessionInfo { get { return _sessionInfo = _sessionInfo ??  new ClientSessionInfo(); } }
-        private ClientSessionInfo _sessionInfo { get; set; }
+        public ClientSessionInfo _SessionInfo { get { return _sessionInfo = _sessionInfo ??  new ClientSessionInfo() ; } }
+        private ClientSessionInfo _sessionInfo { get; set; }     
         #endregion
         #region Constructor
         /// <summary>   Default constructor. </summary>
