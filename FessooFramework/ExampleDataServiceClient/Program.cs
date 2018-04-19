@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExampleDataServiceClient
@@ -23,6 +24,11 @@ namespace ExampleDataServiceClient
             DCT.Execute(c =>
             {
                 Registaration(email, phone, password, firstname, secondname, middlename);
+                while (true)
+                {
+                    Thread.Sleep(3000);
+                    GetDataCollection();
+                }
             });
             Console.ReadLine();
         }

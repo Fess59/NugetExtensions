@@ -27,7 +27,7 @@ namespace FessooFramework.Tools.Helpers
         public static void Dispose(object obj)
         {
             var comment = "";
-            DCT.DCT.Execute((data) =>
+            try
             {
                 if (obj == null) return;
                 if (obj is IDisposable)
@@ -42,8 +42,11 @@ namespace FessooFramework.Tools.Helpers
                     ((IDisposable)obj).Dispose();
                 }
                 obj = null;
-            }, /* TODO DCT comment: comment,*/ continueExceptionMethod: (data, ex) => { comment += ex.ToString(); });
-
+            }
+            catch (Exception ex)
+            {
+                ConsoleHelper.Send("[Dispose exception]", ex.ToString());
+            }
         }
     }
 }

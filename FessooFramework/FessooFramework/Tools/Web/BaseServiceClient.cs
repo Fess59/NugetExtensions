@@ -88,9 +88,9 @@ namespace FessooFramework.Tools.Web
                 if (!_Configurations.Any())
                 {
                     var configuration = _Configurations.SingleOrDefault(q => q.CurrentType == typeof(TResponse));
-                    if (configuration == null)
-                        throw new Exception($"ServiceClient - для клиента службы {ClassName}, нет ни одной реализации для {typeof(TResponse).ToString()}");
-                    configuration.Execute(obj);
+                    if (configuration != null)
+                        configuration.Execute(obj);
+                    //throw new Exception($"ServiceClient - для клиента службы {ClassName}, нет ни одной реализации для {typeof(TResponse).ToString()}");
                 }
             });
             return result;
