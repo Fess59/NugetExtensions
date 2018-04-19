@@ -54,6 +54,14 @@ namespace FessooFramework.Objects.Data
         [JsonProperty("State")]
         public int State { get; set; }
 
+        /// <summary>   Gets or sets the state.
+        ///             Состояние жизненного объекта в базе</summary>
+        ///
+        /// <value> The state. </value>
+        /// 
+        [JsonProperty("ALMState")]
+        public string ALMState { get; set; }
+
         /// <summary>   Gets or sets the state enum.
         ///             Состояние жизненного цикла объекта кэша в формате CacheState</summary>
         ///
@@ -105,13 +113,14 @@ namespace FessooFramework.Objects.Data
             if (DateTime.Now.Ticks > CreateDate.Ticks + TTL)
                 _Remove();
         }
-        internal void SetProperty(Guid id, DateTime createDate, bool hasRemoved, string dataType, Version version)
+        internal void SetProperty(Guid id, DateTime createDate, bool hasRemoved, string dataType, Version version, string almState)
         {
             Id = id;
             CreateDate= createDate;
             HasRemoved = hasRemoved;
             DataType = dataType;
             Version = version.ToString();
+            ALMState = almState;
         }
         #endregion
     }

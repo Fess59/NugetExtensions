@@ -23,7 +23,6 @@ namespace FessooFramework.Tools.DataContexts.Models
                 EntityObjectALMConfiguration<UserAccess, UserAccessState>.New(UserAccessState.Blocked, UserAccessState.Enable, Unblocked),
              EntityObjectALMConfiguration<UserAccess, UserAccessState>.New(UserAccessState.Blocked, UserAccessState.Blocked, Blocked),
         };
-        protected override IEnumerable<UserAccessState> DefaultState => new[] { UserAccessState.Blocked };
         protected override IEnumerable<EntityObjectALMCreator<UserAccess>> CreatorsService => throw new NotImplementedException($" Модель данных Application не может преобразована в модель данных клиента");
         protected override int GetStateValue(UserAccessState state)
         {
@@ -48,6 +47,15 @@ namespace FessooFramework.Tools.DataContexts.Models
         private static UserAccess Unblocked(UserAccess arg1, UserAccess arg2)
         {
             throw new Exception("Разблокировка доступа для аккаунта пользователя не возможна, пожалуйста восстановите пароль через API");
+        }
+
+        protected override UserAccess SetValueDefault(UserAccess oldObj, UserAccess newObj)
+        {
+            if (oldObj.UserProfileId == Guid.Empty)
+                oldObj.UserProfileId = newObj.UserProfileId;
+            oldObj.LoginHash = newObj.LoginHash;
+            oldObj.Login = newObj.Login;
+            return oldObj;
         }
         #endregion
     }

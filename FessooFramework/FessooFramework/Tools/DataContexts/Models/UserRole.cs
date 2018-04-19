@@ -26,6 +26,11 @@ namespace FessooFramework.Tools.DataContexts.Models
             set => UID = (int)value;
         }
 
+        public override IEnumerable<EntityObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<EntityObject> obj = null, IEnumerable<Guid> id = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
         {
             throw new NotImplementedException();

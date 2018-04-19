@@ -16,14 +16,18 @@ namespace Example._0_Base.Data.Models.Model3
             new EntityObjectALMConfiguration<Model3, Model3State>(Model3State.Edit, Model3State.Complete, (a,b)=>{ a.Description = "Complete"; return a; }),
             new EntityObjectALMConfiguration<Model3, Model3State>(Model3State.Complete, Model3State.Edit, (a,b)=>{ a.Description = "Re-edit"; return a; })
         };
-        protected override IEnumerable<Model3State> DefaultState => new Model3State[] { Model3State.Error };
-
+        protected override Model3 SetValueDefault(Model3 oldObj, Model3 newObj)
+        {
+            throw new NotImplementedException();
+        }
         protected override IEnumerable<EntityObjectALMCreator<Model3>> CreatorsService => throw new NotImplementedException();
 
         protected override int GetStateValue(Model3State state)
         {
             return (int)state;
         }
+
+       
     }
     public enum Model3State
     {

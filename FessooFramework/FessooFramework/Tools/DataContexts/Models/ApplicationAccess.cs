@@ -22,7 +22,6 @@ namespace FessooFramework.Tools.DataContexts.Models
                 EntityObjectALMConfiguration<ApplicationAccess, ApplicationState>.New(ApplicationState.Blocked, ApplicationState.Enable, Unblocked),
              EntityObjectALMConfiguration<ApplicationAccess, ApplicationState>.New(ApplicationState.Blocked, ApplicationState.Blocked, Blocked),
         };
-        protected override IEnumerable<ApplicationState> DefaultState => new[] { ApplicationState.Blocked     };
         protected override IEnumerable<EntityObjectALMCreator<ApplicationAccess>> CreatorsService => throw new NotImplementedException($" Модель данных Application не может преобразована в модель данных клиента");
         protected override int GetStateValue(ApplicationState state)
         {
@@ -47,6 +46,13 @@ namespace FessooFramework.Tools.DataContexts.Models
             if (arg1.BlockedDate != null)
                 arg1.BlockedDate = null;
             return arg1;
+        }
+
+        protected override ApplicationAccess SetValueDefault(ApplicationAccess oldObj, ApplicationAccess newObj)
+        {
+            oldObj.Token = newObj.Token;
+            oldObj.Name = newObj.Name;
+            return oldObj;
         }
         #endregion
     }

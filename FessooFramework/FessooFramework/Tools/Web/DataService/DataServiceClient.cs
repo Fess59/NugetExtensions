@@ -79,7 +79,7 @@ namespace FessooFramework.Tools.Web.DataService
         {
             DCT.DCT.Execute(c =>
             {
-                SendQueryCollection(callback, "_SaveChanges", sessionUID: c._SessionInfo.SessionUID, hashUID: c._SessionInfo.HashUID);
+                SendQueryCollection(callback, "_SaveChanges", objects: objs, sessionUID: c._SessionInfo.SessionUID, hashUID: c._SessionInfo.HashUID);
             });
         }
         #endregion

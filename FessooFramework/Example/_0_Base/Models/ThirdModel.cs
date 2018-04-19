@@ -12,6 +12,11 @@ namespace Example._0_Base.Models
     {
         public string Decription { get; set; }
 
+        public override IEnumerable<FessooFramework.Objects.Data.EntityObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<FessooFramework.Objects.Data.EntityObject> obj = null, IEnumerable<Guid> id = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
         {
             throw new NotImplementedException();

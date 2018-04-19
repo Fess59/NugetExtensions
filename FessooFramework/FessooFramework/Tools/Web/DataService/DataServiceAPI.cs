@@ -83,9 +83,8 @@ namespace FessooFramework.Tools.Web.DataService
                             var code = request.QueryType;
                             var sessionUID = request.SessionUID;
                             var hashUID = request.HashUID;
-                            var id = request.Ids.FirstOrDefault();
-                            var obj = convertor._JSONGetCollection(request.JSONObjectCollections).FirstOrDefault();
-                            result = convertor.CustomObjectLoad(code, sessionUID, hashUID, obj, id);
+                            Guid id = request.Ids == null ? Guid.Empty : request.Ids.FirstOrDefault();
+                            result = convertor._CustomCollectionLoad(code, sessionUID, hashUID, request.JSONObjectCollections, new[] { id }).FirstOrDefault();
                             break;
                         }
                 }

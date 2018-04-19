@@ -36,14 +36,14 @@ namespace FessooFramework.Objects.Data
         /// <summary>
         /// Метод который обратной конвертации объекта службы в объект данных
         /// </summary>
-        private Func<object, TObjectType> _RollbackExecute { get; set; }
+        private Func<object, TObjectType, TObjectType> _RollbackExecute { get; set; }
         #endregion
         #region Constructor
         /// <summary>
         /// Базовый конструктор
         /// </summary>
         /// <param name="execute">Метод конвертации объекта данных в объект службы</param>
-        public EntityObjectALMCreator(Func<TObjectType, object> execute, Func<object, TObjectType> rollback)
+        public EntityObjectALMCreator(Func<TObjectType, object> execute, Func<object, TObjectType, TObjectType> rollback)
         {
             _Execute = execute;
             _RollbackExecute = rollback;
@@ -56,14 +56,14 @@ namespace FessooFramework.Objects.Data
         /// <param name="obj"></param>
         /// <typeparam name="TServiceModelType">   Type of the finally object state. </typeparam>
         /// <returns></returns>
-        public TServiceModelType Execute<TServiceModelType>(TObjectType obj)
+        public TServiceModelType Execute<TServiceModelType>(TObjectType obj, string almstate)
             where TServiceModelType : CacheObject
         {
             var result = default(TServiceModelType);
             DCT.Execute(q => {
                 var modelObj = _Execute(obj);
                 result = (TServiceModelType)modelObj;
-                result.SetProperty(result.Id, result.CreateDate, result.HasRemoved, typeof(TObjectType).ToString(), Version);
+                result.SetProperty(obj.Id, obj.CreateDate, obj.HasRemoved, typeof(TObjectType).ToString(), Version, almstate);
             });
             return result;
         }
@@ -73,12 +73,12 @@ namespace FessooFramework.Objects.Data
         /// <param name="obj"></param>
         /// <typeparam name="TServiceModelType">   Type of the finally object state. </typeparam>
         /// <returns></returns>
-        public TObjectType ExecuteRollback<TServiceModelType>(TServiceModelType obj)
+        public TObjectType ExecuteRollback<TServiceModelType>(TServiceModelType obj, TObjectType entity)
             where TServiceModelType : CacheObject
         {
             var result = default(TObjectType);
             DCT.Execute(q => {
-                var entity = _RollbackExecute(obj);
+                entity = _RollbackExecute(obj, entity);
                 entity.SetProperty(obj.Id, obj.CreateDate, obj.HasRemoved);
                 result = entity;
             });
@@ -91,10 +91,10 @@ namespace FessooFramework.Objects.Data
         /// <param name="execute"></param>
         /// <param name="version"></param>
         /// <returns></returns>
-        public static EntityObjectALMCreator<TObjectType> New<TFinalyType>(Func<TObjectType, TFinalyType> execute, Func<TFinalyType, TObjectType> roolbackExecute, Version version)
+        public static EntityObjectALMCreator<TObjectType> New<TFinalyType>(Func<TObjectType, TFinalyType> execute, Func<TFinalyType, TObjectType, TObjectType> roolbackExecute, Version version)
             where TFinalyType : CacheObject
         {
-            return new EntityObjectALMCreator<TObjectType>(execute, (a) => roolbackExecute((TFinalyType)a))
+            return new EntityObjectALMCreator<TObjectType>(execute, (a,b) => roolbackExecute((TFinalyType)a,b))
             {
                 FinallyType = typeof(TFinalyType),
                 ObjectType = typeof(TObjectType),

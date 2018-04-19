@@ -27,6 +27,12 @@ namespace ExampleWPF
         {
             InitializeComponent();
             WebWorkerQueueTest();
+            WebWorker.Current.Execute(() => WebWorker.Current.SetBrowser(new System.Windows.Forms.WebBrowser()));
+            WebWorker.Current.DownloadPage("https://spinningline.ru/katushki-c-7.html?page=74&allproducts=true&", download);
+        }
+        private static void download(string obj)
+        {
+            var r = 1;
         }
         private void WebWorkerQueueTest()
         {

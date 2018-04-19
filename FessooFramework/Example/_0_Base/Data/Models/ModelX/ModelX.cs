@@ -18,13 +18,18 @@ namespace Example._0_Base.Data.DataComponent.ModelX
         #endregion
         #region Abstracts
         protected override int GetStateValue(ModelXState state) { return (int)state; }
-        protected override IEnumerable<ModelXState> DefaultState => new ModelXState[] { ModelXState.Error };
         protected override IEnumerable<EntityObjectALMConfiguration<ModelX, ModelXState>> Configurations => new EntityObjectALMConfiguration<ModelX, ModelXState>[] {
             EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Create, ModelXState.Edited, ModelXHelper.Edited),
               EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Edited, ModelXState.Edited2, ModelXHelper.Edited2),
                EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Edited, ModelXState.Edited3, ModelXHelper.Edited3),
               EntityObjectALMConfiguration<ModelX, ModelXState>.New(ModelXState.Error, ModelXState.Error, ModelXHelper.Error),
         };
+
+        protected override ModelX SetValueDefault(ModelX oldObj, ModelX newObj)
+        {
+            oldObj.Description = "Default set value";
+            return oldObj;
+        }
 
         protected override IEnumerable<EntityObjectALMCreator<ModelX>> CreatorsService => new EntityObjectALMCreator<ModelX>[]
         {
@@ -38,15 +43,14 @@ namespace Example._0_Base.Data.DataComponent.ModelX
                 Description = obj.Description
             };
         }
-        private ModelX ModelXServiceToModelX(ModelXService obj)
+        private ModelX ModelXServiceToModelX(ModelXService obj, ModelX entity)
         {
-            var result = new ModelX()
-            {
-                Description = obj.Description
-            };
-            result.StateEnum = ModelXState.Edited;
-            return result;
+            entity.Description = obj.Description;
+            entity.StateEnum = ModelXState.Edited;
+            return entity;
         }
+
+       
         #endregion
     }
 }

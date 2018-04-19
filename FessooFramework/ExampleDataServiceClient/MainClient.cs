@@ -9,7 +9,7 @@ namespace ExampleDataServiceClient
 {
     public class MainClient : MainServiceClient
     {
-        public override string Address => "http://localhost:53681/MainService.svc";
+        public override string Address => "http://176.111.73.51/MainService/MainService.svc";
 
         public override TimeSpan PostTimeout => TimeSpan.FromSeconds(100);
 

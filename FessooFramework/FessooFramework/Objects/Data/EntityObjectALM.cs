@@ -42,7 +42,7 @@ namespace FessooFramework.Objects.Data
         ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
         ///
         /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
-        protected abstract IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> Configurations { get; }
+        protected virtual IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> Configurations => Enumerable.Empty<EntityObjectALMConfiguration<TObjectType, TStateType>>();
 
         /// <summary>   State configuration.
         ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
@@ -64,10 +64,11 @@ namespace FessooFramework.Objects.Data
         private static IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> _Configurations { get; set; }
         #endregion
         #region Default state
-        /// <summary>
-        /// Базовые состояния, переход в которые возможен из любого состояния
-        /// </summary>
-        protected abstract IEnumerable<TStateType> DefaultState { get; }
+        /// <summary>   State configuration.
+        ///             Настройка конфигурации для измения состояния жизненного цикла </summary>
+        ///
+        /// <remarks>   AM Kozhevnikov, 29.01.2018. </remarks>
+        protected abstract TObjectType SetValueDefault(TObjectType oldObj, TObjectType newObj);
         #endregion
         #region DB integrations
         /// <summary>
@@ -107,13 +108,13 @@ namespace FessooFramework.Objects.Data
             var result = default(TResult);
             if (creatorsService == null || !creatorsService.Any())
                 throw new Exception($"CREATORS to ServiceModel not found any from '{typeof(TObjectType).Name}'");
-            var creators = _CreatorsService.Where(q=>q.ObjectType == typeof(TObjectType) && q.FinallyType == typeof(TResult));
+            var creators = _CreatorsService.Where(q => q.ObjectType == typeof(TObjectType) && q.FinallyType == typeof(TResult));
             if (!creators.Any())
                 throw new Exception($"CREATORS to ServiceModel not found from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}'");
             if (creators.Count() > 1)
                 throw new Exception($"CREATORS to ServiceModel найдено несколько схем конвертации для модели '{typeof(TObjectType).Name}' в модель '{typeof(TResult).Name}'");
             var creator = creators.FirstOrDefault();
-            result = creator.Execute<TResult>((TObjectType)this);
+            result = creator.Execute<TResult>((TObjectType)this, StateEnum.ToString());
             if (result == null)
                 throw new NullReferenceException($"CREATORS to ServiceModel from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}' return NULL");
             return result;
@@ -136,7 +137,10 @@ namespace FessooFramework.Objects.Data
             if (creators.Count() > 1)
                 throw new Exception($"CREATORS to ServiceModel найдено несколько схем конвертации для модели '{typeof(TObjectType).Name}' в модель '{typeof(TResult).Name}'");
             var creator = creators.FirstOrDefault();
-            result = creator.ExecuteRollback<TResult>(obj);
+            var entity = new TObjectType()._DbSet().Find(obj.Id);
+            if (entity == null)
+                entity = new TObjectType();
+            result = creator.ExecuteRollback<TResult>(obj, entity);
             if (result == null)
                 throw new NullReferenceException($"CREATORS to ServiceModel from '{typeof(TObjectType).Name}' to '{typeof(TResult).Name}' return NULL");
             return result;
@@ -163,7 +167,7 @@ namespace FessooFramework.Objects.Data
         /// <summary>
         /// Хранилище конверторов из модели в данных в модель службы
         /// </summary>
-        private static IEnumerable<EntityObjectALMCreator<TObjectType>> _CreatorsService  { get; set; } 
+        private static IEnumerable<EntityObjectALMCreator<TObjectType>> _CreatorsService { get; set; }
         #endregion
         #region ALM
         /// <summary>
@@ -200,15 +204,12 @@ namespace FessooFramework.Objects.Data
                 }
                 var oldState = OldObj.StateEnum;
                 var newState = NewObj.StateEnum;
-                if (DefaultState == null)
-                    throw new NullReferenceException($"ALMComponent exception => DefaultState can't be NULL");
 
                 //Find configuration
-                var configuration = GetStateConfiguration().SingleOrDefault(q => q.State.ToString() == oldState.ToString() && q.NextState.ToString() == newState.ToString());
-
-                //Replace configuration if newState is default 
-                if (DefaultState.Any(q => q.ToString() == newState.ToString()))
-                    configuration = GetStateConfiguration().SingleOrDefault(q => q.NextState.ToString() == newState.ToString());
+                var configurations = GetStateConfiguration().Where(q => q.State.ToString() == oldState.ToString() && q.NextState.ToString() == newState.ToString());
+                var configuration = configurations.FirstOrDefault();
+                if (configurations.Count() > 1)
+                    DCT.SendWarning($"Для объекта {typeof(TObjectType).Name}, найдено несколько переходов {oldState.ToString()}=>{newState.ToString()}. Рекомендуется проверить свойство Configurations", "EntityObjectALM");
 
                 if (configuration != null)
                 {
@@ -218,7 +219,8 @@ namespace FessooFramework.Objects.Data
                 }
                 else
                 {
-                    OldObj.State = SetError();
+                    //Replace configuration if newState is default or not realized
+                    SetValueDefault(OldObj, NewObj);
                 }
             });
             return result;
@@ -234,13 +236,13 @@ namespace FessooFramework.Objects.Data
         /// </returns>
         IEnumerable<EntityObjectALMConfiguration<TObjectType, TStateType>> GetStateConfiguration()
         {
+
             if (!configurations.Any())
-                throw new Exception($"Для типа {typeof(TStateType).ToString()} необходимо настроить переходы жизненного цикла. Реализуйте метод _StateConfiguration");
+            {
+                DCT.SendWarning($"Для объекта {typeof(TStateType).ToString()} не настроено ни одного перехода жизненного цикла. Проверьте реализацию свойства Configurations", "EntityObjectALM");
+                return Enumerable.Empty<EntityObjectALMConfiguration<TObjectType, TStateType>>();
+            }
             var countCheck = configurations.GroupBy(q => new { q.State, q.NextState });
-            //foreach (var item in countCheck.Where(q => q.Count() > 1))
-            //{
-            //    throw new Exception($"Для типа {typeof(TStateType).ToString()} состояние {item.Key.ToString()}, настроено более одного раза");
-            //}
             return configurations;
         }
         /// <summary>
@@ -252,7 +254,7 @@ namespace FessooFramework.Objects.Data
         }
         #endregion
         #region Container
-        public  override EntityObject _ObjectLoadById(Guid id)
+        public override EntityObject _ObjectLoadById(Guid id)
         {
             var obj = DbSet().Find(id);
             return obj;
@@ -262,17 +264,29 @@ namespace FessooFramework.Objects.Data
             var objs = DbSet().ToArray();
             return objs;
         }
-        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs) 
+        public override IEnumerable<TDataModel> _CacheSave<TDataModel>(IEnumerable<TDataModel> objs)
         {
             var collections = Enumerable.Empty<TDataModel>();
             DCT.Execute(c =>
             {
                 if (objs.Any())
                 {
+                    foreach (var obj in objs)
+                        (obj as TObjectType)._Save();
                     c.SaveChanges();
                 }
             });
             return collections;
+        }
+        #endregion
+        #region Custom query
+        //public override CacheObject CustomObjectLoad(string code, string sessionUID = "", string hashUID = "", EntityObject obj = null, Guid? id = null)
+        //{
+        //    throw new NotImplementedException($"Ошибка при вызове метода'{code}'. Для модели данных {typeof(TObjectType).Name}, не реализован абстрактный метод CustomObjectLoad");
+        //}
+        public override IEnumerable<EntityObject> CustomCollectionLoad(string code, string sessionUID = "", string hashUID = "", IEnumerable<EntityObject> obj = null, IEnumerable<Guid> id = null)
+        {
+            throw new NotImplementedException($"Ошибка при вызове метода'{code}'. Для модели данных {typeof(TObjectType).Name}, не реализован абстрактный метод CustomCollectionLoad");
         }
         #endregion
     }

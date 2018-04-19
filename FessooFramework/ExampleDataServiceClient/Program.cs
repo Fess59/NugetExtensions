@@ -1,11 +1,13 @@
 ﻿using ExampleDataServiceClient.Core;
 using ExampleDataServiceModels;
+using FessooFramework.Tools.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ExampleDataServiceClient
 {
@@ -13,16 +15,17 @@ namespace ExampleDataServiceClient
     {
         static string clientHash = "";
         static string sessionHash = "";
-        static string email = "ttt4@ttt.ru";
+        static string email = "penzin2";
         static string phone = "799988888";
-        static string password = "ttt3";
-        static string firstname = "name";
-        static string secondname = "sec";
-        static string middlename = "mid";
+        static string password = "megaprogger";
+        static string firstname = "Артур";
+        static string secondname = "Пензин";
+        static string middlename = "";
         static void Main(string[] args)
         {
             DCT.Execute(c =>
             {
+                //Ping();
                 Registaration(email, phone, password, firstname, secondname, middlename);
                 while (true)
                 {
@@ -30,7 +33,23 @@ namespace ExampleDataServiceClient
                     GetDataCollection();
                 }
             });
+            Thread.Sleep(10000);
             Console.ReadLine();
+        }
+        
+        private static void Ping()
+        {
+            DCT.Execute(c =>
+            {
+                var ping = c.ServiceClient.Ping();
+                Console.WriteLine($"Ping data - {ping}");
+                using (var main = new MainClient())
+                {
+                    var ping2 = main.Ping();
+                    Console.WriteLine($"Ping main - {ping2}");
+
+                }
+            });
         }
 
         static void Registaration(string email, string phone, string password, string firstname, string secondname, string middlename, DateTime? birthday = null)
@@ -64,7 +83,7 @@ namespace ExampleDataServiceClient
                     Console.WriteLine($"Signin succesfull");
                     clientHash = c._SessionInfo.HashUID;
                     sessionHash = c._SessionInfo.SessionUID;
-                    GetDataCollection();
+                    DCT.ExecuteAsync(cc=>GetDataCollection());
                 }
                 else
                     Console.WriteLine($"Signin not sucessfull");
@@ -77,7 +96,7 @@ namespace ExampleDataServiceClient
         {
             DCT.Execute(c =>
             {
-                var ping = c.ServiceClient.Ping();
+                //var ping = c.ServiceClient.Ping();
                 //var collection = c.ServiceClient.CollectionLoad<ExampleDataModel>();
                 c._Store.ServiceContext<DataClient>().CollectionLoad<ExampleDataCache>(GetDataCollectionCallback);
             });

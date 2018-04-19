@@ -28,7 +28,6 @@ namespace FessooFramework.Tools.DataContexts.Models
                 EntityObjectALMConfiguration<UserProfile, UserProfileState>.New(UserProfileState.Blocked, UserProfileState.Enable, Unblocked),
              EntityObjectALMConfiguration<UserProfile, UserProfileState>.New(UserProfileState.Blocked, UserProfileState.Blocked, Blocked),
         };
-        protected override IEnumerable<UserProfileState> DefaultState => new[] { UserProfileState.Blocked };
         protected override IEnumerable<EntityObjectALMCreator<UserProfile>> CreatorsService => throw new NotImplementedException($" Модель данных Application не может преобразована в модель данных клиента");
         protected override int GetStateValue(UserProfileState state)
         {
@@ -59,6 +58,19 @@ namespace FessooFramework.Tools.DataContexts.Models
             if (arg1.BlockedDate != null)
                 arg1.BlockedDate = null;
             return arg1;
+        }
+
+        protected override UserProfile SetValueDefault(UserProfile oldObj, UserProfile newObj)
+        {
+            oldObj.ApplicationId = newObj.ApplicationId;
+            oldObj.FirstName = newObj.FirstName;
+            oldObj.SecondName = newObj.SecondName;
+            oldObj.MiddleName = newObj.MiddleName;
+            oldObj.Birthday = newObj.Birthday;
+            oldObj.Email = newObj.Email;
+            oldObj.Phone = newObj.Phone;
+            oldObj.Login = newObj.Login;
+            return oldObj;
         }
         #endregion
     }
