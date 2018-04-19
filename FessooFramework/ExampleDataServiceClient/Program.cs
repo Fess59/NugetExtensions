@@ -107,14 +107,20 @@ namespace ExampleDataServiceClient
             DCT.Execute(c =>
             {
                 var list = new List<ExampleDataCache>();
-                foreach (var item in collection)
-                {
-                    Console.WriteLine($"Description = {item.Description}");
-                    item.Description += "_C_";
-                    list.Add(item);
-                    c.ServiceClient.Save<ExampleDataCache>((a) => { }, item);
+                list.Add(new ExampleDataCache());
+                list.Add(new ExampleDataCache());
+                list.Add(new ExampleDataCache());
+                list.Add(new ExampleDataCache());
+                list.Add(new ExampleDataCache());
+                c.ServiceClient.Save<ExampleDataCache>((a) => { }, list.ToArray());
+                //foreach (var item in collection)
+                //{
+                //    Console.WriteLine($"Description = {item.Description}");
+                //    item.Description += "_C_";
+                //    list.Add(item);
+                //    c.ServiceClient.Save<ExampleDataCache>((a) => { }, item);
 
-                }
+                //}
             });
         }
     }

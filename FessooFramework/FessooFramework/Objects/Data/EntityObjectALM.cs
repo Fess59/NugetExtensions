@@ -137,7 +137,7 @@ namespace FessooFramework.Objects.Data
             if (creators.Count() > 1)
                 throw new Exception($"CREATORS to ServiceModel найдено несколько схем конвертации для модели '{typeof(TObjectType).Name}' в модель '{typeof(TResult).Name}'");
             var creator = creators.FirstOrDefault();
-            var entity = new TObjectType()._DbSet().Find(obj.Id);
+            var entity = new TObjectType()._DbSet().FirstOrDefault(q=> q.Id == obj.Id);
             if (entity == null)
                 entity = new TObjectType();
             result = creator.ExecuteRollback<TResult>(obj, entity);
