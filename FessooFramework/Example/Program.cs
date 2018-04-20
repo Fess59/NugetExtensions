@@ -11,6 +11,7 @@ using FessooFramework.Tools.Helpers;
 using FessooFramework.Tools.Web;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,25 +26,26 @@ namespace Example
             CoreTest();
             DCTExample.Execute(c =>
             {
-                var r = new Model3();
-                r.StateEnum = Model3State.Edit;
-                r.StateEnum = Model3State.Edit;
-                c.SaveChanges();
-                r.StateEnum = Model3State.Complete;
-                c.SaveChanges();
-                r.StateEnum = Model3State.Edit;
-                c.SaveChanges();
-                var r2 = new Model3();
-                r2.StateEnum = Model3State.Complete;
-                c.SaveChanges();
-                //DataComponentTest();
-                var list = Model3.DbSet().ToArray();
-                foreach (var item in list)
-                {
-                    ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
-                }
-                var model = new ModelX();
-                var visualModel = model._ConvertToServiceModel<ModelXService>();
+                QueueTaskController2();
+                //var r = new Model3();
+                //r.StateEnum = Model3State.Edit;
+                //r.StateEnum = Model3State.Edit;
+                //c.SaveChanges();
+                //r.StateEnum = Model3State.Complete;
+                //c.SaveChanges();
+                //r.StateEnum = Model3State.Edit;
+                //c.SaveChanges();
+                //var r2 = new Model3();
+                //r2.StateEnum = Model3State.Complete;
+                //c.SaveChanges();
+                ////DataComponentTest();
+                //var list = Model3.DbSet().ToArray();
+                //foreach (var item in list)
+                //{
+                //    ConsoleHelper.Send("Info", $"Create={item.ToString()} Description={item.Description}");
+                //}
+                //var model = new ModelX();
+                //var visualModel = model._ConvertToServiceModel<ModelXService>();
             });
 
             Console.Read();
@@ -250,7 +252,10 @@ namespace Example
         #region QueueController
         private static void QueueTaskController2()
         {
+            //QueueTaskController.Current.TaskCount = 10;
             ConsoleHelper.SendMessage("Start");
+            var sw = new Stopwatch();
+            sw.Start();
             //Start
             for (int i = 0; i < 100; i++)
             {
@@ -258,7 +263,7 @@ namespace Example
                 var result = ii.ToString();
                 QueueTaskController.Current.Execute(() =>
                 {
-                    Thread.Sleep(100-ii);
+                    Thread.Sleep(500);
                     ConsoleHelper.SendMessage(result);
                 });
             }
@@ -269,7 +274,7 @@ namespace Example
                 var result = i.ToString();
                 QueueTaskController.Current.Execute(() => ConsoleHelper.SendMessage(result));
             }
-            //Break
+            //Break - контроллер очереди останавливается через 30 секунд не активности
             Thread.Sleep(35000);
             //New start
             for (int i = 131; i < 250; i++)
@@ -277,7 +282,8 @@ namespace Example
                 var result = i.ToString();
                 QueueTaskController.Current.Execute(() => ConsoleHelper.SendMessage(result));
             }
-            ConsoleHelper.SendMessage("Finish");
+            sw.Stop();
+            ConsoleHelper.SendMessage($"Finish {sw.ElapsedMilliseconds}");
         }
       
         #endregion

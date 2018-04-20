@@ -31,8 +31,8 @@ namespace FessooFramework.Tools.Web.DataService
                 if (objects != null)
                     request.SetObjectCollections(objects);
                 var response = Execute<RequestGet, ResponseGet>(request);
-                Console.WriteLine($"SessionUID Reponse = {response.SessionUID}");
-                Console.WriteLine($"HashUID Response = {response.HashUID}");
+                //Console.WriteLine($"SessionUID Reponse = {response.SessionUID}");
+                //Console.WriteLine($"HashUID Response = {response.HashUID}");
                 result = response.GetObjectCollections<TCacheObject>().ToArray();
                 return result;
             }, complete: (c, r) =>

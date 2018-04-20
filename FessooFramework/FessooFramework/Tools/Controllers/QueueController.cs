@@ -51,13 +51,13 @@ namespace FessooFramework.Tools.Controllers
                     if (result && next != null)
                     {
                         next();
-                        ConsoleHelper.SendMessage($"QueueController {typeof(T).Name} execute");
+                        //ConsoleHelper.SendMessage($"QueueController {typeof(T).Name} execute");
                         WaitCount = 0;
                     }
                     else
                     {
                         Thread.Sleep(1000);
-                        ConsoleHelper.SendMessage($"QueueController {typeof(T).Name} wait");
+                        //ConsoleHelper.SendMessage($"QueueController {typeof(T).Name} wait");
                         WaitCount += 1;
                         if (WaitCount >= WaitCountMax)
                         {
