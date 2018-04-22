@@ -81,8 +81,6 @@ namespace FessooFramework.Core
                     execute<TContext>(name, dataCon => continueMethod(dataCon));
                 if (complete != null)
                 {
-                    if (result == null)
-                        throw new NullReferenceException("Возвращаемое значение не может быть null, callback метод не будет вызван");
                     execute<TContext>(name, dataCom => complete(dataCom, result));
                 }
                 //TODO Tracker and Analitics

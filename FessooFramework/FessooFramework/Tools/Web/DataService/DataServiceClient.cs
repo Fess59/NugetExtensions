@@ -14,39 +14,48 @@ namespace FessooFramework.Tools.Web.DataService
         #region Abstractions
         protected override IEnumerable<ServiceResponseConfigBase> Configurations => new ServiceResponseConfigBase[] { };
         #endregion
-        #region Send query
-        public void SendQueryCollection<TCacheObject>(Action<IEnumerable<TCacheObject>> callback, string code, string sessionUID = "", string hashUID = "", IEnumerable<TCacheObject> objects = null, IEnumerable<Guid> ids = null, bool hasCollection = true)
-            where TCacheObject : CacheObject
+        #region Send without async
+        public IEnumerable<TCacheObject> RSendQueryCollection<TCacheObject>(string code, IEnumerable<TCacheObject> objects = null, IEnumerable<Guid> ids = null, bool hasCollection = true)
+        where TCacheObject : CacheObject
         {
-            DCT.DCT.ExecuteAsyncQueue(c =>
+            var result = Enumerable.Empty<TCacheObject>();
+            DCT.DCT.Execute(c =>
             {
-                var result = Enumerable.Empty<TCacheObject>();
                 var request = new RequestGet();
                 request.CurrentType = typeof(TCacheObject).AssemblyQualifiedName;
-                request.HashUID = hashUID;
-                request.SessionUID = sessionUID;
+                request.HashUID = c._SessionInfo.HashUID;
+                request.SessionUID = c._SessionInfo.SessionUID;
                 request.QueryType = code;
                 request.HasCollection = hasCollection;
                 request.Ids = ids;
                 if (objects != null)
                     request.SetObjectCollections(objects);
                 var response = Execute<RequestGet, ResponseGet>(request);
-                //Console.WriteLine($"SessionUID Reponse = {response.SessionUID}");
-                //Console.WriteLine($"HashUID Response = {response.HashUID}");
                 result = response.GetObjectCollections<TCacheObject>().ToArray();
-                return result;
-            }, complete: (c, r) =>
+            });
+            return result;
+        }
+        public TCacheObject RSendQueryObject<TCacheObject>(string code, TCacheObject obj = null, Guid? id = null)
+           where TCacheObject : CacheObject
+        {
+            return RSendQueryCollection(code, obj == null ? null : new[] { obj }, id == null ? null : new[] { id.Value }, hasCollection: false).FirstOrDefault();
+        }
+        #endregion
+        #region Send query async
+        public void SendQueryCollection<TCacheObject>(string code, Action<IEnumerable<TCacheObject>> callback = null, IEnumerable<TCacheObject> objects = null, IEnumerable<Guid> ids = null, bool hasCollection = true)
+            where TCacheObject : CacheObject
+        {
+            DCT.DCT.ExecuteAsyncQueue(c => RSendQueryCollection(code, objects, ids, hasCollection), 
+                complete: (c, r) =>
             {
-                if (callback == null)
-                    ConsoleHelper.Send("DataServiceClient", "В методе CollectionLoad не реализован Callback");
-                else
+                if (callback != null)
                     callback(r);
             });
         }
-        public void SendQueryObject<TCacheObject>(Action<TCacheObject> callback, string code, TCacheObject obj = null, string sessionUID = "", string hashUID = "", Guid? id = null)
+        public void SendQueryObject<TCacheObject>(string code, Action<TCacheObject> callback = null, TCacheObject obj = null, Guid? id = null)
            where TCacheObject : CacheObject
         {
-            SendQueryCollection(result => callback(result.FirstOrDefault()), code, sessionUID, hashUID, obj == null ? null : new[] { obj }, id == null ? null : new[] { id.Value }, hasCollection: false);
+            SendQueryCollection(code, result => callback(result.FirstOrDefault()), obj == null ? null : new[] { obj }, id == null ? null : new[] { id.Value }, hasCollection: false);
         }
         #endregion
         #region CollectionLoad
@@ -55,7 +64,7 @@ namespace FessooFramework.Tools.Web.DataService
         {
             DCT.DCT.Execute(c =>
             {
-                SendQueryCollection(callback, "_CollectionLoad", sessionUID: c._SessionInfo.SessionUID, hashUID: c._SessionInfo.HashUID);
+                SendQueryCollection("_CollectionLoad", callback);
             });
         }
         public void ObjectLoad<TCacheObject>(Action<TCacheObject> callback, Guid id)
@@ -63,7 +72,7 @@ namespace FessooFramework.Tools.Web.DataService
         {
             DCT.DCT.Execute(c =>
             {
-                SendQueryObject(callback, "_ObjectLoad", sessionUID: c._SessionInfo.SessionUID, hashUID: c._SessionInfo.HashUID, id: id);
+                SendQueryObject("_ObjectLoad", callback);
             });
         }
         public void Save<TCacheObject>(Action<TCacheObject> callback, TCacheObject obj)
@@ -71,7 +80,7 @@ namespace FessooFramework.Tools.Web.DataService
         {
             DCT.DCT.Execute(c =>
             {
-                SendQueryObject(callback, "_SaveChanges", obj:obj, sessionUID: c._SessionInfo.SessionUID, hashUID: c._SessionInfo.HashUID);
+                SendQueryObject("_SaveChanges", callback, obj: obj);
             });
         }
         public void Save<TCacheObject>(Action<IEnumerable<TCacheObject>> callback, IEnumerable<TCacheObject> objs)
@@ -79,14 +88,9 @@ namespace FessooFramework.Tools.Web.DataService
         {
             DCT.DCT.Execute(c =>
             {
-                SendQueryCollection(callback, "_SaveChanges", objects: objs, sessionUID: c._SessionInfo.SessionUID, hashUID: c._SessionInfo.HashUID);
+                SendQueryCollection("_SaveChanges", callback, objects: objs);
             });
         }
         #endregion
-
-
-
-
-
     }
 }
