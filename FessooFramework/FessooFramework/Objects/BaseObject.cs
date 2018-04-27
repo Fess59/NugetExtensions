@@ -35,5 +35,10 @@ namespace FessooFramework.Objects
             Id = Guid.NewGuid();
             CreateDate = DateTime.Now;
         }
+        public BaseObject(Guid id, DateTime create)
+        {
+            Id = id;
+            CreateDate = create;
+        }
     }
 }

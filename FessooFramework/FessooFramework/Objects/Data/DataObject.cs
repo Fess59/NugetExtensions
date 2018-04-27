@@ -32,5 +32,12 @@ namespace FessooFramework.Objects.Data
         {
             HasRemoved = true;
         }
+
+        public DataObject(Guid id, DateTime create) : base(id, create)
+        {
+        }
+        public DataObject() : base()
+        {
+        }
     }
 }

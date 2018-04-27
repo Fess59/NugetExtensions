@@ -95,9 +95,13 @@ namespace FessooFramework.Objects.Data
         }
         #endregion
         #region Constructor
-        public CacheObject()
+        public CacheObject(Guid id, DateTime create) : base(id, create)
+        {
+        }
+        public CacheObject() : base()
         {
             //TTL = SetTTL().Ticks;
+
         }
         #endregion
         #region Methods
@@ -121,6 +125,11 @@ namespace FessooFramework.Objects.Data
             DataType = dataType;
             Version = version.ToString();
             ALMState = almState;
+        }
+        public void SetClone(Guid id, DateTime createDate)
+        {
+            Id = id;
+            CreateDate = createDate;
         }
         #endregion
     }
