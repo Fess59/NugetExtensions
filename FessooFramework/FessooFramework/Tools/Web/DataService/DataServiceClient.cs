@@ -45,7 +45,7 @@ namespace FessooFramework.Tools.Web.DataService
         public void SendQueryCollection<TCacheObject>(string code, Action<IEnumerable<TCacheObject>> callback = null, IEnumerable<TCacheObject> objects = null, IEnumerable<Guid> ids = null, bool hasCollection = true)
             where TCacheObject : CacheObject
         {
-            DCT.DCT.ExecuteAsyncQueue(c => RSendQueryCollection(code, objects, ids, hasCollection), 
+            DCT.DCT.ExecuteAsyncQueue(c => RSendQueryCollection(code, objects, ids, hasCollection),
                 complete: (c, r) =>
             {
                 if (callback != null)
@@ -59,6 +59,11 @@ namespace FessooFramework.Tools.Web.DataService
         }
         #endregion
         #region CollectionLoad
+        public IEnumerable<TCacheObject> RCollectionLoad<TCacheObject>()
+ where TCacheObject : CacheObject
+        {
+            return DCT.DCT.Execute(c => RSendQueryCollection<TCacheObject>("_CollectionLoad"));
+        }
         public void CollectionLoad<TCacheObject>(Action<IEnumerable<TCacheObject>> callback)
            where TCacheObject : CacheObject
         {
@@ -67,12 +72,17 @@ namespace FessooFramework.Tools.Web.DataService
                 SendQueryCollection("_CollectionLoad", callback);
             });
         }
+        public TCacheObject RObjectLoad<TCacheObject>(Guid id)
+ where TCacheObject : CacheObject
+        {
+            return DCT.DCT.Execute(c => RSendQueryObject<TCacheObject>("_ObjectLoad", id: id));
+        }
         public void ObjectLoad<TCacheObject>(Action<TCacheObject> callback, Guid id)
   where TCacheObject : CacheObject
         {
             DCT.DCT.Execute(c =>
             {
-                SendQueryObject("_ObjectLoad", callback);
+                SendQueryObject("_ObjectLoad", callback, id: id);
             });
         }
         public void Save<TCacheObject>(Action<TCacheObject> callback, TCacheObject obj)

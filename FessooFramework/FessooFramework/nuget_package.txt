@@ -1,5 +1,5 @@
 nuget pack FessooFramework.csproj
-nuget push FessooFramework.1.0.0.45.nupkg oy2iqxebxgvpjelr2wma6byiiyxtjqzu7emjdis7mjumuu -Source https://api.nuget.org/v3/index.json
+nuget push FessooFramework.1.0.0.46.nupkg oy2bivxbx25auarww4yaihmoxlygqceeli2inqwbeq5hwi -Source https://api.nuget.org/v3/index.json
 
 
 nuget sources update -Name Grotem -source http://nuget.spb.local/nuget -User \Kozhevnikov.AM -pass KR4jBhT8eFBr

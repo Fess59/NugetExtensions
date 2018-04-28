@@ -101,7 +101,6 @@ namespace FessooFramework.Objects.Data
         public CacheObject() : base()
         {
             //TTL = SetTTL().Ticks;
-
         }
         #endregion
         #region Methods
