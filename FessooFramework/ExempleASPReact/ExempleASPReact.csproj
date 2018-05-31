@@ -21,6 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\components\Auth.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExempleASPReactDAL\ExempleASPReactDAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\components\Auth.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

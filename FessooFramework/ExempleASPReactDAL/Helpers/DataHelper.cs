@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace ExempleASPReact._Data
+namespace ExempleASPReactDAL.Helpers
 {
-    /// <summary>
-    /// Анкета с основной информации по сайту
-    /// </summary>
-    internal static class _1_Information
+    public static class DataHelper
     {
         /// <summary>
         /// Наименование сайта

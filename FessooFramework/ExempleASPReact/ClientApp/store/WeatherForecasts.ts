@@ -44,7 +44,8 @@ type KnownAction = RequestWeatherForecastsAction | ReceiveWeatherForecastsAction
 export const actionCreators = {
     requestWeatherForecasts: (startDateIndex: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
-        if (startDateIndex !== getState().weatherForecasts.startDateIndex) {
+        if (startDateIndex !== getState().weatherForecasts.startDateIndex)
+        {
             let fetchTask = fetch(`api/SampleData/WeatherForecasts?startDateIndex=${ startDateIndex }`)
                 .then(response => response.json() as Promise<WeatherForecast[]>)
                 .then(data => {
